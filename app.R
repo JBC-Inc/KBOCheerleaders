@@ -4,17 +4,14 @@ ui <- bslib::page_sidebar(
 
   shinyjs::useShinyjs(),
 
-  theme = bslib::bs_theme(version = 5) |>
+  theme = bslib::bs_theme(
+    version = 5
+    # bootswatch = "united"
+    # base_font = bslib::font_google("Bangers"),
+    ) |>
     bslib::bs_add_rules("
       body{
         font-size: 12px;
-      }
-      .cardt {
-        /* max-height: 600px; */
-      }
-      .cardh {
-        background-color: #ff0000 !important;
-        height: 42px;
       }
       .valb {
         /* border-width: 0; */
@@ -40,7 +37,11 @@ ui <- bslib::page_sidebar(
     }
   "),
 
-
+  shiny::tags$head(
+    shiny::tags$link(
+      rel = "stylesheet",
+      href = "https://fonts.googleapis.com/css2?family=Bangers&display=swap")
+  ),
 
   title = shiny::tags$div(
     class = "d-flex justify-content-between align-items-center w-100",
@@ -54,7 +55,7 @@ ui <- bslib::page_sidebar(
         height = "55px",
         style = "margin-right: 10px;"
       ),
-      shiny::tags$h1("Cheerleaders!")
+      shiny::tags$h1("Cheerleaders!", style = "font-family: 'Bangers', cursive;")
     ),
 
     shiny::tags$div(
@@ -71,13 +72,15 @@ ui <- bslib::page_sidebar(
   ),
 
   sidebar = bslib::sidebar(
+
     shiny::selectizeInput(
       inputId = "team",
       label = "Teams:",
       choices = c("", teams)
     ),
+
     shiny::uiOutput("cheerleaderUI")
-    ),
+  ),
 
   shiny::uiOutput("team"),
 
@@ -114,37 +117,23 @@ server <- function(input, output, session) {
   shinyjs::hide("valb")
   shinyjs::hide("individual")
 
-  # populate cheerleader dropdown
-
-  output$cheerleaderUI <- shiny::renderUI({
-
-    shiny::req(input$team != "")
-
-    cheerleaders <- getCheerleaders(input$team)
-
-    # shiny::selectizeInput(
-    #   inputId = "cheerleader",
-    #   label = "Select Cheerleader:",
-    #   choices = c("", cheerleaders)
-    #   )
-
-    shiny::radioButtons(
-      inputId = "cheerleader",
-      label = "Cheerleaders:",
-      choices = cheerleaders,
-      selected = character(0)
-    )
-    })
-
   team_page <- shiny::reactive(label = "Team page content", {
 
     shiny::req(input$team != "")
 
     url <- paste0(input$team)
 
-    httr2::request(url) |>
+    page <- httr2::request(url) |>
       httr2::req_perform() |>
       httr2::resp_body_html()
+
+    photo_url <- getTeamPhoto(page)
+
+    list(
+      page = page,
+      photo_url = photo_url
+      )
+
     })
 
   team_name <- shiny::reactive(label = "Team name", {
@@ -152,6 +141,9 @@ server <- function(input, output, session) {
   })
 
   team_color <- shiny::reactive(label = "Team colors", {
+
+    shiny::req(team_name())
+
     team_colors[team_name()][[1]]
   })
 
@@ -169,13 +161,13 @@ server <- function(input, output, session) {
 
     df_tables <- lapply(xml_tables, rvest::html_table, fill = TRUE)
 
-    index <- bioTableIndex(df_tables, "nationality")
+    index <- bioTableIndex(df_tables, c("nationality", "birth"))
 
     bio_table <- xml_tables[[index]]
 
     hrefs <- bio_table |>
-      html_nodes("a") |>
-      html_attr("href")
+      rvest::html_nodes("a") |>
+      rvest::html_attr("href")
 
     social_links <- hrefs[grepl("http", hrefs)]
 
@@ -185,29 +177,24 @@ server <- function(input, output, session) {
     social_links <- social_links[social_icons != ""]
     social_icons <- social_icons[social_icons != ""]
 
-    table <- extractBioTable(df_tables, "nationality")
+    table <- extractBioTable(df_tables, c("nationality", "birth"))
 
     html_content <- createHTML(social_links, social_icons)
 
-    table <- table |>
-      dplyr::mutate(X2 = ifelse(X1 == "link", html_content, X2)) |>
-      dplyr::mutate(X2 = ifelse(X1 == "site", html_content, X2)) |>
-      dplyr::mutate(X2 = ifelse(X1 == "SNS", html_content, X2))
-
-    # Multi-column case
+    # sometimes tables have 2 row headers
     if (ncol(table) == 2) {
       table <- table |>
-        dplyr::filter((X1 != X2)) |>
-        dplyr::filter(!X1 %in% c("support team", "platform", "signature")) |>
-        dplyr::filter(!grepl("youtube", X1, ignore.case = TRUE))
-
+        dplyr::mutate(X2 = if_else(X1 %in% c("link", "site", "SNS"), html_content, X2)) |>
+        dplyr::filter(X1 != X2,
+                      !X1 %in% c("support team", "platform", "signature"),
+                      !grepl("youtube", X1, ignore.case = TRUE))
     } else if (ncol(table) == 3) {
       table <- table |>
+        dplyr::mutate(X3 = if_else(X1 %in% c("link", "site", "SNS"), html_content, X3)) |>
         dplyr::select(-X1) |>
-        dplyr::rename(X1 = X2) |>
-        dplyr::rename(X2 = X3) |>
-        dplyr::filter((X1 != X2)) |>
-        dplyr::filter(!X1 %in% c("support team", "platform", "signature"))
+        dplyr::rename(X1 = X2, X2 = X3) |>
+        dplyr::filter(X1 != X2,
+                      !X1 %in% c("support team", "platform", "signature"))
     }
 
     table <- table |>
@@ -260,33 +247,19 @@ server <- function(input, output, session) {
       )
   })
 
+  cheerleader <- shiny::reactive(label = "Cheerleader name", {
+
+    cheerleaders <- getCheerleaders(input$team)
+
+    names(cheerleaders)[which(unlist(cheerleaders) == input$cheerleader)]
+  })
 
   shiny::observe(label = "Show/Hide Team", {
 
     if (input$team != "") {
-
       shinyjs::show("team")
       shinyjs::show("valb")
       shinyjs::hide("individual")
-
-      output$team <- shiny::renderUI({
-        bslib::layout_columns(
-          bslib::card(
-            id = "teamCard",
-            class = "cardt",
-            bslib::card_header(
-              # class = "cardh",
-              style = paste("background-color:", team_color(), "; color: #ffffff;"),
-              team_name()
-            ),
-            bslib::card_body(
-              fillable = FALSE,
-              fill = FALSE,
-              shiny::uiOutput("teamPhoto", inline = TRUE)
-            )
-          )
-        )
-      })
     }
   }) |>
     shiny::bindEvent(input$team)
@@ -294,48 +267,123 @@ server <- function(input, output, session) {
   shiny::observe(label = "Show/Hide Cheerleader", {
 
     if (input$cheerleader != "") {
-
       shinyjs::hide("team")
       shinyjs::hide("valb")
       shinyjs::show("individual")
-
-      cheerleaders <- getCheerleaders(input$team)
-
-      cheerleader <- names(cheerleaders)[which(unlist(cheerleaders) == input$cheerleader)]
-
-      output$individual <- shiny::renderUI({
-
-        bslib::card(
-          bslib::card_header(
-            style = paste("background-color:", team_color(), "; color: #ffffff;"),
-            cheerleader
-          ),
-          shiny::uiOutput("cheerleaderPhoto", inline = TRUE ),
-          DT::dataTableOutput("cheerleaderBio")
-        )
-      })
     }
   }) |>
     shiny::bindEvent(input$cheerleader)
 
+  # sidebar -------------------------------------
+
+  output$cheerleaderUI <- shiny::renderUI({
+
+    shiny::req(input$team != "")
+
+    cheerleaders <- getCheerleaders(input$team)
+
+    # shiny::selectizeInput(
+    #   inputId = "cheerleader",
+    #   label = "Select Cheerleader:",
+    #   choices = c("", cheerleaders)
+    #   )
+
+    shiny::radioButtons(
+      inputId = "cheerleader",
+      label = "Cheerleaders:",
+      choices = cheerleaders,
+      selected = character(0)
+    )
+  })
+
+  # main ----------------------------------------
+
+  output$team <- shiny::renderUI({
+
+    shiny::req(team_name())
+    shiny::req(team_color())
+
+    bslib::layout_column_wrap(
+      width = NULL,
+      fill = FALSE,
+      style = bslib::css(grid_template_columns = "7.5fr 4fr"),
+
+      bslib::card(
+        id = "teamCard",
+
+        bslib::card_header(
+          style = paste("background-color:", team_color(), "; color: #ffffff;"),
+          team_name()
+        ),
+        bslib::card_body(
+          shiny::uiOutput("teamPhoto", inline = TRUE)
+        )
+      ),
+
+      bslib::card(
+        id = "teamLogoCard",
+        min_height = 404.2,
+        max_height = 404.2,
+        bslib::card_header(
+          style = paste("background-color:", team_color(), "; color: #ffffff;"),
+          paste0(team_name(), " Logo")
+        ),
+        bslib::card_body(
+          fillable = FALSE,
+
+          style = "text-align: center;",
+
+          shiny::uiOutput("teamLogo", inline = TRUE)
+        )
+      )
+    )
+
+
+
+  })
+
+  output$individual <- shiny::renderUI({
+
+    shiny::req(team_color())
+    shiny::req(cheerleader())
+
+    bslib::card(
+      bslib::card_header(
+        style = paste("background-color:", team_color(), "; color: #ffffff;"),
+        cheerleader()
+      ),
+      bslib::card_body(
+        fillable = FALSE,
+        shiny::uiOutput("cheerleaderPhoto"),
+        DT::dataTableOutput("cheerleaderBio")
+      )
+    )
+  })
+
+  # main components -----------------------------
 
   output$teamPhoto <- shiny::renderUI({
-
-    page <- team_page()
-
-    photo_url <- getTeamPhoto(page)
 
     team <- names(teams)[teams == input$team]
 
     if (team == "KT Wiz") {
       shiny::img(
-        src = "https://kpopping.com/documents/57/4/850/Wiz-N-fullPicture.webp?v=87cb1", height = "100%")
+        src = "https://i.ytimg.com/vi/OeCJXyFxJDQ/maxresdefault.jpg",
+        # src = "https://kpopping.com/documents/57/4/850/Wiz-N-fullPicture.webp?v=87cb1",
+        height = "80%")
     } else if (team == "Samsung Lions") {
       shiny::img(
         src = "https://www.samsunglions.com/en/img/img_cheerleader2017_en.jpg", height = "100%")
     } else {
-      shiny::img(src = photo_url, height = "100%")
+      shiny::img(src = team_page()$photo_url, height = "100%")
     }
+  })
+
+  output$teamLogo <- shiny::renderUI({
+
+    logo <- team_logos[names(teams)[teams == input$team]][[1]]
+
+    shiny::img(src = logo, height = "100%")
   })
 
   output$cheerleaderPhoto <- shiny::renderUI({
@@ -344,7 +392,7 @@ server <- function(input, output, session) {
 
     photo_url <- getCheerleaderPhoto(bio_table)
 
-    shiny::img(src = photo_url, height = "420px")
+    shiny::img(src = photo_url, height = "320px")
   })
 
   output$cheerleaderBio <- DT::renderDataTable({
@@ -372,10 +420,9 @@ server <- function(input, output, session) {
 
 } # server
 
-
 # utilities ===================================================================
 
-# Cheerleader Team Page -------------------------------------------------------
+# Team Page -------------------------------------------------------------------
 
 getTeamPhoto <- function(page) {
 
@@ -394,7 +441,7 @@ getCheerleaders <- function(team_url) {
 
   df_tables <- lapply(xml_tables, rvest::html_table, fill = TRUE)
 
-  table_index <- cheerTableIndex(df_tables)
+  table_index <- cheerTableIndex(df_tables, "name")
 
   cheerleader_table <- xml_tables[[table_index]]
 
@@ -414,12 +461,12 @@ getCheerleaders <- function(team_url) {
   setNames(links, names)
 }
 
-cheerTableIndex <- function(tables) {
+cheerTableIndex <- function(tables, keyword) {
 
   for (i in seq_along(tables)) {
     table <- tables[[i]]
     if (ncol(table) == 4) {
-      if (any(table$X2 == "name")) {
+      if (any(table$X2 == keyword)) {
         return(i)
       }
     }
@@ -440,6 +487,18 @@ getCheerleaderPhoto <- function(bio_table) {
 
 # Helpers ---------------------------------------------------------------------
 
+bioTableIndex <- function(tables, keywords) {
+
+  for (i in seq_along(tables)) {
+    table <- tables[[i]]
+    if (any(!is.na(table$X1))) {
+      if (any(table$X1 %in% keywords)) {
+        return(i)
+      }
+    }
+  }
+}
+
 matchIconsToLinks <- function(links, mapping) {
 
   matched_icons <- vector("character", length(links))
@@ -455,10 +514,10 @@ matchIconsToLinks <- function(links, mapping) {
   return(matched_icons)
 }
 
-extractBioTable <- function(tibble_list, value) {
+extractBioTable <- function(tibble_list, values) {
 
   for (tbl in tibble_list) {
-    if (any(tbl[[1]] == value, na.rm = TRUE)) {
+    if (any(tbl[[1]] %in% values, na.rm = TRUE)) {
       tbl <- tbl |> dplyr::select(dplyr::where(~ !any(is.na(.))))
       return(tbl)
     }
@@ -472,30 +531,26 @@ createHTML <- function(links, icons) {
   )) |> paste(collapse = "")
 }
 
-bioTableIndex <- function(tables, keyword) {
-
-  for (i in seq_along(tables)) {
-    table <- tables[[i]]
-    if (any(!is.na(table$X1))) {
-      if (any(table$X1 == keyword)) {
-        return(i)
-      }
-    }
-  }
-}
-
-
-
-
-
-
-
-
-
-
-
-
 shinyApp(ui = ui, server = server)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

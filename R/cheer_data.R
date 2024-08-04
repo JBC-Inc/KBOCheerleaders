@@ -27,6 +27,32 @@ teams = list(
   "SSG Landers"   = "https://en.namu.wiki/w/SSG%20%EB%9E%9C%EB%8D%94%EC%8A%A4/%EC%B9%98%EC%96%B4%EB%A6%AC%EB%8D%94"
   )
 
+team_logos = list(
+  "Doosan Bears"  = "https://upload.wikimedia.org/wikipedia/en/thumb/9/98/Doosan_Bears.svg/1280px-Doosan_Bears.svg.png",
+  "Hanwha Eagles" = "https://upload.wikimedia.org/wikipedia/en/thumb/d/d3/Hanwha_Eagles.svg/1920px-Hanwha_Eagles.svg.png",
+  "Kia Tigers"    = "https://upload.wikimedia.org/wikipedia/en/e/e0/Kia_Tigers_2017_New_Team_Logo.png",
+  "Kiwoom Heros"  = "https://upload.wikimedia.org/wikipedia/en/4/4f/Kiwoom_Heroes.png",
+  "KT Wiz"        = "https://upload.wikimedia.org/wikipedia/en/thumb/e/e5/KT_Wiz.svg/1024px-KT_Wiz.svg.png",
+  "LG Twins"      = "https://upload.wikimedia.org/wikipedia/commons/4/41/LG_Twins_2017.png",
+  "Lotte Giants"  = "https://upload.wikimedia.org/wikipedia/en/thumb/6/65/Lotte_Giants.svg/1280px-Lotte_Giants.svg.png",
+  "NC Dinos"      = "https://upload.wikimedia.org/wikipedia/en/thumb/5/54/NC_Dinos_Emblem.svg/1280px-NC_Dinos_Emblem.svg.png",
+  "Samsung Lions" = "https://upload.wikimedia.org/wikipedia/en/thumb/0/0e/Samsung_Lions.svg/1280px-Samsung_Lions.svg.png",
+  "SSG Landers"   = "https://upload.wikimedia.org/wikipedia/en/8/86/SSG_Landers.png"
+)
+
+cap_insignia = list(
+  "Doosan Bears"  = "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Doosan_Bears_insignia.svg/1024px-Doosan_Bears_insignia.svg.png",
+  "Hanwha Eagles" = "",
+  "Kia Tigers"    = "",
+  "Kiwoom Heros"  = "",
+  "KT Wiz"        = "",
+  "LG Twins"      = "",
+  "Lotte Giants"  = "",
+  "NC Dinos"      = "",
+  "Samsung Lions" = "",
+  "SSG Landers"   = ""
+)
+
 team_colors = list(
   "Doosan Bears"  = "#131230",
   "Hanwha Eagles" = "#ff6600",
@@ -48,12 +74,22 @@ keyword_image_mapping = list(
   naver      = "https://i.namu.wiki/i/TY6ZEq_xIPxfVE8K2-z-Ar3AY1YWn4Uq-MtGQxo-MnSm0pOhGCtJTrU51Ghy9Rwx9sBCbNPSmFq92VgwVHqa-OYfxb0j5giYnI8XZwnkYVYDlZ-j0cUoK1IpoqZ7biK6T9toATtoBnnFQfbRTfvv9Q.svg",
   threads    = "https://i.namu.wiki/i/USdGq7GJ0UjNm1xs5WsG2U_EiVaQdZLokvL2zNDGGlTSnblXtgkYbniSsz4HLUXxC_xPYzRD_Vq9QHo5P4UglLzOU-qZW4g-X9Z2FqyyuWg7NFzxyVk6-SgTaRJtqxp3hqv5fQiSUAhMTdIKSbzblw.svg",
   tiktok     = "https://i.namu.wiki/i/8wydteGCtIyC9qAVgIUndFBRaqq1z1onH5Nk3j_wbKRPBxIEeO-XX-m4DrDyv5rufaUj9vpd-nyZsi1l5m_IihAVoyK5Lfi0rDDV1kuSkfFd-KCbh3CMorivR4jrj0D8_m7iNG5OxyH9j97GMdjBXA.svg",
+  `x.com`    = "https://i.namu.wiki/i/jBQ6v78CaBnATxXt9esV0juqHYdjpd7XHRSW4JhG-Pn9tWlqKuYprL8KQMCMpg-ObU-Jx6QPOhwM7VaWE_u3khTpOEubdkOoEnojnxkPyQqkQ8hu7QKwpGaiP5dqHyF2XMe0ft3VE7s6jTdraeSUKA.svg",
   youtube    = "https://i.namu.wiki/i/0pCL8w8sKgZWCk0vaUO3_JRI-_ytvVk0DL7vzKB0Gp6rwOsOdBBDYNEbNpr2vn9FY1vYiYdeHr4tH2413EQWgA.svg"
 )
 
 
-
-
+# "Doosan Bears"  = "",
+# "Hanwha Eagles" = "",
+# "Kia Tigers"    = "",
+# "Kiwoom Heros"  = "",
+# "KT Wiz"        = "",
+# "LG Twins"      = "",
+# "Lotte Giants"  = "",
+# "NC Dinos"      = "",
+# "Samsung Lions" = "",
+# "SSG Landers"   = ""
+#
 
 
 
