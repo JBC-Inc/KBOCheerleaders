@@ -240,4 +240,43 @@ get_cheerleaders <- function(team_url) {
 #   )
 # )
 
+# PARSE CHEERLEADER PAGE DATA -------------------------------------------------
+
+# parseCheerleaderBio <- function(bio_table, df_tables) {
+#
+#   hrefs <- bio_table |>
+#     html_nodes("a") |>
+#     html_attr("href")
+#
+#   social_links <- hrefs[grepl("http", hrefs)]
+#
+#   social_icons <- matchIconsToLinks(social_links, keyword_image_mapping)
+#
+#   # account for missing values
+#   social_links <- social_links[social_icons != ""]
+#   social_icons <- social_icons[social_icons != ""]
+#
+#   table <- extractBioTable(df_tables, "nationality")
+#
+#   html_content <- createHTML(social_links, social_icons)
+#
+#   table <- table |>
+#     dplyr::mutate(X2 = ifelse(X1 == "link", html_content, X2)) |>
+#     dplyr::mutate(X2 = ifelse(X1 == "site", html_content, X2)) |>
+#     dplyr::mutate(X2 = ifelse(X1 == "SNS", html_content, X2))
+#
+#   if (ncol(table) == 2) {
+#     table |>
+#       dplyr::filter((X1 != X2)) |>
+#       dplyr::filter(!X1 %in% c("support team", "platform", "signature"))
+#   } else if (ncol(table) == 3) {
+#     table |>
+#       dplyr::select(-X1) |>
+#       dplyr::rename(X1 = X2) |>
+#       dplyr::rename(X2 = X3) |>
+#       dplyr::filter((X1 != X2)) |>
+#       dplyr::filter(!X1 %in% c("support team", "platform", "signature"))
+#   }
+# }
+
 

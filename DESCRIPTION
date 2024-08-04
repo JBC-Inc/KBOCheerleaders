@@ -1,14 +1,28 @@
 Package: KBOCheerleaders
-Title: What the Package Does (One Line, Title Case)
+Title: Korean Baseball Organization Cheerleaders dynamic interactive database.
 Version: 0.0.0.9000
 Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
+    person("Jeff", "Craggy", , "craggyjeff@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+Description: Dynamic interactive Shiny app based on the Korean wiki pages.
+License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.1
 URL: https://github.com/JBC-Inc/KBOCheerleaders
 BugReports: https://github.com/JBC-Inc/KBOCheerleaders/issues
+Imports: 
+    bslib,
+    DT,
+    glue,
+    httr2,
+    purrr,
+    rvest,
+    shiny,
+    shinyjs,
+    stringr
+Depends: 
+    tidyverse
+Suggests: 
+    devtools,
+    usethis
