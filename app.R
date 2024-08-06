@@ -122,6 +122,13 @@ ui <- bslib::page_sidebar(
 
 server <- function(input, output, session) {
 
+  shiny::observe(label = "Authenticate", priority = 300, {
+
+    if (is.null(global_token)) {
+      authenticateYouTube()
+    }
+  })
+
   shinyjs::hide("team")
   shinyjs::hide("valb")
   shinyjs::hide("individual")
@@ -142,7 +149,6 @@ server <- function(input, output, session) {
       page = page,
       photo_url = photo_url
       )
-
     })
 
   team_info <- shiny::reactive(label = "Team name/colors", {
@@ -151,7 +157,7 @@ server <- function(input, output, session) {
 
     team_name <- names(teams)[which(unlist(teams) == input$team)]
 
-    team_color <- team_colors[team_names()][[1]]
+    team_color <- team_colors[team_name][[1]]
 
     list(
       name = team_name,
@@ -163,11 +169,17 @@ server <- function(input, output, session) {
 
     shiny::req(input$team != "")
 
-    url <- paste0(wiki_url, input$cheerleader)
+    page <- fetchCheerleaderPage(wiki_url, input$cheerleader)
 
-    page <- httr2::request(url) |>
-      httr2::req_perform() |>
-      httr2::resp_body_html()
+    if (is.null(page)) {
+      return(
+        list(
+          table = data.frame("NA" = "The requested cheerleader page is not available."),
+          bio_table = data.frame(),
+          links = data.frame()
+        )
+      )
+    }
 
     xml_tables <- rvest::html_nodes(page, "table")
 
@@ -275,7 +287,7 @@ server <- function(input, output, session) {
     insta_link <- links[grepl("instagram", links)]
     tiktok_link <- links[grepl("tiktok", links)]
 
-    channel_stats <- ytChannelStats(yt_link)
+    youtube <- ytChannelStats(yt_link)
 
     tiktok <- tiktokStats(tiktok_link)
 
@@ -308,13 +320,8 @@ server <- function(input, output, session) {
       youtube = youtube,
       tiktok = tiktok
     )
-  }) |> shiny::bindEvent(input$cheerleader)
-
-  shiny::observe(label = "Authenticate", priority = 300, {
-    if (is.null(global_token)) {
-      authenticateYouTube()
-    }
-  })
+  }) |>
+    shiny::bindEvent(input$cheerleader)
 
   shiny::observe(label = "Show/Hide Team", {
 
@@ -336,7 +343,7 @@ server <- function(input, output, session) {
   }) |>
     shiny::bindEvent(input$cheerleader)
 
-  # sidebar -------------------------------------
+  # sidebar -------------------------------------------------------------------
 
   output$cheerleaderUI <- shiny::renderUI({
 
@@ -358,7 +365,7 @@ server <- function(input, output, session) {
     )
   })
 
-  # main ----------------------------------------
+  # main ----------------------------------------------------------------------
 
   output$team <- shiny::renderUI({
 
@@ -373,8 +380,8 @@ server <- function(input, output, session) {
         id = "teamCard",
 
         bslib::card_header(
-          style = paste("background-color:", team_info()$team_color, "; color: #ffffff;"),
-          team_info()$team_name
+          style = paste("background-color:", team_info()$color, "; color: #ffffff;"),
+          team_info()$name
         ),
         bslib::card_body(
           class = "cardb",
@@ -391,8 +398,8 @@ server <- function(input, output, session) {
           min_height = 324,
           max_height = 324,
           bslib::card_header(
-            style = paste("background-color:", team_info()$team_color, "; color: #ffffff;"),
-            paste0(team_info()$team_name, " Team Logo")
+            style = paste("background-color:", team_info()$color, "; color: #ffffff;"),
+            paste0(team_info()$name, " Team Logo")
           ),
           bslib::card_body(
             class = "cardb",
@@ -405,8 +412,8 @@ server <- function(input, output, session) {
           min_height = 324,
           max_height = 324,
           bslib::card_header(
-            style = paste("background-color:", team_info()$team_color, "; color: #ffffff;"),
-            paste0(team_info()$team_name, " Cap Insignia")
+            style = paste("background-color:", team_info()$color, "; color: #ffffff;"),
+            paste0(team_info()$name, " Cap Insignia")
           ),
           bslib::card_body(
             class = "cardb",
@@ -426,7 +433,7 @@ server <- function(input, output, session) {
     createCheerleaderUI(team_info, cheerleader, smm)
   })
 
-  # main components -----------------------------
+  # main team components ------------------------------------------------------
 
   output$teamPhoto <- shiny::renderUI({
 
@@ -460,6 +467,8 @@ server <- function(input, output, session) {
     shiny::img(src = logo, height = "242px")
   })
 
+  # main cheerleader components -----------------------------------------------
+
   output$cheerleaderPhoto <- shiny::renderUI({
 
     bio_table <- cheerleader_page()$bio_table
@@ -473,18 +482,13 @@ server <- function(input, output, session) {
 
     DT::datatable(
       data = cheerleader_page()$table,
-
       colnames = NULL,
       escape = FALSE,
-
       options = list(
         dom = "t",
         columnDefs = list(
-          list(visible = FALSE, targets = 0),
-
-          list(width = '1000px', targets = 1)
-
-
+          list(visible = FALSE, targets = 0)
+          #list(width = '1000px', targets = 1)
         ),
         ordering = FALSE,
         pageLength = -1
@@ -495,23 +499,3 @@ server <- function(input, output, session) {
 } # server
 
 shinyApp(ui = ui, server = server)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

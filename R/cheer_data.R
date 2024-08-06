@@ -3,27 +3,27 @@
 
 global_token <- NULL
 
-# make the token
-# YTAnalytics::youtube_oauth(
-#   clientId = Sys.getenv("YT_CLIENT_ID"),
-#   clientSecret = Sys.getenv("YT_CLIENT_SECRET")
-#   )
+authenticateYouTube <- function() {
 
-authenticate_youtube <- function() {
+  # make the token
+  # YTAnalytics::youtube_oauth(
+  #   clientId = Sys.getenv("YT_CLIENT_ID"),
+  #   clientSecret = Sys.getenv("YT_CLIENT_SECRET")
+  #   )
 
-  # file.remove(".httr-oauth")
+  file.remove(".httr-oauth")
 
   tuber::yt_oauth(
     app_id = Sys.getenv("YT_CLIENT_ID"),
-    app_secret = Sys.getenv("YT_CLIENT_SECRET"),
-    token = ''
+    app_secret = Sys.getenv("YT_CLIENT_SECRET")
+    # token = ''
   )
   global_token <<- TRUE
 }
 
-if (is.null(global_token)) {
-  authenticate_youtube()
-}
+# if (is.null(global_token)) {
+#   authenticateYouTube()
+# }
 
 # Cheerleader count, Team Name, Wiki Page
 #=============================================================================================================
@@ -105,7 +105,6 @@ keyword_image_mapping = list(
   youtube    = "https://i.namu.wiki/i/0pCL8w8sKgZWCk0vaUO3_JRI-_ytvVk0DL7vzKB0Gp6rwOsOdBBDYNEbNpr2vn9FY1vYiYdeHr4tH2413EQWgA.svg"
 )
 
-
 # "Doosan Bears"  = "",
 # "Hanwha Eagles" = "",
 # "Kia Tigers"    = "",
@@ -116,7 +115,7 @@ keyword_image_mapping = list(
 # "NC Dinos"      = "",
 # "Samsung Lions" = "",
 # "SSG Landers"   = ""
-#
+
 
 
 

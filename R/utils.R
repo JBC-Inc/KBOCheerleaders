@@ -36,15 +36,17 @@ getCheerleaders <- function(team_url) {
   names <- stringr::str_to_title(names[idx_keep])
   links <- links[idx_keep]
 
-  names <- names |> stringr::str_replace("Excellent", "Woo Su-han")
-  names <- names |> stringr::str_replace("Joo Eun Lee", "Lee Ju-eun")
-  names <- names |> stringr::str_replace("Native People", "Won Min-Ju")
-  names <- names |> stringr::str_replace("Excellent", "Woo Su-han")
-  names <- names |> stringr::str_replace("binary", "Lee Jin")
-  names <- names |> stringr::str_replace("launching", "Jin Su-Hwa")
-  names <- names |> stringr::str_replace("calligraphy", "Seo Yeeun")
-  names <- names |> stringr::str_replace("this thumb", "Lee Um-ji")
-  names <- names |> stringr::str_replace("Irian", "Lee Ri-an")
+  names <- names |> stringr::str_replace_all(c(
+    "Excellent"     = "Woo Su-han",
+    "Joo Eun Lee"   = "Lee Ju-eun",
+    "Native People" = "Won Min-Ju",
+    "Binary"        = "Lee Jin",
+    "Launching"     = "Jin Su-Hwa",
+    "Calligraphy"   = "Seo Yeeun",
+    "this thumb"    = "Lee Um-ji",
+    "Irian"         = "Lee Ri-an",
+    "This Week"     = "Lee Geum-Ju"
+  ))
 
   setNames(links, names)
 }
@@ -64,13 +66,39 @@ cheerTableIndex <- function(tables, keyword) {
 
 # Cheerleader Page ------------------------------------------------------------
 
+fetchCheerleaderPage <- function(wiki_url, cheerleader) {
+
+  url <- paste0(wiki_url, cheerleader)
+  req <- httr2::request(url)
+
+  if (is.null(req)) {
+    return(NULL)
+  }
+  page <- tryCatch({
+    resp <- httr2::req_perform(req)
+    if (httr2::resp_status(resp) < 400) {
+      httr2::resp_body_html(resp)
+    } else {
+      message("The requested cheerleader page is not available.")
+      return(NULL)
+    }
+  }, error = function(e) {
+    # message("Error in fetching the cheerleader page: ", e$message)
+    return(NULL)
+  })
+  return(page)
+}
+
 getCheerleaderPhoto <- function(bio_table) {
 
+  if (class(bio_table) == "xml_node") {
   bio_images <- bio_table |>
     rvest::html_nodes("tr td img[src$='.webp']") |>
     rvest::html_attr("src")
-
-  bio_images[1]
+  return(bio_images[1])
+  } else {
+    return(NULL)
+  }
 }
 
 # Helpers ---------------------------------------------------------------------
@@ -121,31 +149,85 @@ createHTML <- function(links, icons) {
 
 ytChannelStats <- function(yt_link) {
 
+  extract_channel_id <- function(url) {
+
+    if (stringr::str_detect(url, "@")) {
+      page <- tryCatch({
+        rvest::read_html(url) %>% rvest::html_text2()
+      }, error = function(e) NULL)
+      if (!is.null(page)) {
+        channel_id <- sub(".*channel_id=([A-Za-z0-9_-]+).*", "\\1", page)
+        if (nchar(channel_id) == 24) {
+          return(channel_id)
+        }
+      }
+    } else {
+      channel_id <- stringr::str_extract(url, "(?<=/)[^/.]{24}")
+      if (!is.na(channel_id) && nchar(channel_id) == 24) {
+        return(channel_id)
+      } else (
+        return(NULL)
+      )
+    }
+    return(NULL)
+  }
+
   if (length(yt_link) == 0) {
     return(list(title = NA, count = NA, subs = NA, views = NA))
   }
-  yt_link <- yt_link[1]
 
-  if (stringr::str_detect(yt_link, "@")) {
-    channel_id <- tryCatch({
-      page <- rvest::read_html(yt_link)|> rvest::html_text2()
-      sub(".*channel_id=([A-Za-z0-9_-]+).*", "\\1", page)
-    }, error = function(e) NULL)
-  } else {
-    channel_id <- str_extract(yt_link, "(?<=/)[^/.]{24}")
+  # browser()
+  #
+  # # sometimes multiple links , need to get the 1st link that has 24 char channel ID
+  #
+  # yt_link <- yt_link[1]
+  #
+  # if (stringr::str_detect(yt_link, "@")) {
+  #   channel_id <- tryCatch({
+  #     page <- rvest::read_html(yt_link)|> rvest::html_text2()
+  #     sub(".*channel_id=([A-Za-z0-9_-]+).*", "\\1", page)
+  #   }, error = function(e) NULL)
+  # } else {
+  #   channel_id <- str_extract(yt_link, "(?<=/)[^/.]{24}")
+  # }
+  #
+  # if (!is.null(channel_id)) {
+  #   channel_stats <- tryCatch({
+  #     tuber::get_channel_stats(channel_id = channel_id)
+  #   }, error = function(e) {
+  #     list(title = NA, count = NA, subs = NA, views = NA)
+  #   })
+  # } else {
+  #   return(list(title = NA, count = NA, subs = NA, views = NA))
+  # }
+  #
+  # list(
+  #   title = channel_stats$snippet$title,
+  #   subs  = channel_stats$statistics$subscriberCount,
+  #   views = channel_stats$statistics$viewCount,
+  #   count = channel_stats$statistics$videoCount
+  # )
+
+  # Iterate through the list of links to find the first valid one
+  for (link in yt_link) {
+
+    channel_id <- extract_channel_id(link)
+    if (!is.null(channel_id)) {
+      channel_stats <- tryCatch({
+        tuber::get_channel_stats(channel_id = channel_id)
+      }, error = function(e) {
+        list(title = NA, count = NA, subs = NA, views = NA)
+      })
+      return(list(
+        title = channel_stats$snippet$title,
+        subs  = channel_stats$statistics$subscriberCount,
+        views = channel_stats$statistics$viewCount,
+        count = channel_stats$statistics$videoCount
+      ))
+    }
   }
 
-  if (!is.null(channel_id)) {
-    channel_stats <- tryCatch({
-      tuber::get_channel_stats(channel_id = channel_id)
-    }, error = function(e) {
-      list(title = NA, count = NA, subs = NA, views = NA)
-    })
-  } else {
-    channel_stats <- list(title = NA, count = NA, subs = NA, views = NA)
-  }
-
-  channel_stats
+  return(list(title = NA, count = NA, subs = NA, views = NA))
 }
 
 tiktokStats <- function(tiktok_link) {
@@ -186,7 +268,7 @@ createCheerleaderUI <- function(team_info, cheerleader, smm) {
 
   photoBio <- bslib::card(
     bslib::card_header(
-      style = paste("background-color:", team_info()$team_color, "; color: #ffffff;"),
+      style = paste("background-color:", team_info()$color, "; color: #ffffff;"),
       cheerleader()
     ),
     bslib::card_body(
@@ -200,14 +282,14 @@ createCheerleaderUI <- function(team_info, cheerleader, smm) {
     )
   )
 
-  if (!any(sapply(smm()$youtube, is.null))) {
+  if (!any(is.na(smm()$youtube))) {
 
     yt <- bslib::card(
       id = "valb",
       class = "cardb",
 
       bslib::card_header(
-        style = paste("background-color:", team_info()$team_color, "; color: #ffffff;"),
+        style = paste("background-color:", team_info()$color, "; color: #ffffff;"),
         paste0("YouTube Statistics for ", smm()$youtube$title)
       ),
 
@@ -252,24 +334,24 @@ createCheerleaderUI <- function(team_info, cheerleader, smm) {
   #   insta <- NULL
   # }
   #
-  if (!any(sapply(smm()$tiktok, is.na))) {
+  if (!any(is.na(smm()$tiktok))) {
 
     tiktok <- bslib::card(
       id = "valb",
       class = "cardb",
 
       bslib::card_header(
-        style = paste("background-color:", team_info()$team_color, "; color: #ffffff;"),
+        style = paste("background-color:", team_info()$color, "; color: #ffffff;"),
         paste0("TikTik Statistics for ", smm()$tiktok$name)
       ),
       bslib::value_box(
         title = "Followers",
-        smm()$tiktok$followers,
+        format(as.numeric(smm()$tiktok$followers), big.mark = ","),
         showcase = bsicons::bs_icon("tiktok")
       ),
       bslib::value_box(
         title = "Likes",
-        smm()$tiktok$likes,
+        format(as.numeric(smm()$tiktok$likes), big.mark = ","),
         showcase = bsicons::bs_icon("heart")
       )
     )
@@ -290,6 +372,17 @@ createCheerleaderUI <- function(team_info, cheerleader, smm) {
     )
   )
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
