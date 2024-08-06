@@ -1,8 +1,35 @@
 
-wiki_url <- "https://en.namu.wiki"
+# Authentication =============================================================================================
+
+global_token <- NULL
+
+# make the token
+# YTAnalytics::youtube_oauth(
+#   clientId = Sys.getenv("YT_CLIENT_ID"),
+#   clientSecret = Sys.getenv("YT_CLIENT_SECRET")
+#   )
+
+authenticate_youtube <- function() {
+
+  # file.remove(".httr-oauth")
+
+  tuber::yt_oauth(
+    app_id = Sys.getenv("YT_CLIENT_ID"),
+    app_secret = Sys.getenv("YT_CLIENT_SECRET"),
+    token = ''
+  )
+  global_token <<- TRUE
+}
+
+if (is.null(global_token)) {
+  authenticate_youtube()
+}
 
 # Cheerleader count, Team Name, Wiki Page
 #=============================================================================================================
+
+wiki_url <- "https://en.namu.wiki"
+
 # 11 Doosan Bears   https://en.namu.wiki/w/%EB%91%90%EC%82%B0%20%EB%B2%A0%EC%96%B4%EC%8A%A4/%EC%B9%98%EC%96%B4%EB%A6%AC%EB%8D%94
 #  8 Hanwha Eagles  https://en.namu.wiki/w/%ED%95%9C%ED%99%94%20%EC%9D%B4%EA%B8%80%EC%8A%A4/%EC%B9%98%EC%96%B4%EB%A6%AC%EB%8D%94
 # 12 Kia Tigers     https://en.namu.wiki/w/KIA%20%ED%83%80%EC%9D%B4%EA%B1%B0%EC%A6%88/%EC%B9%98%EC%96%B4%EB%A6%AC%EB%8D%94#s-5.1
@@ -42,15 +69,15 @@ team_logos = list(
 
 cap_insignia = list(
   "Doosan Bears"  = "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Doosan_Bears_insignia.svg/1024px-Doosan_Bears_insignia.svg.png",
-  "Hanwha Eagles" = "",
-  "Kia Tigers"    = "",
-  "Kiwoom Heros"  = "",
-  "KT Wiz"        = "",
-  "LG Twins"      = "",
-  "Lotte Giants"  = "",
-  "NC Dinos"      = "",
-  "Samsung Lions" = "",
-  "SSG Landers"   = ""
+  "Hanwha Eagles" = "https://upload.wikimedia.org/wikipedia/en/thumb/d/d4/Hanwha_Eagles_cap_logo.svg/1024px-Hanwha_Eagles_cap_logo.svg.png",
+  "Kia Tigers"    = "https://upload.wikimedia.org/wikipedia/en/8/8c/Kia_Tigers_2017_New_insignia.png",
+  "Kiwoom Heros"  = "https://upload.wikimedia.org/wikipedia/commons/6/6e/Kiwoom_Heroes_insignia.png",
+  "KT Wiz"        = "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/KT_Wiz_insignia.svg/1024px-KT_Wiz_insignia.svg.png",
+  "LG Twins"      = "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/LG_Twins_Cap_Logo.svg/1024px-LG_Twins_Cap_Logo.svg.png",
+  "Lotte Giants"  = "https://upload.wikimedia.org/wikipedia/commons/b/bf/Busan_Giants_cap_insignia.svg",
+  "NC Dinos"      = "https://upload.wikimedia.org/wikipedia/en/0/09/NC_Dinos_cap_insignia.png",
+  "Samsung Lions" = "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Samsung_Lions_insignia.svg/1024px-Samsung_Lions_insignia.svg.png",
+  "SSG Landers"   = "https://upload.wikimedia.org/wikipedia/commons/2/2f/SSG_Landers_insignia.png"
 )
 
 team_colors = list(

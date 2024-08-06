@@ -13,8 +13,14 @@ ui <- bslib::page_sidebar(
       body{
         font-size: 12px;
       }
+      .cardb {
+        text-align: center;
+      }
       .valb {
         /* border-width: 0; */
+      }
+      .views {
+        color: #ff0000;
       }
       .fcon {
         height: 55px;
@@ -34,6 +40,9 @@ ui <- bslib::page_sidebar(
     }
     table td:first-child {
       width: 200px;
+    }
+    .html-fill-container {
+      display: block !important;
     }
   "),
 
@@ -56,19 +65,19 @@ ui <- bslib::page_sidebar(
         style = "margin-right: 10px;"
       ),
       shiny::tags$h1("Cheerleaders!", style = "font-family: 'Bangers', cursive;")
-    ),
-
-    shiny::tags$div(
-      class = "d-flex align-items-center",
-      shiny::tags$img(src = "https://shiny.posit.co/images/shiny-solo.png", class = "fcon"),
-      shiny::tags$img(src = "https://glue.tidyverse.org/logo.png", class = "fcon"),
-      shiny::tags$img(src = "https://httr2.r-lib.org/logo.png", class = "fcon"),
-      shiny::tags$img(src = "https://purrr.tidyverse.org/logo.png", class = "fcon"),
-      shiny::tags$img(src = "https://rvest.tidyverse.org/logo.png", class = "fcon"),
-      shiny::tags$img(src = "shinyjs.png", class = "fcon"),
-      shiny::tags$img(src = "https://stringr.tidyverse.org/logo.png", class = "fcon"),
-      shiny::tags$img(src = "https://avatars.githubusercontent.com/u/22032646?s=200&v=4", class = "fcon")
     )
+
+    # shiny::tags$div(
+    #   class = "d-flex align-items-center",
+    #   shiny::tags$img(src = "https://shiny.posit.co/images/shiny-solo.png", class = "fcon"),
+    #   shiny::tags$img(src = "https://glue.tidyverse.org/logo.png", class = "fcon"),
+    #   shiny::tags$img(src = "https://httr2.r-lib.org/logo.png", class = "fcon"),
+    #   shiny::tags$img(src = "https://purrr.tidyverse.org/logo.png", class = "fcon"),
+    #   shiny::tags$img(src = "https://rvest.tidyverse.org/logo.png", class = "fcon"),
+    #   shiny::tags$img(src = "shinyjs.png", class = "fcon"),
+    #   shiny::tags$img(src = "https://stringr.tidyverse.org/logo.png", class = "fcon"),
+    #   shiny::tags$img(src = "https://avatars.githubusercontent.com/u/22032646?s=200&v=4", class = "fcon")
+    # )
   ),
 
   sidebar = bslib::sidebar(
@@ -136,15 +145,18 @@ server <- function(input, output, session) {
 
     })
 
-  team_name <- shiny::reactive(label = "Team name", {
-    names(teams)[which(unlist(teams) == input$team)]
-  })
+  team_info <- shiny::reactive(label = "Team name/colors", {
 
-  team_color <- shiny::reactive(label = "Team colors", {
+    shiny::req(input$team)
 
-    shiny::req(team_name())
+    team_name <- names(teams)[which(unlist(teams) == input$team)]
 
-    team_colors[team_name()][[1]]
+    team_color <- team_colors[team_names()][[1]]
+
+    list(
+      name = team_name,
+      color = team_color
+    )
   })
 
   cheerleader_page <- shiny::reactive(label = "Cheerleader page content", {
@@ -184,13 +196,13 @@ server <- function(input, output, session) {
     # sometimes tables have 2 row headers
     if (ncol(table) == 2) {
       table <- table |>
-        dplyr::mutate(X2 = if_else(X1 %in% c("link", "site", "SNS"), html_content, X2)) |>
+        dplyr::mutate(X2 = dplyr::if_else(X1 %in% c("link", "site", "SNS"), html_content, X2)) |>
         dplyr::filter(X1 != X2,
                       !X1 %in% c("support team", "platform", "signature"),
                       !grepl("youtube", X1, ignore.case = TRUE))
     } else if (ncol(table) == 3) {
       table <- table |>
-        dplyr::mutate(X3 = if_else(X1 %in% c("link", "site", "SNS"), html_content, X3)) |>
+        dplyr::mutate(X3 = dplyr::if_else(X1 %in% c("link", "site", "SNS"), html_content, X3)) |>
         dplyr::select(-X1) |>
         dplyr::rename(X1 = X2, X2 = X3) |>
         dplyr::filter(X1 != X2,
@@ -243,7 +255,8 @@ server <- function(input, output, session) {
 
     list(
       table = table,
-      bio_table = bio_table
+      bio_table = bio_table,
+      links = social_links
       )
   })
 
@@ -252,6 +265,55 @@ server <- function(input, output, session) {
     cheerleaders <- getCheerleaders(input$team)
 
     names(cheerleaders)[which(unlist(cheerleaders) == input$cheerleader)]
+  })
+
+  smm <- shiny::reactive(label = "Social Media Metrics", {
+
+    links <- cheerleader_page()$links
+
+    yt_link <- links[grepl("youtube", links)]
+    insta_link <- links[grepl("instagram", links)]
+    tiktok_link <- links[grepl("tiktok", links)]
+
+    channel_stats <- ytChannelStats(yt_link)
+
+    tiktok <- tiktokStats(tiktok_link)
+
+    # # Instagram ---------------------------------------------------------------
+    #
+    # if (length(insta_link) != 0 ) {
+    #   meta_content <- rvest::read_html(insta_link) |>
+    #     as.character()
+    #
+    #   # page <- httr2::request(insta_link) |>
+    #   #   httr2::req_perform() |>
+    #   #   httr2::resp_body_json()
+    #   #
+    #   # parsed <- rvest::read_html(page)
+    #   #
+    #   # head <- rvest::html_element(parsed, "head")
+    #
+    #   inst_followers <- stringr::str_extract(
+    #     string = meta_content,
+    #     pattern = '(?<=content=")(.*?)(?= Followers)'
+    #   )
+    #
+    #   inst_name <- stringr::str_extract(insta_link, "(?<=/)[^/]+/?$")
+    # } else {
+    #   inst_followers <- NA
+    #   inst_name <- NA
+    # }
+    #
+    list(
+      youtube = youtube,
+      tiktok = tiktok
+    )
+  }) |> shiny::bindEvent(input$cheerleader)
+
+  shiny::observe(label = "Authenticate", priority = 300, {
+    if (is.null(global_token)) {
+      authenticateYouTube()
+    }
   })
 
   shiny::observe(label = "Show/Hide Team", {
@@ -291,7 +353,7 @@ server <- function(input, output, session) {
     shiny::radioButtons(
       inputId = "cheerleader",
       label = "Cheerleaders:",
-      choices = cheerleaders,
+      choices = cheerleaders, # cheerleaders[order(names(cheerleaders))],
       selected = character(0)
     )
   })
@@ -300,64 +362,68 @@ server <- function(input, output, session) {
 
   output$team <- shiny::renderUI({
 
-    shiny::req(team_name())
-    shiny::req(team_color())
+    shiny::req(team_info())
 
     bslib::layout_column_wrap(
       width = NULL,
       fill = FALSE,
-      style = bslib::css(grid_template_columns = "7.5fr 4fr"),
+      style = bslib::css(grid_template_columns = "2.5fr 1fr"),
 
       bslib::card(
         id = "teamCard",
 
         bslib::card_header(
-          style = paste("background-color:", team_color(), "; color: #ffffff;"),
-          team_name()
+          style = paste("background-color:", team_info()$team_color, "; color: #ffffff;"),
+          team_info()$team_name
         ),
         bslib::card_body(
-          shiny::uiOutput("teamPhoto", inline = TRUE)
+          class = "cardb",
+          shiny::uiOutput("teamPhoto") # , inline = TRUE)
         )
       ),
 
-      bslib::card(
-        id = "teamLogoCard",
-        min_height = 404.2,
-        max_height = 404.2,
-        bslib::card_header(
-          style = paste("background-color:", team_color(), "; color: #ffffff;"),
-          paste0(team_name(), " Logo")
+      bslib::layout_column_wrap(
+        width = NULL,
+        heights_equal = "row",
+
+        bslib::card(
+          id = "teamLogoCard",
+          min_height = 324,
+          max_height = 324,
+          bslib::card_header(
+            style = paste("background-color:", team_info()$team_color, "; color: #ffffff;"),
+            paste0(team_info()$team_name, " Team Logo")
+          ),
+          bslib::card_body(
+            class = "cardb",
+            shiny::uiOutput("teamLogo")
+          )
         ),
-        bslib::card_body(
-          fillable = FALSE,
 
-          style = "text-align: center;",
-
-          shiny::uiOutput("teamLogo", inline = TRUE)
+        bslib::card(
+          id = "teamCapInsignia",
+          min_height = 324,
+          max_height = 324,
+          bslib::card_header(
+            style = paste("background-color:", team_info()$team_color, "; color: #ffffff;"),
+            paste0(team_info()$team_name, " Cap Insignia")
+          ),
+          bslib::card_body(
+            class = "cardb",
+            shiny::uiOutput("capInsignia")
+          )
         )
       )
     )
-
-
-
   })
 
   output$individual <- shiny::renderUI({
 
-    shiny::req(team_color())
+    shiny::req(team_info())
     shiny::req(cheerleader())
+    shiny::req(smm())
 
-    bslib::card(
-      bslib::card_header(
-        style = paste("background-color:", team_color(), "; color: #ffffff;"),
-        cheerleader()
-      ),
-      bslib::card_body(
-        fillable = FALSE,
-        shiny::uiOutput("cheerleaderPhoto"),
-        DT::dataTableOutput("cheerleaderBio")
-      )
-    )
+    createCheerleaderUI(team_info, cheerleader, smm)
   })
 
   # main components -----------------------------
@@ -370,7 +436,8 @@ server <- function(input, output, session) {
       shiny::img(
         src = "https://i.ytimg.com/vi/OeCJXyFxJDQ/maxresdefault.jpg",
         # src = "https://kpopping.com/documents/57/4/850/Wiz-N-fullPicture.webp?v=87cb1",
-        height = "80%")
+        style = "height: 600px;"
+        )
     } else if (team == "Samsung Lions") {
       shiny::img(
         src = "https://www.samsunglions.com/en/img/img_cheerleader2017_en.jpg", height = "100%")
@@ -383,7 +450,14 @@ server <- function(input, output, session) {
 
     logo <- team_logos[names(teams)[teams == input$team]][[1]]
 
-    shiny::img(src = logo, height = "100%")
+    shiny::img(src = logo, height = "242px")
+  })
+
+  output$capInsignia <- shiny::renderUI({
+
+    logo <- cap_insignia[names(teams)[teams == input$team]][[1]]
+
+    shiny::img(src = logo, height = "242px")
   })
 
   output$cheerleaderPhoto <- shiny::renderUI({
@@ -420,125 +494,7 @@ server <- function(input, output, session) {
 
 } # server
 
-# utilities ===================================================================
-
-# Team Page -------------------------------------------------------------------
-
-getTeamPhoto <- function(page) {
-
-  page |>
-    rvest::html_node("tr td img[src$='.webp']") |>
-    rvest::html_attr("src")
-}
-
-getCheerleaders <- function(team_url) {
-
-  html_content <- httr2::request(team_url) |>
-    httr2::req_perform() |>
-    httr2::resp_body_html()
-
-  xml_tables <- rvest::html_nodes(html_content, "table")
-
-  df_tables <- lapply(xml_tables, rvest::html_table, fill = TRUE)
-
-  table_index <- cheerTableIndex(df_tables, "name")
-
-  cheerleader_table <- xml_tables[[table_index]]
-
-  names <- cheerleader_table |>
-    rvest::html_nodes("a") |>
-    rvest::html_text()
-
-  links <- cheerleader_table |>
-    rvest::html_nodes("a") |>
-    rvest::html_attr("href")
-
-  idx_keep <- !grepl("\\[\\d+\\]", names)
-
-  names <- stringr::str_to_title(names[idx_keep])
-  links <- links[idx_keep]
-
-  setNames(links, names)
-}
-
-cheerTableIndex <- function(tables, keyword) {
-
-  for (i in seq_along(tables)) {
-    table <- tables[[i]]
-    if (ncol(table) == 4) {
-      if (any(table$X2 == keyword)) {
-        return(i)
-      }
-    }
-  }
-  return(NULL)
-}
-
-# Cheerleader Page ------------------------------------------------------------
-
-getCheerleaderPhoto <- function(bio_table) {
-
-  bio_images <- bio_table |>
-    rvest::html_nodes("tr td img[src$='.webp']") |>
-    rvest::html_attr("src")
-
-  bio_images[1]
-}
-
-# Helpers ---------------------------------------------------------------------
-
-bioTableIndex <- function(tables, keywords) {
-
-  for (i in seq_along(tables)) {
-    table <- tables[[i]]
-    if (any(!is.na(table$X1))) {
-      if (any(table$X1 %in% keywords)) {
-        return(i)
-      }
-    }
-  }
-}
-
-matchIconsToLinks <- function(links, mapping) {
-
-  matched_icons <- vector("character", length(links))
-  for (i in seq_along(links)) {
-    link <- links[i]
-    for (keyword in names(mapping)) {
-      if (grepl(keyword, link, ignore.case = TRUE)) {
-        matched_icons[i] <- mapping[[keyword]]
-        break
-      }
-    }
-  }
-  return(matched_icons)
-}
-
-extractBioTable <- function(tibble_list, values) {
-
-  for (tbl in tibble_list) {
-    if (any(tbl[[1]] %in% values, na.rm = TRUE)) {
-      tbl <- tbl |> dplyr::select(dplyr::where(~ !any(is.na(.))))
-      return(tbl)
-    }
-  }
-}
-
-createHTML <- function(links, icons) {
-
-  purrr::map2(links, icons, ~glue::glue(
-    '<a href="{.x}" target="_blank"><img src="{.y}" width="42" height="42"></a>&nbsp'
-  )) |> paste(collapse = "")
-}
-
 shinyApp(ui = ui, server = server)
-
-
-
-
-
-
-
 
 
 

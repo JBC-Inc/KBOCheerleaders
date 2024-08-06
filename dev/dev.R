@@ -280,3 +280,76 @@ get_cheerleaders <- function(team_url) {
 # }
 
 
+# YOUTUBE STATISTICS ==========================================================
+
+if (length(yt_link) != 0) {
+  if (length(yt_link) > 1) {
+    yt_link <- yt_link[1]
+  }
+  if (stringr::str_detect(yt_link, "@")) {
+    channel_id <- tryCatch({
+      page <- rvest::read_html(yt_link) |> rvest::html_text2()
+      sub(".*channel_id=([A-Za-z0-9_-]+).*", "\\1", page)
+    }, error = function(e) {
+      return(NULL)
+    })
+  } else {
+    channel_id <- stringr::str_extract(yt_link, "(?<=/)[^/.]{24}")
+    channel_stats <- tuber::get_channel_stats(channel_id = channel_id)
+  }
+
+  if (is.null(channel_id)){
+    channel_stats <- list(title = NA, count = NA, subs = NA, views = NA)
+  }
+} else {
+  channel_stats <- list(title = NA, count = NA, subs = NA, views = NA)
+}
+
+
+# if (length(yt_link) != 0) {
+#   if (length(yt_link) > 1) {
+#     yt_link <- yt_link[1]
+#   }
+#
+#   # everything after last slash
+#   channel_id <- stringr::str_extract(yt_link, "(?<=/)[^/]+$") # [^/]+$
+#
+#   # case normal id 24 chars
+#   if (!grepl("@", channel_id)) {
+#     channel_id <- stringr::str_sub(channel_id, 1, 24)
+#   } else {
+#     # case @username
+#     html_text <- rvest::read_html(yt_link) |> rvest::html_text2()
+#     channel_id <- sub(".*channel_id=([A-Za-z0-9_-]+).*", "\\1", html_text)
+#   }
+#   channel_stats <- tuber::get_channel_stats(channel_id = channel_id)
+# } else {
+#   channel_stats <- list(title = NA, count = NA, subs = NA, views = NA)
+# }
+
+if (length(tiktok_link) != 0) {
+
+  page <- httr2::request(tiktok_link) |>
+    httr2::req_perform() |>
+    httr2::resp_body_string()
+
+
+
+  # html <- rvest::read_html(tiktok_link) |>
+  #   as.character()
+
+  tt_name <- stringr::str_extract(tiktok_link, "(?<=/)[^/]+/?$")
+
+  stats <- stringr::str_extract(
+    string = page,
+    pattern = '"stats":\\{[^}]*\\}'
+  )
+
+  tt_followers <- stringr::str_extract(stats, '(?<=followerCount":)\\d+')
+
+  tt_likes <- stringr::str_extract(stats, '(?<=heart":)\\d+')
+} else {
+  tt_name <- NA
+  tt_followers <- NA
+  tt_likes <- NA
+}

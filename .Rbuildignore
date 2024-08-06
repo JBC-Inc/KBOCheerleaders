@@ -3,3 +3,5 @@
 ^KBOCheerleaders\.Rproj$
 ^\.Rproj\.user$
 ^LICENSE\.md$
+^\.httr-oauth$
+^\.auth_yt$

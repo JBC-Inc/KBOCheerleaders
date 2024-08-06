@@ -99,6 +99,23 @@
       ],
       "Hash": "f27411eb6d9c3dada5edd444b8416675"
     },
+    "YTAnalytics": {
+      "Package": "YTAnalytics",
+      "Version": "0.1.0",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "YTAnalytics",
+      "RemoteUsername": "davisj95",
+      "RemoteRef": "HEAD",
+      "RemoteSha": "c3595430fad6e1f548c4606969092e9010a5047a",
+      "Requirements": [
+        "dplyr",
+        "httr",
+        "jsonlite"
+      ],
+      "Hash": "afd003360527129c0d33b545e308328e"
+    },
     "askpass": {
       "Package": "askpass",
       "Version": "1.2.0",
@@ -201,6 +218,20 @@
         "tidyr"
       ],
       "Hash": "a4652c36d1f8abfc3ddf4774f768c934"
+    },
+    "bsicons": {
+      "Package": "bsicons",
+      "Version": "0.1.2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "cli",
+        "htmltools",
+        "rlang",
+        "utils"
+      ],
+      "Hash": "d8f892fbd94d0b9b1f6d688b05b8633c"
     },
     "bslib": {
       "Package": "bslib",
@@ -1288,6 +1319,17 @@
       ],
       "Hash": "2ec30ffbeec83da57655b850cf2d3e0e"
     },
+    "plyr": {
+      "Package": "plyr",
+      "Version": "1.8.9",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "Rcpp"
+      ],
+      "Hash": "6b8177fd19982f0020743fadbfdbd933"
+    },
     "praise": {
       "Package": "praise",
       "Version": "1.0.0",
@@ -1966,6 +2008,22 @@
         "xfun"
       ],
       "Hash": "cfbad971a71f0e27cec22e544a08bc3b"
+    },
+    "tuber": {
+      "Package": "tuber",
+      "Version": "0.9.9",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "dplyr",
+        "httr",
+        "jsonlite",
+        "plyr",
+        "purrr",
+        "utils"
+      ],
+      "Hash": "8d1687cb2c721c3ef70d3773a553c550"
     },
     "tzdb": {
       "Package": "tzdb",
