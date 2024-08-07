@@ -122,12 +122,11 @@ ui <- bslib::page_sidebar(
 
 server <- function(input, output, session) {
 
-  shiny::observe(label = "Authenticate", priority = 300, {
-
-    if (is.null(global_token)) {
-      authenticateYouTube()
-    }
-  })
+  # shiny::observe(label = "Authenticate", priority = 300, {
+  #   if (is.null(global_token)) {
+  #     authenticateYouTube()
+  #   }
+  # })
 
   shinyjs::hide("team")
   shinyjs::hide("valb")
@@ -180,6 +179,14 @@ server <- function(input, output, session) {
         )
       )
     }
+
+    # shiny::req(input$team != "")
+    #
+    # url <- paste0(wiki_url, input$cheerleader)
+    #
+    # page <- httr2::request(url) |>
+    #   httr2::req_perform() |>
+    #   httr2::resp_body_html()
 
     xml_tables <- rvest::html_nodes(page, "table")
 
