@@ -15,8 +15,9 @@ authenticateYouTube <- function() {
 
   tuber::yt_oauth(
     app_id = Sys.getenv("YT_CLIENT_ID"),
-    app_secret = Sys.getenv("YT_CLIENT_SECRET")
-    # token = './.httr-oauth'
+    app_secret = Sys.getenv("YT_CLIENT_SECRET"),
+    token = '',
+    scope = "own_account_readonly"
   )
   global_token <<- TRUE
 }
