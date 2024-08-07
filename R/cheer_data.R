@@ -11,12 +11,12 @@ authenticateYouTube <- function() {
   #   clientSecret = Sys.getenv("YT_CLIENT_SECRET")
   #   )
 
-  file.remove(".httr-oauth")
+  # file.remove(".httr-oauth")
 
   tuber::yt_oauth(
     app_id = Sys.getenv("YT_CLIENT_ID"),
     app_secret = Sys.getenv("YT_CLIENT_SECRET")
-    # token = ''
+    # token = './.httr-oauth'
   )
   global_token <<- TRUE
 }
