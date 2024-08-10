@@ -70,13 +70,28 @@ team_colors = list(
   "SSG Landers"   = "#CF112D"
 )
 
+team_themesong = list(
+  "Doosan Bears"  = "https://www.youtube.com/watch?v=IeyOr91IuyA",
+  "Hanwha Eagles" = "https://www.youtube.com/watch?v=45IrJtdGtDk",
+  "Kia Tigers"    = "https://www.youtube.com/watch?v=6RiMyqT3_t0",
+  "Kiwoom Heros"  = "https://www.youtube.com/watch?v=antR6UYqZKk",
+  "KT Wiz"        = "https://www.youtube.com/watch?v=bsWBORqEjpI",
+  "LG Twins"      = "https://www.youtube.com/watch?v=CeGiBg9eXG0",
+  "Lotte Giants"  = "https://www.youtube.com/watch?v=NSR5kAxIEi0",
+  "NC Dinos"      = "https://www.youtube.com/watch?v=QmgeKEe-LEE",
+  "Samsung Lions" = "https://www.youtube.com/watch?v=AmQC5K6_HUs",
+  "SSG Landers"   = "https://www.youtube.com/watch?v=zX7uot4biaQ"
+)
+
 team_names <- names(teams)
 
 team_data <- data.frame(name = team_names,
-                        url = sapply(team_names, function(name) teams[[name]]),
-                        logo = sapply(team_names, function(name) team_logos[[name]]),
+                        url      = sapply(team_names, function(name) teams[[name]]),
+                        logo     = sapply(team_names, function(name) team_logos[[name]]),
                         insignia = sapply(team_names, function(name) cap_insignia[[name]]),
-                        color = sapply(team_names, function(name) team_colors[[name]]))
+                        color    = sapply(team_names, function(name) team_colors[[name]]),
+                        song     = sapply(team_names, function(name) team_themesong[[name]])
+                        )
 
 usethis::use_data(team_data, internal = FALSE, overwrite = TRUE)
 
@@ -141,6 +156,10 @@ cheer_data <- purrr::map(cheer_data, ~ {
   .x$bio_table <- NULL
   .x
 })
+
+# fix dupe link
+cheer_data$`Hannah Kim`$table <- cheer_data$`Hannah Kim`$table[-1, ]
+cheer_data$`Hyein Na`$table <- cheer_data$`Hyein Na`$table[-1, ]
 
 usethis::use_data(cheer_data, internal = FALSE, overwrite = TRUE)
 

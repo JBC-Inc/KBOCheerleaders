@@ -1,0 +1,75 @@
+
+.selectize-input {
+  font-size: 12px;
+  line-height: 1rem;
+  border-radius: 7px;
+}
+
+.selectize-dropdown {
+  font-size: 12px;
+  line-height: 1rem;
+}
+
+table td:first-child {
+  width: 200px;
+}
+
+
+/* card value box formatting */
+
+.html-fill-container {
+  display: block !important;
+}
+
+/* icon colors */
+
+.bslib-value-box.default .value-box-showcase svg.bi.bi-youtube {
+    fill: #FF0000 !important;
+}
+
+.bslib-value-box.default .value-box-showcase svg.bi.bi-instagram {
+    fill: rgba(255, 255, 255, 0.6) !important;
+    background: linear-gradient(45deg, #FFD600, #FF7A00, #FF0069, #D300C5, #7638FA);
+    border-radius: 18px;
+}
+
+/*
+.bslib-value-box.default .value-box-showcase svg.bi.bi-tiktok {
+    fill: #000000 !important;
+}
+.tiktok-text {
+    font-family: Arial, sans-serif;
+    font-size: 24px;
+    fill: #FF0000;
+    text-shadow: 4px 4px 8px rgba(255, 0, 0, 0.5);
+}
+*/
+
+/* icon padding */
+.value-box-showcase.html-fill-item.html-fill-container {
+  /*padding: 5px;*/
+}
+.value-box-area.html-fill-item.html-fill-container {
+  /*padding: 5px;*/
+}
+
+/* stat font size */
+
+.bslib-value-box .value-box-value {
+  font-size: 1rem;
+}
+
+.bslib-grid .bslib-mb-spacing {
+  display: flex !important;
+}
+
+
+
+
+
+
+
+
+
+
+

@@ -2,7 +2,7 @@
 
 ui <- bslib::page_sidebar(
 
-  shinyjs::useShinyjs(),
+  addExternalResources(),
 
   theme = bslib::bs_theme(
     version = 5
@@ -16,62 +16,15 @@ ui <- bslib::page_sidebar(
       .cardb {
         text-align: center;
       }
-      .views {
-        color: #ff0000;
-      }
       .fcon {
         height: 55px;
         margin-right: 10px;
       }
     "),
 
-  tags$style(type='text/css', "
-    .selectize-input {
-      font-size: 12px;
-      line-height: 1rem;
-      border-radius: 7px;
-    }
-    .selectize-dropdown {
-      font-size: 12px;
-      line-height: 1rem;
-    }
-    table td:first-child {
-      width: 200px;
-    }
-
-    /* card value box formatting */
-
-    .html-fill-container {
-      display: block !important;
-    }
-    .value-box-showcase.html-fill-item.html-fill-container {
-      padding: 5px;
-    }
-    .value-box-area.html-fill-item.html-fill-container {
-      padding: 5px;
-    }
-    .bslib-value-box .value-box-value {
-      font-size: 1rem;
-    }
-
-    .bslib-grid .bslib-mb-spacing {
-      display: flex !important;
-    }
-
-  "),
-
-  shiny::tags$head(
-    shiny::tags$link(
-      rel = "stylesheet",
-      href = "https://fonts.googleapis.com/css2?family=Bangers&display=swap")
-  ),
-
   title = shiny::tags$div(
     class = "d-flex justify-content-between align-items-center w-100",
-
-    shiny::tags$div(
-      class = "d-flex align-items-center",
-
+    shiny::tags$div(class = "d-flex align-items-center",
       shiny::tags$img(
         src = paste0("https://upload.wikimedia.org/wikipedia/en/thumb/5/59/",
                      "KBO_League.svg/1920px-KBO_League.svg.png"),
@@ -83,18 +36,15 @@ ui <- bslib::page_sidebar(
   ),
 
   sidebar = bslib::sidebar(
-
     shiny::selectizeInput(
       inputId = "team",
       label = "Teams:",
       choices = c("", team_data$name)
     ),
-
-    shiny::uiOutput("cheerleaderUI")
+    shiny::uiOutput("cheerleaderUI"),
+    shiny::uiOutput("song")
   ),
-
   shiny::uiOutput("team"),
-
   # bslib::card(
   #   id = "valb",
   #   class = "valb",
@@ -116,7 +66,6 @@ ui <- bslib::page_sidebar(
   #     )
   #   )
   # ),
-
   shiny::uiOutput("individual")
 )
 
@@ -137,7 +86,8 @@ server <- function(input, output, session) {
       color = team_data$color[team_data$name == input$team],
       photo = team_photos[which(team_data$name == input$team)],
       logo  = team_data$logo[team_data$name == input$team],
-      cap   = team_data$insignia[team_data$name == input$team]
+      cap   = team_data$insignia[team_data$name == input$team],
+      song  = team_data$song[team_data$name == input$team]
     )
   })
 
@@ -150,15 +100,30 @@ server <- function(input, output, session) {
     )
   })
 
-  shiny::observe(label = "Show/Hide Team", {
+  shiny::observeEvent(input$team, label = "Show/Hide Team", {
 
     if (input$team != "") {
       shinyjs::show("team")
       shinyjs::show("valb")
       shinyjs::hide("individual")
     }
-  }) |>
-    shiny::bindEvent(input$team)
+
+    song <- td()$song
+
+    video_id <- sub(".*v=([^&]+).*", "\\1", song)
+
+    song <- paste0("https://www.youtube.com/embed/", video_id, "?autoplay=1")
+
+    output$song <- shiny::renderUI(
+      shiny::tags$iframe(
+        width="200",
+        height="113",
+        src=song,
+        frameborder="0",
+        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture",
+        allowfullscreen=NA)
+    )
+  }, ignoreInit = TRUE)
 
   shiny::observe(label = "Show/Hide Cheerleader", {
 
@@ -174,6 +139,8 @@ server <- function(input, output, session) {
 
   output$cheerleaderUI <- shiny::renderUI({
 
+    shiny::req(input$team)
+
     cheerleaders <- team_cheerleaders |>
       dplyr::filter(team == input$team) |>
       dplyr::pull(cheerleader)
@@ -181,7 +148,7 @@ server <- function(input, output, session) {
     shiny::radioButtons(
       inputId = "cheerleader",
       label = "Cheerleaders:",
-      choices = cheerleaders,
+      choices = sort(cheerleaders),
       selected = character(0)
     )
   })
@@ -246,9 +213,13 @@ server <- function(input, output, session) {
 
   output$individual <- shiny::renderUI({
 
+    shiny::req(input$cheerleader)
+
     yt <- dplyr::filter(smm()$youtube, name == input$cheerleader)
     inst <- dplyr::filter(smm()$instagram, name == input$cheerleader)
     tt <- dplyr::filter(smm()$tiktok, cheername == input$cheerleader)
+
+    yt <- yt |> dplyr::filter(views > 200000)
 
     photoBio <- bslib::card(
       full_screen = TRUE,
@@ -274,25 +245,24 @@ server <- function(input, output, session) {
         class = "cardb",
 
         bslib::card_header(
-          style = paste("background-color:",
-                        td()$color, "; color: #ffffff;"),
+          style = paste("background-color:", td()$color, "; color: #ffffff;"),
           paste0("YouTube Statistics for ", yt$title)
         ),
 
         bslib::value_box(
           title = "Subscribers",
           format(yt$subs, big.mark = ","),
-          showcase = bsicons::bs_icon("youtube")
+          showcase = bsicons::bs_icon("youtube") # , size = "3rem")
         ),
         bslib::value_box(
           title = "Views",
           format(yt$views, big.mark = ","),
-          showcase = bsicons::bs_icon("film", class = "views")
+          showcase = bsicons::bs_icon("film") # , size = "3rem")
         ),
         bslib::value_box(
           title = "Videos",
           format(yt$count, big.mark = ","),
-          showcase = bsicons::bs_icon("camera-video")
+          showcase = bsicons::bs_icon("camera-video") # , size = "3rem")
         )
       )
     } else {
@@ -313,7 +283,7 @@ server <- function(input, output, session) {
         bslib::value_box(
           title = "Followers",
           format(inst$followers, big.mark = ","),
-          showcase = bsicons::bs_icon("instagram")
+          showcase = bsicons::bs_icon("instagram") # , size = "3rem")
         )
       )
     } else {
@@ -327,19 +297,22 @@ server <- function(input, output, session) {
         class = "cardb",
 
         bslib::card_header(
-          style = paste("background-color:",
-                        td()$color, "; color: #ffffff;"),
+          style = paste("background-color:", td()$color, "; color: #ffffff;"),
           paste0("TikTik Statistics for ", tt$name)
         ),
         bslib::value_box(
           title = "Followers",
           format(as.numeric(tt$followers), big.mark = ","),
-          showcase = bsicons::bs_icon("tiktok")
+          # showcase = bsicons::bs_icon("tiktok", size = "3rem")
+          showcase = htmltools::img(src = "tiktok.webp",
+                                    alt = "tiktok icon",
+                                    height = "64",
+                                    width = "64")
         ),
         bslib::value_box(
           title = "Likes",
           format(as.numeric(tt$likes), big.mark = ","),
-          showcase = bsicons::bs_icon("heart")
+          showcase = bsicons::bs_icon("heart") # , size = "3rem")
         )
       )
     } else {

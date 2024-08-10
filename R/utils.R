@@ -414,6 +414,7 @@ getYouTube <- function(cheer_data) {
   for (cheerleader in seq_along(names(cheer_data))) {
     links <- cheer_data[[cheerleader]][[2]]
     yt_link <- links[grepl("youtube", links)]
+    # yt_link <- yt_link[1]
 
     if (length(yt_link) != 0) {
       for (link in yt_link) {
