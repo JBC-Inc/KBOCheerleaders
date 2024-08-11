@@ -153,6 +153,32 @@ getTeamPhotos <- function(team_data) {
   # print(magick::image_read(paste0("./www/team_img/", team_data$name[[7]], ".webp")))
 }
 
+getTeamLogos <- function(team_logos) {
+  if (!dir.exists("./www/team_logo")) {
+    dir.create("./www/team_logo", recursive = TRUE)
+  }
+  for (team in seq_along(team_logos)) {
+    download.file(
+      url = team_logos[[team]],
+      destfile = paste0("./www/team_logo/", names(team_logos[team]), ".png"),
+      mode = "wb"
+    )
+  }
+}
+
+getTeamCap <- function(team_caps) {
+  if (!dir.exists("./www/team_cap")) {
+    dir.create("./www/team_cap", recursive = TRUE)
+  }
+  for (team in seq_along(team_caps)) {
+    download.file(
+      url = team_caps[[team]],
+      destfile = paste0("./www/team_cap/", names(team_caps[team]), ".png"),
+      mode = "wb"
+    )
+  }
+}
+
 # Cheerleader page ------------------------------------------------------------
 
 #' Get Cheerleader Page
@@ -231,23 +257,29 @@ getCheerleaderPage <- function(wiki_url, cheerleader_url, values) {
       names(keyword_image_mapping), ~
         stringr::str_detect(link, stringr::regex(.x, ignore_case = TRUE)))
     if (!is.null(keyword)) {
-      keyword_image_mapping[[keyword]]
+      file.path("/www/social_icons", keyword_image_mapping[[keyword]])
     } else {
       NA_character_
     }
   })
 
-  # account for missing values
-  social_links <- social_links[social_icons != ""]
-  social_icons <- social_icons[social_icons != ""]
+  # if (cheerleader_url == "/w/%EC%84%9C%EC%9C%A0%EB%A6%BC") {
+  #   browser()
+  # }
 
-  # html_content <- createHTML(social_links, social_icons)
+  # account for missing values
+  valid_links <- !is.na(social_icons) & social_icons != ""
+
+  social_links <- social_links[valid_links]
+  social_icons <- social_icons[valid_links]
+
+  # createHTML(social_links, social_icons)
 
   html_content <- purrr::map2(social_links, social_icons, ~glue::glue(
     '<a href="{.x}" target="_blank"><img src="{.y}" width="42" height="42"></a>&nbsp'
   )) |> paste(collapse = "")
 
-  # table <- extractBioTable(df_tables, c("nationality", "birth"))
+  # extractBioTable(df_tables, values = c("nationality", "birth"))
 
   table <- df_tables|>
     purrr::detect(~ any(.x[[1]] %in% values, na.rm = TRUE)) |>
@@ -258,7 +290,8 @@ getCheerleaderPage <- function(wiki_url, cheerleader_url, values) {
   # sometimes tables have 2 row headers
   if (ncol(table) == 2) {
     table <- table |>
-      dplyr::mutate(X1 = ifelse(X1 %in% c("|", ""), "link", X1),
+      dplyr::mutate(X1 = ifelse(X1 %in% c("", "|", "||", "|||", "||||",
+                                          "||[7]|||", "||[2]|||"), "link", X1),
                     X2 = dplyr::if_else(X1 %in% c("link", "site", "SNS"), html_content, X2)) |>
       dplyr::filter(X1 != X2,
                     !X1 %in% c("support team", "platform", "signature"),

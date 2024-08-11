@@ -25,7 +25,11 @@ Imports:
     tuber,
     YTAnalytics,
     magick,
-    htmltools
+    htmltools,
+    ggimage,
+    tidyr,
+    gt,
+    reactable
 Depends: 
     R (>= 2.10),
     tidyverse

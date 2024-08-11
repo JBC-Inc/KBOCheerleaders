@@ -1,4 +1,9 @@
 
+/* above tabset */
+.main.bslib-gap-spacing.html-fill-container {
+  padding-top: 5px;
+}
+
 .selectize-input {
   font-size: 12px;
   line-height: 1rem;
@@ -14,8 +19,21 @@ table td:first-child {
   width: 200px;
 }
 
+/* stat cards */
 
-/* card value box formatting */
+.stat-fat {
+  padding: 0px;
+}
+
+#stat,
+#f1 {
+  padding-top: 10px;
+}
+
+
+
+
+/* cheerleader cards  */
 
 .html-fill-container {
   display: block !important;

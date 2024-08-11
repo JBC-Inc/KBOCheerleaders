@@ -7,6 +7,8 @@ addExternalResources <- function() {
 
     shinyjs::useShinyjs(),
 
+    shiny::tags$script(src = "script.js"),
+
     shiny::includeCSS(path = "./www/custom.css"),
 
     shiny::tags$link(

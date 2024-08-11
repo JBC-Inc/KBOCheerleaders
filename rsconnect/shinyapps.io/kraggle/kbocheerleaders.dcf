@@ -1,10 +1,12 @@
 name: kbocheerleaders
-title:
+title: KBOCheerleaders
 username: kraggle
 account: kraggle
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 12417986
-bundleId: 8966326
+bundleId: 8968160
 url: https://kraggle.shinyapps.io/kbocheerleaders/
 version: 1
+asMultiple: FALSE
+asStatic: FALSE

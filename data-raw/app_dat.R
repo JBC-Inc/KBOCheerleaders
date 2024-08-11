@@ -7,29 +7,82 @@ usethis::use_data(wiki_url, internal = FALSE, overwrite = TRUE)
 ############################# GEN TEAM DATA ###################################
 ###############################################################################
 
-# 11 Doosan Bears   https://en.namu.wiki/w/%EB%91%90%EC%82%B0%20%EB%B2%A0%EC%96%B4%EC%8A%A4/%EC%B9%98%EC%96%B4%EB%A6%AC%EB%8D%94
-#  8 Hanwha Eagles  https://en.namu.wiki/w/%ED%95%9C%ED%99%94%20%EC%9D%B4%EA%B8%80%EC%8A%A4/%EC%B9%98%EC%96%B4%EB%A6%AC%EB%8D%94
-# 12 Kia Tigers     https://en.namu.wiki/w/KIA%20%ED%83%80%EC%9D%B4%EA%B1%B0%EC%A6%88/%EC%B9%98%EC%96%B4%EB%A6%AC%EB%8D%94#s-5.1
-#  8 Kiwoom Heros   https://en.namu.wiki/w/%ED%82%A4%EC%9B%80%20%ED%9E%88%EC%96%B4%EB%A1%9C%EC%A6%88/%EC%B9%98%EC%96%B4%EB%A6%AC%EB%8D%94
-#  8 KT Wiz         https://en.namu.wiki/w/kt%20wiz/%EC%B9%98%EC%96%B4%EB%A6%AC%EB%8D%94
-#  9 LG Twins       https://en.namu.wiki/w/LG%20%ED%8A%B8%EC%9C%88%EC%8A%A4/%EC%B9%98%EC%96%B4%EB%A6%AC%EB%8D%94
-# 10 Lotte Giants   https://en.namu.wiki/w/%EB%A1%AF%EB%8D%B0%20%EC%9E%90%EC%9D%B4%EC%96%B8%EC%B8%A0/%EC%B9%98%EC%96%B4%EB%A6%AC%EB%8D%94
-# 10 NC Dinos       https://en.namu.wiki/w/NC%20%EB%8B%A4%EC%9D%B4%EB%85%B8%EC%8A%A4/%EC%B9%98%EC%96%B4%EB%A6%AC%EB%8D%94
-# 11 Samsung Lions  https://en.namu.wiki/w/%EC%82%BC%EC%84%B1%20%EB%9D%BC%EC%9D%B4%EC%98%A8%EC%A6%88/%EC%B9%98%EC%96%B4%EB%A6%AC%EB%8D%94
-# 10 SSG Landers    https://en.namu.wiki/w/SSG%20%EB%9E%9C%EB%8D%94%EC%8A%A4/%EC%B9%98%EC%96%B4%EB%A6%AC%EB%8D%94
+# "Doosan Bears"  = "",
+# "Hanwha Eagles" = "",
+# "Kia Tigers"    = "",
+# "Kiwoom Heros"  = "",
+# "KT Wiz"        = "",
+# "LG Twins"      = "",
+# "Lotte Giants"  = "",
+# "NC Dinos"      = "",
+# "Samsung Lions" = "",
+# "SSG Landers"   = ""
 
-teams = list(
-  "Doosan Bears"  = "https://en.namu.wiki/w/%EB%91%90%EC%82%B0%20%EB%B2%A0%EC%96%B4%EC%8A%A4/%EC%B9%98%EC%96%B4%EB%A6%AC%EB%8D%94",
-  "Hanwha Eagles" = "https://en.namu.wiki/w/%ED%95%9C%ED%99%94%20%EC%9D%B4%EA%B8%80%EC%8A%A4/%EC%B9%98%EC%96%B4%EB%A6%AC%EB%8D%94",
-  "Kia Tigers"    = "https://en.namu.wiki/w/KIA%20%ED%83%80%EC%9D%B4%EA%B1%B0%EC%A6%88/%EC%B9%98%EC%96%B4%EB%A6%AC%EB%8D%94#s-5.1",
-  "Kiwoom Heros"  = "https://en.namu.wiki/w/%ED%82%A4%EC%9B%80%20%ED%9E%88%EC%96%B4%EB%A1%9C%EC%A6%88/%EC%B9%98%EC%96%B4%EB%A6%AC%EB%8D%94",
-  "KT Wiz"        = "https://en.namu.wiki/w/kt%20wiz/%EC%B9%98%EC%96%B4%EB%A6%AC%EB%8D%94",
-  "LG Twins"      = "https://en.namu.wiki/w/LG%20%ED%8A%B8%EC%9C%88%EC%8A%A4/%EC%B9%98%EC%96%B4%EB%A6%AC%EB%8D%94",
-  "Lotte Giants"  = "https://en.namu.wiki/w/%EB%A1%AF%EB%8D%B0%20%EC%9E%90%EC%9D%B4%EC%96%B8%EC%B8%A0/%EC%B9%98%EC%96%B4%EB%A6%AC%EB%8D%94",
-  "NC Dinos"      = "https://en.namu.wiki/w/NC%20%EB%8B%A4%EC%9D%B4%EB%85%B8%EC%8A%A4/%EC%B9%98%EC%96%B4%EB%A6%AC%EB%8D%94",
-  "Samsung Lions" = "https://en.namu.wiki/w/%EC%82%BC%EC%84%B1%20%EB%9D%BC%EC%9D%B4%EC%98%A8%EC%A6%88/%EC%B9%98%EC%96%B4%EB%A6%AC%EB%8D%94",
-  "SSG Landers"   = "https://en.namu.wiki/w/SSG%20%EB%9E%9C%EB%8D%94%EC%8A%A4/%EC%B9%98%EC%96%B4%EB%A6%AC%EB%8D%94"
+name <- c(
+  "Doosan Bears",
+  "Hanwha Eagles",
+  "Kia Tigers",
+  "Kiwoom Heros",
+  "KT Wiz",
+  "LG Twins",
+  "Lotte Giants",
+  "NC Dinos",
+  "Samsung Lions",
+  "SSG Landers"
+  )
+
+url = c(
+  "https://en.namu.wiki/w/%EB%91%90%EC%82%B0%20%EB%B2%A0%EC%96%B4%EC%8A%A4/%EC%B9%98%EC%96%B4%EB%A6%AC%EB%8D%94",
+  "https://en.namu.wiki/w/%ED%95%9C%ED%99%94%20%EC%9D%B4%EA%B8%80%EC%8A%A4/%EC%B9%98%EC%96%B4%EB%A6%AC%EB%8D%94",
+  "https://en.namu.wiki/w/KIA%20%ED%83%80%EC%9D%B4%EA%B1%B0%EC%A6%88/%EC%B9%98%EC%96%B4%EB%A6%AC%EB%8D%94#s-5.1",
+  "https://en.namu.wiki/w/%ED%82%A4%EC%9B%80%20%ED%9E%88%EC%96%B4%EB%A1%9C%EC%A6%88/%EC%B9%98%EC%96%B4%EB%A6%AC%EB%8D%94",
+  "https://en.namu.wiki/w/kt%20wiz/%EC%B9%98%EC%96%B4%EB%A6%AC%EB%8D%94",
+  "https://en.namu.wiki/w/LG%20%ED%8A%B8%EC%9C%88%EC%8A%A4/%EC%B9%98%EC%96%B4%EB%A6%AC%EB%8D%94",
+  "https://en.namu.wiki/w/%EB%A1%AF%EB%8D%B0%20%EC%9E%90%EC%9D%B4%EC%96%B8%EC%B8%A0/%EC%B9%98%EC%96%B4%EB%A6%AC%EB%8D%94",
+  "https://en.namu.wiki/w/NC%20%EB%8B%A4%EC%9D%B4%EB%85%B8%EC%8A%A4/%EC%B9%98%EC%96%B4%EB%A6%AC%EB%8D%94",
+  "https://en.namu.wiki/w/%EC%82%BC%EC%84%B1%20%EB%9D%BC%EC%9D%B4%EC%98%A8%EC%A6%88/%EC%B9%98%EC%96%B4%EB%A6%AC%EB%8D%94",
+  "https://en.namu.wiki/w/SSG%20%EB%9E%9C%EB%8D%94%EC%8A%A4/%EC%B9%98%EC%96%B4%EB%A6%AC%EB%8D%94"
+  )
+
+color = c(
+  "#131230",
+  "#ff6600",
+  "#EC0F32",
+  "#820023",
+  "#000000",
+  "#a50034",
+  "#041e42",
+  "#071d3d",
+  "#074CA1",
+  "#CF112D"
+  )
+
+themesong = c(
+  "https://www.youtube.com/watch?v=IeyOr91IuyA",
+  "https://www.youtube.com/watch?v=45IrJtdGtDk",
+  "https://www.youtube.com/watch?v=6RiMyqT3_t0",
+  "https://www.youtube.com/watch?v=antR6UYqZKk",
+  "https://www.youtube.com/watch?v=bsWBORqEjpI",
+  "https://www.youtube.com/watch?v=CeGiBg9eXG0",
+  "https://www.youtube.com/watch?v=NSR5kAxIEi0",
+  "https://www.youtube.com/watch?v=QmgeKEe-LEE",
+  "https://www.youtube.com/watch?v=AmQC5K6_HUs",
+  "https://www.youtube.com/watch?v=zX7uot4biaQ"
 )
+
+team_data <-
+  data.frame(
+    name = name,
+    url = url,
+    color = color,
+    song = themesong
+  )
+
+usethis::use_data(team_data, internal = FALSE, overwrite = TRUE)
+
+###############################################################################
+############################# GEN TEAM LOGO ###################################
+###############################################################################
 
 team_logos = list(
   "Doosan Bears"  = "https://upload.wikimedia.org/wikipedia/en/thumb/9/98/Doosan_Bears.svg/1280px-Doosan_Bears.svg.png",
@@ -44,7 +97,17 @@ team_logos = list(
   "SSG Landers"   = "https://upload.wikimedia.org/wikipedia/en/8/86/SSG_Landers.png"
 )
 
-cap_insignia = list(
+getTeamLogos(team_logos)
+
+team_logos <- list.files("./www/team_logo")
+
+usethis::use_data(team_logos, overwrite = TRUE)
+
+###############################################################################
+############################# GEN TEAM CAP ####################################
+###############################################################################
+
+team_caps = list(
   "Doosan Bears"  = "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Doosan_Bears_insignia.svg/1024px-Doosan_Bears_insignia.svg.png",
   "Hanwha Eagles" = "https://upload.wikimedia.org/wikipedia/en/thumb/d/d4/Hanwha_Eagles_cap_logo.svg/1024px-Hanwha_Eagles_cap_logo.svg.png",
   "Kia Tigers"    = "https://upload.wikimedia.org/wikipedia/en/8/8c/Kia_Tigers_2017_New_insignia.png",
@@ -57,43 +120,15 @@ cap_insignia = list(
   "SSG Landers"   = "https://upload.wikimedia.org/wikipedia/commons/2/2f/SSG_Landers_insignia.png"
 )
 
-team_colors = list(
-  "Doosan Bears"  = "#131230",
-  "Hanwha Eagles" = "#ff6600",
-  "Kia Tigers"    = "#EC0F32",
-  "Kiwoom Heros"  = "#820023",
-  "KT Wiz"        = "#000000",
-  "LG Twins"      = "#a50034",
-  "Lotte Giants"  = "#041e42",
-  "NC Dinos"      = "#071d3d",
-  "Samsung Lions" = "#074CA1",
-  "SSG Landers"   = "#CF112D"
-)
+getTeamCap(team_caps)
 
-team_themesong = list(
-  "Doosan Bears"  = "https://www.youtube.com/watch?v=IeyOr91IuyA",
-  "Hanwha Eagles" = "https://www.youtube.com/watch?v=45IrJtdGtDk",
-  "Kia Tigers"    = "https://www.youtube.com/watch?v=6RiMyqT3_t0",
-  "Kiwoom Heros"  = "https://www.youtube.com/watch?v=antR6UYqZKk",
-  "KT Wiz"        = "https://www.youtube.com/watch?v=bsWBORqEjpI",
-  "LG Twins"      = "https://www.youtube.com/watch?v=CeGiBg9eXG0",
-  "Lotte Giants"  = "https://www.youtube.com/watch?v=NSR5kAxIEi0",
-  "NC Dinos"      = "https://www.youtube.com/watch?v=QmgeKEe-LEE",
-  "Samsung Lions" = "https://www.youtube.com/watch?v=AmQC5K6_HUs",
-  "SSG Landers"   = "https://www.youtube.com/watch?v=zX7uot4biaQ"
-)
+team_caps <- list.files("./www/team_cap")
 
-team_names <- names(teams)
+usethis::use_data(team_caps, overwrite = TRUE)
 
-team_data <- data.frame(name = team_names,
-                        url      = sapply(team_names, function(name) teams[[name]]),
-                        logo     = sapply(team_names, function(name) team_logos[[name]]),
-                        insignia = sapply(team_names, function(name) cap_insignia[[name]]),
-                        color    = sapply(team_names, function(name) team_colors[[name]]),
-                        song     = sapply(team_names, function(name) team_themesong[[name]])
-                        )
-
-usethis::use_data(team_data, internal = FALSE, overwrite = TRUE)
+###############################################################################
+#################### Social Media Icon Mapping ################################
+###############################################################################
 
 keyword_image_mapping = list(
   afreecatv  = "afreecatv.jpg",
@@ -107,18 +142,7 @@ keyword_image_mapping = list(
   youtube    = "youtube.png"
 )
 
-usethis::use_data(keyword_image_mapping, internal = FALSE, overwrite = TRUE)
-
-# "Doosan Bears"  = "",
-# "Hanwha Eagles" = "",
-# "Kia Tigers"    = "",
-# "Kiwoom Heros"  = "",
-# "KT Wiz"        = "",
-# "LG Twins"      = "",
-# "Lotte Giants"  = "",
-# "NC Dinos"      = "",
-# "Samsung Lions" = "",
-# "SSG Landers"   = ""
+usethis::use_data(keyword_image_mapping, overwrite = TRUE)
 
 ###############################################################################
 ############################ TEAM PAGE DATA ###################################
@@ -126,13 +150,13 @@ usethis::use_data(keyword_image_mapping, internal = FALSE, overwrite = TRUE)
 
 team_cheerleaders <-getTeamCheerleaders(team_data$url)
 
-usethis::use_data(team_cheerleaders, internal = FALSE, overwrite = TRUE)
+usethis::use_data(team_cheerleaders, overwrite = TRUE)
 
 getTeamPhotos(team_data)
 
 team_photos <- list.files("./www/team_img")
 
-usethis::use_data(team_photos, internal = FALSE, overwrite = TRUE)
+usethis::use_data(team_photos, overwrite = TRUE)
 
 ###############################################################################
 ######################## CHEERLEADER PAGE DATA ################################
@@ -142,7 +166,7 @@ cheer_data <- cheerData(wiki_url = wiki_url,
                         team_cheerleaders = team_cheerleaders,
                         values = c("nationality", "birth"))
 
-# html nodes cant be stored as *.rda
+# store html nodes in .rds
 bio_tables <- purrr::map(names(cheer_data), ~ {
   cheerleader_data <- cheer_data[[.x]]
   as.character(cheerleader_data$bio_table)
@@ -152,16 +176,23 @@ names(bio_tables) <- names(cheer_data)
 
 readr::write_rds(bio_tables, "./data/bio_tables.rds")
 
+# clean cheer data
+# remove bio_table
+cheer_data <- lapply(cheer_data, function(item) {
+  item[!names(item) %in% "bio_table"]
+})
+# omit NA links
 cheer_data <- purrr::map(cheer_data, ~ {
-  .x$bio_table <- NULL
+  if ("links" %in% names(.x)) {
+    .x$links <- .x$links[!is.na(.x$links)]
+  }
   .x
 })
-
-# fix dupe link
+# omit dupe link
 cheer_data$`Hannah Kim`$table <- cheer_data$`Hannah Kim`$table[-1, ]
 cheer_data$`Hyein Na`$table <- cheer_data$`Hyein Na`$table[-1, ]
 
-usethis::use_data(cheer_data, internal = FALSE, overwrite = TRUE)
+usethis::use_data(cheer_data, overwrite = TRUE)
 
 # get cheerleader photos
 
@@ -208,20 +239,9 @@ authenticateYouTube <- function() {
 youtube <- getYouTube(cheer_data)
 lookup <- setNames(team_cheerleaders$team, team_cheerleaders$cheerleader)
 youtube$team <- lookup[youtube$name]
+youtube$cat <- "youtube"
 
-usethis::use_data(youtube, internal = FALSE, overwrite = TRUE)
-
-# Cheerleaders / Teams with over 1,000,000 views
-
-youtube |>
-  filter(views > 1000000) |>
-  ggplot(aes(x = reorder(paste0(team, "\n", name), -views), y = views)) +
-  geom_bar(stat = "identity", fill = "skyblue") +
-  scale_y_continuous(breaks = seq(0, 100000000, 10000000),
-                     labels = scales::label_number(scale = 1e-6, suffix = "M")) +
-  labs(title = "Greater than 1,000,000 views", x = "", y = "") +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+usethis::use_data(youtube, overwrite = TRUE)
 
 # Instagram ===================================================================
 
@@ -229,7 +249,11 @@ instagram <- getInstagram(cheer_data)
 
 glimpse(instagram)
 
-usethis::use_data(instagram, internal = FALSE, overwrite = TRUE)
+lookup <- setNames(team_cheerleaders$team, team_cheerleaders$cheerleader)
+instagram$team <- lookup[instagram$name]
+instagram$cat <- "instagram"
+
+usethis::use_data(instagram, overwrite = TRUE)
 
 # TikTok ======================================================================
 
@@ -237,75 +261,13 @@ tiktok <- getTikTok(cheer_data)
 
 glimpse(tiktok)
 
-usethis::use_data(tiktok, internal = FALSE, overwrite = TRUE)
+lookup <- setNames(team_cheerleaders$team, team_cheerleaders$cheerleader)
+tiktok$team <- lookup[tiktok$cheername]
+tiktok$cat <- "tiktok"
+
+usethis::use_data(tiktok, overwrite = TRUE)
 
 
-
-
-
-
-
-
-
-
-
-#==============================================================================
-#==============================================================================
-#==============================================================================
-#==============================================================================
-#==============================================================================
-#==============================================================================
-#==============================================================================
-#==============================================================================
-
-# wiki_url    "https://en.namu.wiki"
-
-# team_data
-#
-# Rows: 10
-# Columns: 5
-# $ name     <chr> "Doosan Bears", "Hanwha Eagles", "Kia Tigers", "Kiwoom Heros", "KT Wiz", "LG Twins", "Lo…
-# $ url      <chr> "https://en.namu.wiki/w/%EB%91%90%EC%82%B0%20%EB%B2%A0%EC%96%B4%EC%8A%A4/%EC%B9%98%EC%96…
-# $ logo     <chr> "https://upload.wikimedia.org/wikipedia/en/thumb/9/98/Doosan_Bears.svg/1280px-Doosan_Bea…
-# $ insignia <chr> "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Doosan_Bears_insignia.svg/102…
-# $ color    <chr> "#131230", "#ff6600", "#EC0F32", "#820023", "#000000", "#a50034", "#041e42", "#071d3d", …
-
-# team_photos
-#
-# chr [1:10] "Doosan Bears.webp" "Hanwha Eagles.webp" "Kia Tigers.webp" "Kiwoom Heros.webp" ...
-
-# team_cheerleaders
-#
-# Rows: 97
-# Columns: 3
-# $ team        <chr> "Doosan Bears", "Doosan Bears", "Doosan Bears", "Doosan Bears", "Doosan Bears", "Doos…
-# $ cheerleader <chr> "Hyunsuk Seo", "Jeong Hee-Jeong", "Dayoung Lee", "Hyeji Ahn", "Sohyun Park", "Hyejin …
-# $ link        <chr> "/w/%EC%84%9C%ED%98%84%EC%88%99(%EC%B9%98%EC%96%B4%EB%A6%AC%EB%8D%94)", "/w/%EC%A0%95…
-
-# cheer_data
-#
-# List of 97    example
-# $ Hyunsuk Seo    :List of 2
-# ..$ table: tibble [12 × 2] (S3: tbl_df/tbl/data.frame)
-# ..$ links: chr [1:4] "https://www.facebook.com/hs0422" "https://www.instagram.com/seo_hsss"...
-
-# bio_tables (for image url extraction)
-# List of 97
-# $ Hyunsuk Seo    : chr "<table class=\"wiki-table\" style=\"background-color:#ffffff; width:100%;
-#                         border:2px solid #131230;\" data-dark"| __truncated__
-
-# keyword_image_mapping
-#
-# List of 9
-# $ afreecatv: chr "afreecatv.jpg"
-# $ facebook : chr "facebook.png"
-# $ instagram: chr "instagram.png"
-# $ likey    : chr "likey.jpg"
-# $ naver    : chr "naver.jpg"
-# $ threads  : chr "threads.jpg"
-# $ tiktok   : chr "tiktok.jpg"
-# $ x.com    : chr "twitter.jpg"
-# $ youtube  : chr "youtube.png"
 
 
 
