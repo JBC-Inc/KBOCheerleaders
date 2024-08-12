@@ -7,7 +7,6 @@ ui <- bslib::page_sidebar(
   theme = bslib::bs_theme(
     version = 5,
     base_font = "Roboto, sans-serif",
-
     # bootswatch = "zephyr"
     # base_font = bslib::font_google("Bangers"),
     ) |>
@@ -796,23 +795,4 @@ server <- function(input, output, session) {
 } # server
 
 shinyApp(ui = ui, server = server)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
