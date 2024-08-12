@@ -6,6 +6,8 @@ ui <- bslib::page_sidebar(
 
   theme = bslib::bs_theme(
     version = 5,
+    base_font = "Roboto, sans-serif",
+
     # bootswatch = "zephyr"
     # base_font = bslib::font_google("Bangers"),
     ) |>
@@ -26,13 +28,12 @@ ui <- bslib::page_sidebar(
     class = "d-flex justify-content-between align-items-center w-100",
     shiny::tags$div(class = "d-flex align-items-center",
       shiny::tags$img(
-        src = paste0("https://upload.wikimedia.org/wikipedia/en/thumb/5/59/",
-                     "KBO_League.svg/1920px-KBO_League.svg.png"),
+        src = "https://upload.wikimedia.org/wikipedia/en/thumb/5/59/KBO_League.svg/1920px-KBO_League.svg.png",
         height = "55px",
         style = "margin-right: 10px;"
       ),
       shiny::tags$h1("Cheerleaders!", style = "font-family: 'Bangers', cursive;")
-    ),
+    )
     # bslib::input_dark_mode(id = NULL, mode = NULL)
   ),
 
@@ -42,7 +43,15 @@ ui <- bslib::page_sidebar(
       label = "Teams:",
       choices = c("", team_data$name)
     ),
+
     shiny::uiOutput("cheerleaderUI"),
+
+    shinyWidgets::materialSwitch(
+      inputId = "play_video",
+      label = "Play Team Themesong",
+      status = "danger"
+      ),
+
     shiny::uiOutput("song")
   ),
 
@@ -61,7 +70,7 @@ ui <- bslib::page_sidebar(
     ),
     bslib::nav_panel(                    # leaderboard
       value = "leader",
-      "Leaderboard",
+      "Leaderboards",
       shiny::uiOutput("leaders")
     )
   )
@@ -107,23 +116,11 @@ server <- function(input, output, session) {
       shinyjs::show("team")
       shinyjs::show("valb")
       shinyjs::hide("individual")
+    } else if (input$cheerleader != "") {
+      shinyjs::hide("team")
+      shinyjs::hide("valb")
+      shinyjs::show("individual")
     }
-
-    song <- td()$song
-
-    video_id <- sub(".*v=([^&]+).*", "\\1", song)
-
-    song <- paste0("https://www.youtube.com/embed/", video_id, "?autoplay=1")
-
-    output$song <- shiny::renderUI(
-      shiny::tags$iframe(
-        width="200",
-        height="113",
-        src=song,
-        frameborder="0",
-        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture",
-        allowfullscreen=NA)
-    )
   }, ignoreInit = TRUE)
 
   shiny::observe(label = "Show/Hide Cheerleader", {
@@ -137,6 +134,34 @@ server <- function(input, output, session) {
     }
   }) |>
     shiny::bindEvent(input$cheerleader)
+
+  selected_song <- shiny::reactive(label = "Song Selected", {
+
+    shiny::req(input$team)
+
+    song <- td()$song
+
+    video_id <- sub(".*v=([^&]+).*", "\\1", song)
+
+    autoplay <- if(input$play_video) "1" else "0"
+
+    song <- paste0("https://www.youtube.com/embed/", video_id, "?autoplay=", autoplay)
+  })
+
+  shiny::observe({
+
+    song <- selected_song()
+
+    output$song <- shiny::renderUI(
+      shiny::tags$iframe(
+        width="200",
+        height="113",
+        src=song,
+        frameborder="0",
+        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture",
+        allowfullscreen=NA)
+    )
+  })
 
   # sidebar -------------------------------------------------------------------
 
@@ -160,72 +185,6 @@ server <- function(input, output, session) {
 
   output$stats <- shiny::renderUI({
 
-    # bslib::card(
-    #   id = "valb",
-    #   class = "valb",
-    #   bslib::layout_columns(
-    #     bslib::value_box(
-    #       title = "Team Member Count",
-    #       42,
-    #       showcase = bsicons::bs_icon("handbag")
-    #     ),
-    #     bslib::value_box(
-    #       title = "Average Tenure",
-    #       42,
-    #       showcase = bsicons::bs_icon("handbag")
-    #     ),
-    #     bslib::value_box(
-    #       title = "Social Media Views",
-    #       42,
-    #       showcase = bsicons::bs_icon("handbag")
-    #     )
-    #   )
-    # ),
-
-    # bslib::layout_column_wrap(       delete me
-    #   width = NULL,
-    #   fill = FALSE,
-    #   style = bslib::css(grid_template_columns = "2.5fr 1fr"),
-    #
-    #   bslib::card(
-    #     id = "teamCard",
-    #     full_screen = TRUE,
-    #     bslib::card_header(
-    #       style = paste("background-color:", td()$color, "; color: #ffffff;"),
-    #       td()$name
-    #     ),
-    #     bslib::card_body(
-    #       class = "cardb",
-    #       fillable = TRUE,
-    #       shiny::uiOutput("teamPhoto")
-    #     )
-    #   )
-
-    # bslib::layout_column_wrap(
-    #   width = '900px',
-    #   fixed_width = TRUE,
-    #
-    #   bslib::card(
-    #     id = "stat",
-    #     class = "stat-fat",
-    #     # full_screen = TRUE,
-    #     bslib::card_header(
-    #       class = "bg-dark",
-    #       "Total Cheerleader Social Media Followers by Team"
-    #     ),
-    #     bslib::card_body(
-    #       # fillable = TRUE,
-    #       shiny::plotOutput("fat", click = "plot_click", height = '600px')
-    #     ),
-    #     bslib::card_footer(
-    #       "Click Team to view.",
-    #       class = "bg-info"
-    #     )
-    #   )
-    # )
-
-    # bslib::layout_columns(
-
     bslib::page_fillable(
 
       # Followers aggregate team
@@ -239,10 +198,10 @@ server <- function(input, output, session) {
           id = "stat-fat",
           class = "stat-fat",
           bslib::card_header("Total Cheerleader Social Media Followers by Team", class = "bg-dark"),
-          bslib::card_body(shiny::plotOutput(
-            "fat", click = "plot_click", height = '600px'
-          )),
-          bslib::card_footer("Click Team to view.", class = "bg-info")
+          bslib::card_body(
+            shiny::plotOutput("fat", click = "plot_click", height = '600px')
+            ),
+          bslib::card_footer("Click Team `Logo` to view.", class = "bg-info")
         )
       ),
 
@@ -298,7 +257,7 @@ server <- function(input, output, session) {
               )
             )
           ),
-          bslib::card_footer("Legend description here.", class = "bg-info")
+          bslib::card_footer("Average Followers Aggregate Teams.", class = "bg-info")
         )
         # bslib::card(
         #   id = "f4",
@@ -359,14 +318,19 @@ server <- function(input, output, session) {
       df = agg_follow(),
       coordinfo = input$plot_click,
       xvar = 'team',
-      threshold = 100,
+      threshold = 42,
       maxpoints = 1,
       addDist = TRUE
-      )
+    )
 
     if (nrow(point) != 0) {
       shiny::updateSelectInput(session, "team", selected = point$team)
-      }
+      shiny::updateSelectInput(session, "cheerleader", selected = "")
+      shiny::updateNavbarPage(inputId = "tabs", selected = "visual")
+      shinyjs::show("team")
+      shinyjs::show("valb")
+      shinyjs::hide("individual")
+    }
   }) |>
     shiny::bindEvent(input$plot_click)
 
@@ -617,7 +581,7 @@ server <- function(input, output, session) {
 
   # Leaderboard ---------------------------------------------------------------
 
-  shiny::observe({
+  shiny::observe(label = "Click Leaderboard Cheerleader", {
     session$sendCustomMessage("set_team", input$team)
     shiny::updateSelectizeInput(session, "team", selected = input$team)
 
@@ -640,8 +604,8 @@ server <- function(input, output, session) {
         gt::gt_output("leaderYT")
       ),
       bslib::card_footer(
-        "Click Cheerleader to view.",
-        class = "bg-info"
+        "Click Cheerleader Photo to view.",
+        style = paste("background-color: #ff0000; color: #ffffff;")
       )
     )
 
@@ -661,8 +625,11 @@ server <- function(input, output, session) {
         gt::gt_output("leaderInst")
       ),
       bslib::card_footer(
-        "Click Cheerleader to view.",
-        class = "bg-info"
+        "Click Cheerleader Photo to view.",
+        style = paste(
+          "fill: rgba(255, 255, 255, 0.6) !important;
+        background: linear-gradient(45deg, #FFD600, #FF7A00, #FF0069, #D300C5, #7638FA);"
+        )
       )
     )
 
@@ -679,16 +646,18 @@ server <- function(input, output, session) {
         gt::gt_output("leaderTT")
       ),
       bslib::card_footer(
-        "Click Cheerleader to view.",
-        class = "bg-info"
+        "Click Cheerleader Photo to view.",
+        style = paste("background-color: #000000; color: #ffffff;")
       )
     )
 
     bslib::layout_column_wrap(
-      width = 1/2,
+      width = '800px',
+      fixed_width = TRUE,
       heights_equal = "row",
       yt, inst, tt
     )
+
   })
 
   output$leaderYT <- gt::render_gt({
@@ -719,7 +688,7 @@ server <- function(input, output, session) {
       ) |>
       gt::data_color(
         columns = c(avg_views_per_video),
-        colors = scales::col_numeric(
+        fn = scales::col_numeric(
           palette = c("red", "yellow", "green"),
           domain = NULL)
         ) |>
@@ -759,7 +728,7 @@ server <- function(input, output, session) {
       ) |>
       gt::data_color(
         columns = c(instagram_followers),
-        colors = scales::col_numeric(
+        fn = scales::col_numeric(
           palette = c("red", "yellow", "green"),
           domain = NULL)
       ) |>
@@ -805,7 +774,7 @@ server <- function(input, output, session) {
       ) |>
       gt::data_color(
         columns = c(likes_followers),
-        colors = scales::col_numeric(
+        fn = scales::col_numeric(
           palette = c("red", "yellow", "green"),
           domain = NULL)
       ) |>

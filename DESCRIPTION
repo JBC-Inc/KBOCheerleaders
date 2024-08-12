@@ -29,7 +29,8 @@ Imports:
     ggimage,
     tidyr,
     gt,
-    reactable
+    reactable,
+    shinyWidgets
 Depends: 
     R (>= 2.10),
     tidyverse

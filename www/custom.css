@@ -7,18 +7,24 @@
 /* -------------------------------------- sidebar */
 
 .selectize-input {
-  font-size: 12px;
-  line-height: 1rem;
-  border-radius: 7px;
+  font-size: 14px;
+  /*line-height: 1rem;*/
+  border-radius: 4px;
 }
 
 .selectize-dropdown {
-  font-size: 12px;
-  line-height: 1rem;
+  font-size: 14px;
+  /*line-height: 1rem;*/
 }
 
 table td:first-child {
   width: 200px;
+}
+
+/* -------------------------------------- tab-content */
+
+.tab-content {
+  padding-top: 10px;
 }
 
 /* -------------------------------------- stat cards */
