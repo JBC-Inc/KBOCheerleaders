@@ -4,6 +4,8 @@
   padding-top: 5px;
 }
 
+/* -------------------------------------- sidebar */
+
 .selectize-input {
   font-size: 12px;
   line-height: 1rem;
@@ -19,7 +21,7 @@ table td:first-child {
   width: 200px;
 }
 
-/* stat cards */
+/* -------------------------------------- stat cards */
 
 .stat-fat, .f1 {
   padding: 0px;
@@ -33,10 +35,45 @@ table td:first-child {
   padding-top: 0px;
 }
 
+/* legend for stats */
+
+.legend-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.color-box {
+  width: 30px;
+  height: 30px;
+  border-radius: 5px;
+}
+
+.color-box.red {
+  background-color: red;
+}
+
+.color-box.purple {
+  background-color: purple;
+}
+
+.color-box.black {
+  background-color: black;
+  color: white;
+}
 
 
 
-/* cheerleader cards  */
+
+
+
+/* -------------------------------------- cheerleader cards  */
 
 .html-fill-container {
   display: block !important;
@@ -83,6 +120,20 @@ table td:first-child {
 .bslib-grid .bslib-mb-spacing {
   display: flex !important;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

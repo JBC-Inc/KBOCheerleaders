@@ -228,136 +228,87 @@ server <- function(input, output, session) {
 
     bslib::page_fillable(
 
-    bslib::layout_column_wrap(
-      width = '900px',
-      fixed_width = TRUE,
+      # Followers aggregate team
 
-      style = bslib::css(grid_template_columns = "4fr 1fr"),
-      bslib::card(
-        id = "stat-fat",
-        class = "stat-fat",
-        bslib::card_header(
-          "Total Cheerleader Social Media Followers by Team",
-          class = "bg-dark"
-        ),
-        bslib::card_body(
-          shiny::plotOutput("fat", click = "plot_click", height = '600px')
-        ),
-        bslib::card_footer(
-          "Click Team to view.",
-          class = "bg-info"
+      bslib::layout_column_wrap(
+        width = '900px',
+        fixed_width = TRUE,
+
+        style = bslib::css(grid_template_columns = "4fr 1fr"),
+        bslib::card(
+          id = "stat-fat",
+          class = "stat-fat",
+          bslib::card_header("Total Cheerleader Social Media Followers by Team", class = "bg-dark"),
+          bslib::card_body(shiny::plotOutput(
+            "fat", click = "plot_click", height = '600px'
+          )),
+          bslib::card_footer("Click Team to view.", class = "bg-info")
         )
-      )
-    ),
-
-    # HERE vvvvvvvvvvvvvvvvvvvvvvv
-
-    bslib::layout_columns(
-      width = '100%',
-      col_widths = 3,
-      # height = '400px',
-      fixed_width = TRUE,
-
-      class = "LAYOUT-COLUMNS",
-
-      # style = bslib::css(grid_template_columns = "repeat(4, 1fr)"),
-
-      # bslib::card(
-      #   height = 550,
-      #   full_screen = TRUE,
-      #   bslib::card_header("A filling plot"),
-      #   bslib::card_body(shiny::plotOutput("f1", height = '100%'))
-      # )
-
-      bslib::card(
-        id = "f1",
-        # class = "f1",
-        height = 269,
-        full_screen = TRUE,
-        bslib::card_header(
-          "Distribution Avg Followers per Platform",
-          class = "bg-dark"),
-        bslib::card_body(shiny::plotOutput("f1", height = '100%'))
       ),
-      bslib::card(
-        id = "f2",
-        height = 269,
-        full_screen = TRUE,
-        bslib::card_header(
-          "Capped Average Followers per Platform",
-          class = "bg-dark"),
-        bslib::card_body(shiny::plotOutput("f2", height = '100%'))
-      ),
-      bslib::card(
-        id = "f3",
-        height = 269,
-        full_screen = TRUE,
-        bslib::card_header(
-          "Log-Transformed Average Followers per Platform",
-          class = "bg-dark"
+
+      # distributions
+
+      bslib::layout_columns(
+        width = '100%',
+        col_widths = 3,
+        fixed_width = TRUE,
+
+        bslib::card(
+          id = "f1",
+          # class = "f1",
+          height = 269,
+          full_screen = TRUE,
+          # bslib::card_header("Distribution Avg Followers per Platform", class = "bg-dark"),
+          bslib::card_header("Average Followers per Platform (95% Percentile)", class = "bg-dark"),
+          bslib::card_body(shiny::plotOutput("f1", height = '100%'))
         ),
-        bslib::card_body(shiny::plotOutput("f3", height = '100%'))
-      ),
-      bslib::card(
-        id = "f4",
-        height = 269,
-        full_screen = TRUE,
-        bslib::card_header(
-          "Average Followers per Platform (95% Percentile)",
-          class = "bg-dark"
+        bslib::card(
+          id = "f2",
+          height = 269,
+          full_screen = TRUE,
+          bslib::card_header("Capped Average Followers per Platform", class = "bg-dark"),
+          bslib::card_body(shiny::plotOutput("f2", height = '100%'))
         ),
-        bslib::card_body(shiny::plotOutput("f4", height = '100%'))
+        bslib::card(
+          id = "f3",
+          height = 269,
+          full_screen = TRUE,
+          bslib::card_header("Log-Transformed Average Followers per Platform", class = "bg-dark"),
+          bslib::card_body(shiny::plotOutput("f3", height = '100%'))
+        ),
+
+        bslib::card(
+          id = "legend-card",
+          class = "legend-card",
+          bslib::card_header("Legend", class = "bg-dark text-white"),
+          bslib::card_body(
+            # Using HTML to create the legend layout
+            tags$div(
+              class = "legend-container",
+              tags$div(class = "legend-item", tags$div(class = "color-box red"), tags$span("YouTube")),
+              tags$div(
+                class = "legend-item",
+                tags$div(class = "color-box purple"),
+                tags$span("Instagram")
+              ),
+              tags$div(
+                class = "legend-item",
+                tags$div(class = "color-box black"),
+                tags$span("TikTok")
+              )
+            )
+          ),
+          bslib::card_footer("Legend description here.", class = "bg-info")
+        )
+        # bslib::card(
+        #   id = "f4",
+        #   height = 269,
+        #   full_screen = TRUE,
+        #   bslib::card_header("Average Followers per Platform (95% Percentile)", class = "bg-dark"),
+        #   bslib::card_body(shiny::plotOutput("f4", height = '100%'))
+        # )
       )
-
     )
-
-
-    )
-
-
-
-
-
-    # bslib::layout_column_wrap(
-    #   width = '900px',
-    #   fixed_width = TRUE,
-    #   style = bslib::css(grid_template_columns = "1fr 1fr 1fr 1fr"),
-    #
-    #   bslib::card(
-    #
-    #     height = 100,
-    #
-    #     # id = "f1",
-    #     bslib::card_header(
-    #       "Distribution of Average Followers per Platform",
-    #       class = "bg-dark"),
-    #     bslib::card_body(shiny::plotOutput("f1"))
-    #   ),
-    #   bslib::card(
-    #     bslib::card_header(
-    #       "Distribution of Capped Average Followers per Platform",
-    #       class = "bg-dark"),
-    #     bslib::card_body(shiny::plotOutput("f2"))
-    #   ),
-    #   bslib::card(
-    #     bslib::card_header(
-    #       "Distribution of Log-Transformed Average Followers per Platform",
-    #       class = "bg-dark"
-    #     ),
-    #     bslib::card_body(shiny::plotOutput("f3"))
-    #   ),
-    #   bslib::card(
-    #     bslib::card_header(
-    #       "Distribution of Average Followers per Platform (95% Percentile)",
-    #       class = "bg-dark"
-    #     ),
-    #     bslib::card_body(shiny::plotOutput("f4"))
-    #   )
-    # )
-
-
-
-
 
   })
 
@@ -420,11 +371,7 @@ server <- function(input, output, session) {
     shiny::bindEvent(input$plot_click)
 
   output$f1 <- shiny::renderPlot({
-
-    # mtcars |>
-    #   ggplot2::ggplot(ggplot2::aes(x = mpg, y = hp)) +
-    #   ggplot2::geom_point()
-    fat_distro[[1]]
+    fat_distro[[4]]
   })
 
   output$f2 <- shiny::renderPlot({
@@ -433,10 +380,6 @@ server <- function(input, output, session) {
 
   output$f3 <- shiny::renderPlot({
     fat_distro[[3]]
-  })
-
-  output$f4 <- shiny::renderPlot({
-    fat_distro[[4]]
   })
 
   # Team/Cheerleader ----------------------------------------------------------
