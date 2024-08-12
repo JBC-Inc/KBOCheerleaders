@@ -182,121 +182,248 @@ server <- function(input, output, session) {
     #   )
     # ),
 
+    # bslib::layout_column_wrap(       delete me
+    #   width = NULL,
+    #   fill = FALSE,
+    #   style = bslib::css(grid_template_columns = "2.5fr 1fr"),
+    #
+    #   bslib::card(
+    #     id = "teamCard",
+    #     full_screen = TRUE,
+    #     bslib::card_header(
+    #       style = paste("background-color:", td()$color, "; color: #ffffff;"),
+    #       td()$name
+    #     ),
+    #     bslib::card_body(
+    #       class = "cardb",
+    #       fillable = TRUE,
+    #       shiny::uiOutput("teamPhoto")
+    #     )
+    #   )
+
+    # bslib::layout_column_wrap(
+    #   width = '900px',
+    #   fixed_width = TRUE,
+    #
+    #   bslib::card(
+    #     id = "stat",
+    #     class = "stat-fat",
+    #     # full_screen = TRUE,
+    #     bslib::card_header(
+    #       class = "bg-dark",
+    #       "Total Cheerleader Social Media Followers by Team"
+    #     ),
+    #     bslib::card_body(
+    #       # fillable = TRUE,
+    #       shiny::plotOutput("fat", click = "plot_click", height = '600px')
+    #     ),
+    #     bslib::card_footer(
+    #       "Click Team to view.",
+    #       class = "bg-info"
+    #     )
+    #   )
+    # )
+
+    # bslib::layout_columns(
+
+    bslib::page_fillable(
+
     bslib::layout_column_wrap(
-      width = NULL,
-      fill = FALSE,
-      style = bslib::css(grid_template_columns = "2fr 1fr"),
+      width = '900px',
+      fixed_width = TRUE,
+
+      style = bslib::css(grid_template_columns = "4fr 1fr"),
       bslib::card(
-        id = "stat",
+        id = "stat-fat",
         class = "stat-fat",
         bslib::card_header(
           "Total Cheerleader Social Media Followers by Team",
           class = "bg-dark"
         ),
         bslib::card_body(
-          shiny::plotOutput("fat", click = "plot_click")
+          shiny::plotOutput("fat", click = "plot_click", height = '600px')
         ),
         bslib::card_footer(
           "Click Team to view.",
           class = "bg-info"
         )
-      ),
-      bslib::layout_column_wrap(
-        width = NULL,
-        fill = FALSE,
-        style = bslib::css(flex_direction = "column"),
-        bslib::card(id = "f1",
-                    bslib::card_header(
-                      "Distribution of Average Followers per Platform",
-                      class = "bg-dark"
-                    ),
-                    bslib::card_body(
-                      shiny::plotOutput("f1")
-                    )
-        ),
-        bslib::card(
-          bslib::card_header(
-            "Distribution of Capped Average Followers per Platform",
-            class = "bg-dark"
-          ),
-          bslib::card_body(
-            shiny::plotOutput("f2")
-          )
-        ),
-        bslib::card(
-          bslib::card_header(
-            "Distribution of Log-Transformed Average Followers per Platform",
-            class = "bg-dark"
-          ),
-          bslib::card_body(
-            shiny::plotOutput("f3")
-          )
-        ),
-        bslib::card(
-          bslib::card_header(
-            "Distribution of Average Followers per Platform (95% Percentile)",
-            class = "bg-dark"
-          ),
-          bslib::card_body(
-            shiny::plotOutput("f4")
-          )
-        )
       )
+    ),
+
+    # HERE vvvvvvvvvvvvvvvvvvvvvvv
+
+    bslib::layout_columns(
+      width = '100%',
+      col_widths = 3,
+      # height = '400px',
+      fixed_width = TRUE,
+
+      class = "LAYOUT-COLUMNS",
+
+      # style = bslib::css(grid_template_columns = "repeat(4, 1fr)"),
+
+      # bslib::card(
+      #   height = 550,
+      #   full_screen = TRUE,
+      #   bslib::card_header("A filling plot"),
+      #   bslib::card_body(shiny::plotOutput("f1", height = '100%'))
+      # )
+
+      bslib::card(
+        id = "f1",
+        # class = "f1",
+        height = 269,
+        full_screen = TRUE,
+        bslib::card_header(
+          "Distribution Avg Followers per Platform",
+          class = "bg-dark"),
+        bslib::card_body(shiny::plotOutput("f1", height = '100%'))
+      ),
+      bslib::card(
+        id = "f2",
+        height = 269,
+        full_screen = TRUE,
+        bslib::card_header(
+          "Capped Average Followers per Platform",
+          class = "bg-dark"),
+        bslib::card_body(shiny::plotOutput("f2", height = '100%'))
+      ),
+      bslib::card(
+        id = "f3",
+        height = 269,
+        full_screen = TRUE,
+        bslib::card_header(
+          "Log-Transformed Average Followers per Platform",
+          class = "bg-dark"
+        ),
+        bslib::card_body(shiny::plotOutput("f3", height = '100%'))
+      ),
+      bslib::card(
+        id = "f4",
+        height = 269,
+        full_screen = TRUE,
+        bslib::card_header(
+          "Average Followers per Platform (95% Percentile)",
+          class = "bg-dark"
+        ),
+        bslib::card_body(shiny::plotOutput("f4", height = '100%'))
+      )
+
     )
+
+
+    )
+
+
+
+
+
+    # bslib::layout_column_wrap(
+    #   width = '900px',
+    #   fixed_width = TRUE,
+    #   style = bslib::css(grid_template_columns = "1fr 1fr 1fr 1fr"),
+    #
+    #   bslib::card(
+    #
+    #     height = 100,
+    #
+    #     # id = "f1",
+    #     bslib::card_header(
+    #       "Distribution of Average Followers per Platform",
+    #       class = "bg-dark"),
+    #     bslib::card_body(shiny::plotOutput("f1"))
+    #   ),
+    #   bslib::card(
+    #     bslib::card_header(
+    #       "Distribution of Capped Average Followers per Platform",
+    #       class = "bg-dark"),
+    #     bslib::card_body(shiny::plotOutput("f2"))
+    #   ),
+    #   bslib::card(
+    #     bslib::card_header(
+    #       "Distribution of Log-Transformed Average Followers per Platform",
+    #       class = "bg-dark"
+    #     ),
+    #     bslib::card_body(shiny::plotOutput("f3"))
+    #   ),
+    #   bslib::card(
+    #     bslib::card_header(
+    #       "Distribution of Average Followers per Platform (95% Percentile)",
+    #       class = "bg-dark"
+    #     ),
+    #     bslib::card_body(shiny::plotOutput("f4"))
+    #   )
+    # )
+
+
+
+
+
   })
 
-  bigback <- shiny::reactive({
+  agg_follow <- shiny::reactive(label = "Followers Across Teams", {
+
     fat |>
       tidyr::drop_na() |>
       dplyr::group_by(team, color, logo) |>
       dplyr::summarize(followers = sum(followers), .groups = 'drop') |>
       dplyr::arrange(dplyr::desc(followers))
-  })
+    })
 
   output$fat <- shiny::renderPlot({
 
-    bigback() |>
-      ggplot2::ggplot(
-        mapping = ggplot2::aes(
-          x = reorder(team, -followers),
-          y = followers,
-          fill = color)) +
-      ggplot2::geom_bar(stat = "identity") +
-      ggimage::geom_image(ggplot2::aes(image = logo), size = 0.30) +
-      ggplot2::scale_fill_identity() +
-      ggplot2::scale_y_continuous(
-        breaks = seq(0, 5000000, 500000),
-        labels = scales::comma_format(), # scales::label_number(scale = 1e-6, suffix = "M")) +
-        limits = c(0, 4000000)
-      ) +
-      ggplot2::labs(title = "", x = "", y = "") +
-      ggplot2::theme_minimal() +
-      ggplot2::theme(
-        axis.text.x = ggplot2::element_text(angle = 45, hjust = 1, size = 14),
-        axis.text.y = ggplot2::element_text(size = 14),
-        plot.margin = ggplot2::margin(5, 5, 5, 5)
+    agg_follow() |>
+      ggplot2::ggplot(mapping = ggplot2::aes(
+         x = reorder(team, -followers),
+         y = followers,
+         fill = color
+       )) +
+       ggplot2::geom_bar(stat = "identity") +
+       ggimage::geom_image(
+         mapping = ggplot2::aes(image = paste0("www/team_logo/", logo)),
+         size = 0.2) +
+       ggplot2::scale_fill_identity() +
+       ggplot2::scale_y_continuous(
+         breaks = seq(0, 5000000, 500000),
+         labels = scales::comma_format(),
+         # scales::label_number(scale = 1e-6, suffix = "M")) +
+         limits = c(0, 4000000)
+       ) +
+       ggplot2::labs(title = "", x = "", y = "") +
+       ggplot2::theme_minimal() +
+       ggplot2::theme(
+         axis.text.x = ggplot2::element_text(
+           angle = 45,
+           hjust = 1,
+           size = 14
+         ),
+         axis.text.y = ggplot2::element_text(size = 14),
+         plot.margin = ggplot2::margin(5, 5, 5, 5)
+       )
+   })
+
+  shiny::observe(label = "Plot click team logo", {
+
+    point <- shiny::nearPoints(
+      df = agg_follow(),
+      coordinfo = input$plot_click,
+      xvar = 'team',
+      threshold = 100,
+      maxpoints = 1,
+      addDist = TRUE
       )
-  })
 
-  shiny::observeEvent(input$plot_click, {
-
-    click <- input$plot_click
-
-    point <- shiny::nearPoints(bigback(),
-                               coordinfo = click,
-                               xvar = 'team',
-                               threshold = 100,
-                               maxpoints = 1,
-                               addDist = TRUE)
-
-    if (nrow(point) == 0) {
-      shiny::updateNavbarPage(inputId = "tabs", selected = "stats")
-    } else {
+    if (nrow(point) != 0) {
       shiny::updateSelectInput(session, "team", selected = point$team)
-    }
-  })
+      }
+  }) |>
+    shiny::bindEvent(input$plot_click)
 
   output$f1 <- shiny::renderPlot({
+
+    # mtcars |>
+    #   ggplot2::ggplot(ggplot2::aes(x = mpg, y = hp)) +
+    #   ggplot2::geom_point()
     fat_distro[[1]]
   })
 
@@ -562,6 +689,7 @@ server <- function(input, output, session) {
       full_screen = TRUE,
       bslib::card_header(
         style = paste("background-color: #ff0000; color: #ffffff;"),
+        bsicons::bs_icon("youtube"),
         "Top 5 YouTube Subscribers/Views"
       ),
       bslib::card_body(
@@ -578,7 +706,11 @@ server <- function(input, output, session) {
       id = "instleader",
       full_screen = TRUE,
       bslib::card_header(
-        style = paste("background-color: #000000; color: #ffffff;"),
+        style = paste(
+        "fill: rgba(255, 255, 255, 0.6) !important;
+        background: linear-gradient(45deg, #FFD600, #FF7A00, #FF0069, #D300C5, #7638FA);"
+        ),
+        bsicons::bs_icon("instagram"),
         "Top 5 Insagram Followers"
       ),
       bslib::card_body(
@@ -596,6 +728,7 @@ server <- function(input, output, session) {
       full_screen = TRUE,
       bslib::card_header(
         style = paste("background-color: #000000; color: #ffffff;"),
+        bsicons::bs_icon("tiktok"),
         "Top 5 TikTok Followers/Likes"
       ),
       bslib::card_body(
@@ -616,6 +749,7 @@ server <- function(input, output, session) {
   })
 
   output$leaderYT <- gt::render_gt({
+
     ultra_combo |>
       dplyr::select(team,
                     logo,
@@ -638,8 +772,14 @@ server <- function(input, output, session) {
         subs = "Subscribers",
         views = "Views",
         count = "Videos",
-        avg_views_per_video = "Avg Views/Video"
+        avg_views_per_video = "Views/Video"
       ) |>
+      gt::data_color(
+        columns = c(avg_views_per_video),
+        colors = scales::col_numeric(
+          palette = c("red", "yellow", "green"),
+          domain = NULL)
+        ) |>
       gt::tab_style(
         style = gt::cell_text(align = "center"),
         locations = gt::cells_column_labels(dplyr::everything())
@@ -673,6 +813,12 @@ server <- function(input, output, session) {
         photo = "Cheerleader",
         link = "Name",
         instagram_followers = "Followers",
+      ) |>
+      gt::data_color(
+        columns = c(instagram_followers),
+        colors = scales::col_numeric(
+          palette = c("red", "yellow", "green"),
+          domain = NULL)
       ) |>
       gt::tab_style(
         style = gt::cell_text(align = "center"),
@@ -714,6 +860,12 @@ server <- function(input, output, session) {
         likes = "Likes",
         likes_followers = "Likes/Followers"
       ) |>
+      gt::data_color(
+        columns = c(likes_followers),
+        colors = scales::col_numeric(
+          palette = c("red", "yellow", "green"),
+          domain = NULL)
+      ) |>
       gt::tab_style(
         style = gt::cell_text(align = "center"),
         locations = gt::cells_column_labels(dplyr::everything())
@@ -732,6 +884,7 @@ server <- function(input, output, session) {
 } # server
 
 shinyApp(ui = ui, server = server)
+
 
 
 

@@ -21,13 +21,16 @@ table td:first-child {
 
 /* stat cards */
 
-.stat-fat {
+.stat-fat, .f1 {
   padding: 0px;
 }
 
-#stat,
-#f1 {
-  padding-top: 10px;
+#stat-fat,
+#f1,
+#f2,
+#f3,
+#f4 {
+  padding-top: 0px;
 }
 
 

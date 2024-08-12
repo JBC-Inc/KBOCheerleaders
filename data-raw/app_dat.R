@@ -4,7 +4,7 @@ wiki_url <- "https://en.namu.wiki"
 usethis::use_data(wiki_url, internal = FALSE, overwrite = TRUE)
 
 ###############################################################################
-############################# GEN TEAM DATA ###################################
+############################# TEAM DATA #######################################
 ###############################################################################
 
 # "Doosan Bears"  = "",
@@ -81,7 +81,7 @@ team_data <-
 usethis::use_data(team_data, internal = FALSE, overwrite = TRUE)
 
 ###############################################################################
-############################# GEN TEAM LOGO ###################################
+############################# TEAM LOGO #######################################
 ###############################################################################
 
 team_logos = list(
@@ -104,7 +104,7 @@ team_logos <- list.files("./www/team_logo")
 usethis::use_data(team_logos, overwrite = TRUE)
 
 ###############################################################################
-############################# GEN TEAM CAP ####################################
+############################# TEAM CAP ########################################
 ###############################################################################
 
 team_caps = list(
@@ -216,14 +216,14 @@ authenticateYouTube <- function() {
   #   clientSecret = Sys.getenv("YT_CLIENT_SECRET")
   #   )
 
-  file.remove(".httr-oauth")
-
-  tuber::yt_oauth(
-    app_id = Sys.getenv("YT_CLIENT_ID"),
-    app_secret = Sys.getenv("YT_CLIENT_SECRET"),
-    token = '.httr-oauth'
-  )
-  global_token <<- TRUE
+  # file.remove(".httr-oauth")
+  #
+  # tuber::yt_oauth(
+  #   app_id = Sys.getenv("YT_CLIENT_ID"),
+  #   app_secret = Sys.getenv("YT_CLIENT_SECRET"),
+  #   token = '.httr-oauth'
+  # )
+  # global_token <<- TRUE
 
   # shiny::observe(label = "Authenticate", priority = 300, {
   #   if (is.null(global_token)) {
@@ -267,14 +267,15 @@ tiktok$cat <- "tiktok"
 
 usethis::use_data(tiktok, overwrite = TRUE)
 
+# Followers Across Teams ======================================================
 
+fat <- makeFat(youtube, instagram, tiktok)
 
+usethis::use_data(fat, overwrite = TRUE)
 
+fat_plot <- followersAcrossTeams(fat)
 
-
-
-
-
+usethis::use_data(fat_plot, overwrite = TRUE)
 
 
 

@@ -57,20 +57,16 @@ team_colors <- data.frame(name = team_data$name, color = team_data$color)
 fat <- fat |>
   left_join(team_colors, by = c("team" = "name"))
 
-fat <- fat |> mutate(logo = case_when(
-  team == "Doosan Bears"  ~ "https://upload.wikimedia.org/wikipedia/en/thumb/9/98/Doosan_Bears.svg/1280px-Doosan_Bears.svg.png",
-  team == "Hanwha Eagles" ~ "https://upload.wikimedia.org/wikipedia/en/thumb/d/d3/Hanwha_Eagles.svg/1920px-Hanwha_Eagles.svg.png",
-  team == "Kia Tigers"    ~ "https://upload.wikimedia.org/wikipedia/en/e/e0/Kia_Tigers_2017_New_Team_Logo.png",
-  team == "Kiwoom Heros"  ~ "https://upload.wikimedia.org/wikipedia/en/4/4f/Kiwoom_Heroes.png",
-  team == "KT Wiz"        ~ "https://upload.wikimedia.org/wikipedia/en/thumb/e/e5/KT_Wiz.svg/1024px-KT_Wiz.svg.png",
-  team == "LG Twins"      ~ "https://upload.wikimedia.org/wikipedia/commons/4/41/LG_Twins_2017.png",
-  team == "Lotte Giants"  ~ "https://upload.wikimedia.org/wikipedia/en/thumb/6/65/Lotte_Giants.svg/1280px-Lotte_Giants.svg.png",
-  team == "NC Dinos"      ~ "https://upload.wikimedia.org/wikipedia/en/thumb/5/54/NC_Dinos_Emblem.svg/1280px-NC_Dinos_Emblem.svg.png",
-  team == "Samsung Lions" ~ "https://upload.wikimedia.org/wikipedia/en/thumb/0/0e/Samsung_Lions.svg/1280px-Samsung_Lions.svg.png",
-  team == "SSG Landers"   ~ "https://upload.wikimedia.org/wikipedia/en/8/86/SSG_Landers.png"
-))
+team_logos_df <- data.frame(
+  name = team_data$name,
+  logo = unlist(team_logos)
+)
 
-fat |> drop_na() |>
+fat <- fat |>
+  left_join(team_logos_df , by = c("team" = "name"))
+
+fat |>
+  drop_na() |>
   group_by(team, color, logo) |>
   summarize(followers = sum(followers), .groups = 'drop') |>
   arrange(desc(followers)) |>
@@ -84,9 +80,13 @@ fat |> drop_na() |>
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1),
         plot.margin = margin(5, 5, 5, 5)  ) +
-  ggimage::geom_image(aes(image = logo), size = 0.22)
+  ggimage::geom_image(aes(image = paste0("www/team_logo/", logo)), size = 0.22)
 
 usethis::use_data(fat, internal = FALSE, overwrite = TRUE)
+
+
+
+
 
 # density of followers by platform
 yt <- youtube |> dplyr::select(team, subs, cat)
@@ -98,7 +98,7 @@ fat_dist <- dplyr::bind_rows(yt, inst, tt)
 
 usethis::use_data(fat_dist, overwrite = TRUE)
 
-# FOLLOWERS ALL TEAMS DISTRIBUTION BY PLATFORM
+# FOLLOWERS ALL TEAMS DISTRIBUTION BY PLATFORM ===============================
 fatDistro <- function(fat_dist) {
 
 f1 <- fat_dist %>%
@@ -113,11 +113,14 @@ f1 <- fat_dist %>%
                                         "tiktok" = "black",
                                         "instagram" = "purple")) +
 
-  ggplot2::labs(title = "", fill = "Social Media Platform",
-                x = "Average Followers per Team",
-                y = "Density") +
+  ggplot2::labs(title = "",
+                fill = "Social Media Platform",
+                x = "",
+                y = "") +
   ggplot2::theme_minimal() +
-  ggplot2::theme(legend.position = "top")
+  ggplot2::theme(plot.margin = ggplot2::margin(0, 0, 0, 0),
+                 #plot.margin = ggplot2::margin(5, 5, 5, 5)
+                 legend.position = "none")
 
 # CAPPED OUTLIERS @ 100,000
 f2 <- fat_dist |>
@@ -127,7 +130,7 @@ f2 <- fat_dist |>
   ggplot2::ggplot(aes(x = avg_followers, fill = cat)) +
   ggplot2::geom_density(alpha = 0.6) +
   ggplot2::scale_x_continuous(
-    breaks = seq(0, 200000, 10000),
+    breaks = seq(0, 200000, 25000),
     labels = scales::comma_format()) +
   ggplot2::scale_fill_manual(values = c("youtube" = "red",
                                         "tiktok" = "black",
@@ -136,7 +139,9 @@ f2 <- fat_dist |>
                 x = "Average Followers per Team",
                 y = "Density") +
   ggplot2::theme_minimal() +
-  ggplot2::theme(legend.position = "top")
+  ggplot2::theme(plot.margin = ggplot2::margin(0, 0, 0, 0),
+                 #plot.margin = ggplot2::margin(5, 5, 5, 5)
+                 legend.position = "none")
 
 # LOG SCALE
 f3 <- fat_dist |>
@@ -157,7 +162,9 @@ f3 <- fat_dist |>
     x = "Log(Average Followers per Team)",
     y = "Density") +
   ggplot2::theme_minimal() +
-  ggplot2::theme(legend.position = "top")
+  ggplot2::theme(plot.margin = ggplot2::margin(0, 0, 0, 0),
+                 #plot.margin = ggplot2::margin(5, 5, 5, 5)
+                 legend.position = "none")
 
 # DENSITY w/TRIMMED
 average_followers <- fat_dist |>
@@ -183,7 +190,9 @@ f4 <-
                 x = "Average Followers per Team",
                 y = "Density") +
   ggplot2::theme_minimal() +
-  ggplot2::theme(legend.position = "top")
+  ggplot2::theme(plot.margin = ggplot2::margin(0, 0, 0, 0),
+                 #plot.margin = ggplot2::margin(5, 5, 5, 5)
+                 legend.position = "none")
 
   return(
     list(

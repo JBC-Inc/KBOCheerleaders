@@ -1,4 +1,10 @@
 
+#' Add Shiny static resources to Shiny Server
+#'
+#' Make scripts available to their components.
+#'
+#' @return
+#'
 addExternalResources <- function() {
 
   shiny::addResourcePath("www", "www")

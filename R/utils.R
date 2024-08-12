@@ -570,6 +570,116 @@ getTikTok <- function(cheer_data) {
   tiktok
 }
 
+# stats followers across teams ------------------------------------------------
+
+#' Aggregate YouTube Instagram and TikTok follower data
+#'
+#' @param youtube cheerleader YouTube data
+#' @param instagram cheerleader Instagram data
+#' @param tiktok cheerleader TikTok data
+#'
+#' @return data.frame: team name, logo, color and followers per cheerleader
+#'
+makeFat <- function(youtube, instagram, tiktok) {
+
+  yt <- youtube |> dplyr::select(team, subs)
+  colnames(yt) <- c("team", "followers")
+  ist <- instagram |> dplyr::select(team, followers)
+  tt <- tiktok |> dplyr::select(team, followers)
+
+  fat <- dplyr::bind_rows(yt, ist, tt)
+
+  team_colors <- data.frame(name = team_data$name, color = team_data$color)
+
+  fat <- fat |>
+    dplyr::left_join(team_colors, by = c("team" = "name"))
+
+  team_logos_df <- data.frame(
+    name = team_data$name,
+    logo = unlist(team_logos)
+  )
+
+  fat |>
+    dplyr::left_join(team_logos_df , by = c("team" = "name"))
+}
+
+#' Aggregate Team Followers plot
+#'
+#' Allows faster loading times.
+#'
+#' @param fat followers across teams data.frame
+#'
+#' @return ggplot2 with team logo images
+#'
+followersAcrossTeams <- function(fat) {
+
+  fat |>
+    tidyr::drop_na() |>
+    dplyr::group_by(team, color, logo) |>
+    dplyr::summarize(followers = sum(followers), .groups = 'drop') |>
+    dplyr::arrange(dplyr::desc(followers)) |>
+
+    ggplot2::ggplot(mapping = ggplot2::aes(
+      x = reorder(team, -followers),
+      y = followers,
+      fill = color
+    )) +
+    ggplot2::geom_bar(stat = "identity") +
+    ggimage::geom_image(
+      mapping = ggplot2::aes(image = paste0("www/team_logo/", logo)),
+      size = 0.2) +
+    ggplot2::scale_fill_identity() +
+    ggplot2::scale_y_continuous(
+      breaks = seq(0, 5000000, 500000),
+      labels = scales::comma_format(),
+      # scales::label_number(scale = 1e-6, suffix = "M")) +
+      limits = c(0, 4000000)
+    ) +
+    ggplot2::labs(title = "", x = "", y = "") +
+    ggplot2::theme_minimal() +
+    ggplot2::theme(
+      axis.text.x = ggplot2::element_text(
+        angle = 45,
+        hjust = 1,
+        size = 14
+      ),
+      axis.text.y = ggplot2::element_text(size = 14),
+      plot.margin = ggplot2::margin(5, 5, 5, 5)
+    )
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -15,8 +15,9 @@ data("keyword_image_mapping")            # List(name, img name)
 
   # social media statistics -------------
   data("fat")                           # followers all teams
-  data("fat_dist")                      # data
-  data("fat_distro")                    # plots
+  data("fat_plot")                      # followers all teams plot
+  data("fat_dist")                      # distributions data
+  data("fat_distro")                    # distributions plots
 
   data("ultra_combo")                   # leaderboard
 
