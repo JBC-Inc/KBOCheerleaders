@@ -1,10 +1,10 @@
 Package: KBOCheerleaders
-Title: Korean Baseball Organization Cheerleaders dynamic interactive database.
+Title: Korean Baseball Organization Cheerleaders interactive database.
 Version: 0.0.0.9000
 Authors@R: 
     person("Jeff", "Craggy", , "craggyjeff@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: Dynamic interactive Shiny app based on the Korean wiki pages.
+Description: Shiny app based on the Korean Baseball League Cheerleader namuwiki pages.
 License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
@@ -15,22 +15,22 @@ Imports:
     bslib,
     bsicons,
     DT,
+    ggimage,
     glue,
+    gt,
+    htmltools,
     httr2,
+    magick,
     purrr,
     rvest,
     shiny,
+    shinycssloaders,
     shinyjs,
-    stringr,
-    tuber,
-    YTAnalytics,
-    magick,
-    htmltools,
-    ggimage,
-    tidyr,
-    gt,
-    reactable,
     shinyWidgets
+    stringr,
+    tidyr,
+    tuber,
+    YTAnalytics
 Depends: 
     R (>= 2.10),
     tidyverse

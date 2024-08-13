@@ -74,7 +74,45 @@ table td:first-child {
   color: white;
 }
 
+/* -------------------------------------- reactable */
 
+.team {
+  display: flex;
+  align-items: center;
+}
+
+.team-logo {
+  height: 1.3rem;
+  border: 1px solid #f0f0f0;
+}
+
+.team-name {
+  margin-left: 0.5rem;
+  font-size: 1.125rem;
+  font-weight: 700;
+}
+.bar-cell {
+  display: flex;
+  align-items: center;
+}
+.number {
+  font-family: "Fira Mono", Consolas, Monaco, monospace;
+  font-size: 0.84375rem;
+  white-space: pre;
+}
+.bar-chart {
+  flex-grow: 1;
+  margin-left: 0.375rem;
+  height: 0.875rem;
+}
+.bar {
+  height: 100%;
+}
+.grade-bar {
+  height: 100%;
+  fill: rgba(255, 255, 255, 0.6) !important;
+  background: linear-gradient(45deg, #FFD600, #FF7A00, #FF0069, #D300C5, #7638FA);
+}
 
 
 

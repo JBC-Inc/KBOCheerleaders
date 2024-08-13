@@ -1689,9 +1689,14 @@
     },
     "reactable": {
       "Package": "reactable",
-      "Version": "0.4.4",
-      "Source": "Repository",
-      "Repository": "CRAN",
+      "Version": "0.4.4.9000",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "reactable",
+      "RemoteUsername": "glin",
+      "RemoteRef": "HEAD",
+      "RemoteSha": "363068caab2fa708b247a4ab0f73cdc694223587",
       "Requirements": [
         "R",
         "digest",
@@ -1700,7 +1705,7 @@
         "jsonlite",
         "reactR"
       ],
-      "Hash": "6069eb2a6597963eae0605c1875ff14c"
+      "Hash": "c6be7f8e94fd65a692806fad10d18fb7"
     },
     "readr": {
       "Package": "readr",
@@ -2044,6 +2049,21 @@
         "shiny"
       ],
       "Hash": "bc918b6911c4e928e24a9928295de834"
+    },
+    "shinycssloaders": {
+      "Package": "shinycssloaders",
+      "Version": "1.1.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "digest",
+        "glue",
+        "grDevices",
+        "htmltools",
+        "shiny"
+      ],
+      "Hash": "2b45a467a30d6a88a1892a738c0900cf"
     },
     "shinyjs": {
       "Package": "shinyjs",

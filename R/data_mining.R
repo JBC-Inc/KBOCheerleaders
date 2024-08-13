@@ -257,7 +257,7 @@ getCheerleaderPage <- function(wiki_url, cheerleader_url, values) {
       names(keyword_image_mapping), ~
         stringr::str_detect(link, stringr::regex(.x, ignore_case = TRUE)))
     if (!is.null(keyword)) {
-      file.path("/social_icons", keyword_image_mapping[[keyword]])
+      file.path("social_icons", keyword_image_mapping[[keyword]])
     } else {
       NA_character_
     }

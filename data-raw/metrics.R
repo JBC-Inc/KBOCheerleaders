@@ -360,7 +360,12 @@ ultra_combo <- ultra_combo |>
   mutate(
     logo =
       glue::glue(
-        '<img height=50 src="www/team_logo/{team_img}"></img>')) |>
+        '<img height=50 src="www/team_logo/{team_img}"
+        class="team-photo"
+        data-team="{team}">
+        </img>'
+        )
+    ) |>
   mutate(
     photo =
       glue::glue(
@@ -369,8 +374,8 @@ ultra_combo <- ultra_combo |>
              data-team="{team}"
              data-name="{name}">
              </img>'
-      )
-  ) |>
+        )
+    ) |>
   mutate(logo = str_replace(logo, "Wiz\\.webp", "Wiz.jpg")) |>
   mutate(logo = str_replace(logo, "Lions\\.webp", "Lions.jpg")) |>
   mutate(avg_views_per_video = as.integer(views / count)) |>
