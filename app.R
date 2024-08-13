@@ -64,6 +64,11 @@ ui <- bslib::page_sidebar(
       shiny::uiOutput("stats"),
       shiny::uiOutput("reactable")
     ),
+    bslib::nav_panel(                    # reactable
+      value = "accordion",
+      "Reactable",
+      shiny::uiOutput("reactable")
+    ),
     bslib::nav_panel(                    # team/cheerleader
       value = "visual",
       "Team/Cheerleader",
@@ -260,18 +265,37 @@ server <- function(input, output, session) {
     shiny::bindEvent(input$plot_click)
 
     output$f1 <- shiny::renderPlot({
-    fat_distro[[4]]
-  })
+      fat_distro[[4]]
+    })
 
     output$f2 <- shiny::renderPlot({
-    fat_distro[[2]]
-  })
+      fat_distro[[2]]
+    })
 
     output$f3 <- shiny::renderPlot({
-    fat_distro[[3]]
-  })
+      fat_distro[[3]]
+    })
 
-    react <- shiny::reactive(label = "Reactable Data", {
+  # Reactable -----------------------------------------------------------------
+
+    output$reactable <- shiny::renderUI({
+      bslib::card(
+        bslib::card_header(
+          bslib::tooltip(
+            shiny::span(
+              "Cheerleader Social Media Statistics by Team",
+              bsicons::bs_icon("question-circle-fill")
+            ),
+            "Click Cheerleader Image to view the page."),
+          class = "bg-dark"
+        ),
+        bslib::card_body(
+          reactable::reactableOutput("react")
+        )
+      )
+    })
+
+      leader_data <- shiny::reactive(label = "Reactable Data", {
       teams <- ultra_combo |>
         dplyr::group_by(team) |>
         dplyr::summarize(members = dplyr::n_distinct(name), .groups = 'drop')
@@ -296,32 +320,9 @@ server <- function(input, output, session) {
         )
     })
 
-    output$reactable <- shiny::renderUI({
-
-      bslib::card(
-        bslib::card_header(
-          bslib::tooltip(
-            shiny::span(
-              "Cheerleader Social Media Statistics by Team",
-              bsicons::bs_icon("question-circle-fill")
-              ),
-            "Click Cheerleader Image to view the page."),
-          class = "bg-dark"
-        ),
-        bslib::card_body(
-          shinycssloaders::withSpinner(
-            reactable::reactableOutput("react"),
-            type = 2,
-            color.background = "#78c2ad",
-            color = "#EEEEEE"
-          )
-        )
-      )
-    })
-
-    output$react <- reactable::renderReactable({
-      makeReactable(react)
-    })
+      output$react <- reactable::renderReactable({
+        makeReactable(leader_data)
+      })
 
   # Team/Cheerleader ----------------------------------------------------------
 

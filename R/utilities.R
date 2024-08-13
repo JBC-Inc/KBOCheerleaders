@@ -33,12 +33,7 @@ makeStatsPage <- function() {
           class = "bg-dark"
         ),
         bslib::card_body(
-          shinycssloaders::withSpinner(
-            shiny::plotOutput("fat", click = "plot_click", height = '600px'),
-            type = 2,
-            color.background = "#78c2ad",
-            color = "#EEEEEE"
-          )
+          shiny::plotOutput("fat", click = "plot_click", height = '600px')
         ),
         # bslib::card_footer("Click Team `Logo` to view.", class = "bg-info")
       )
@@ -115,14 +110,14 @@ makeStatsPage <- function() {
 #' stats such as total followers, YouTube subscribers, Instagram followers,
 #' and TikTok followers arranged in descending order.
 #'
-#' @param react
+#' @param leader_data reactive list of ultra_combo and teams
 #'
 #' @return `reactable::reactable`
 #'
-makeReactable <- function(react) {
+makeReactable <- function(leader_data) {
 
   reactable::reactable(
-    data = react()$teams,
+    data = leader_data()$teams,
     columns = list(
       team = reactable::colDef(
         name = "Team",
@@ -138,8 +133,8 @@ makeReactable <- function(react) {
       members = reactable::colDef(name = "Members")
     ),
     details = function(index) {
-      cheerleaders <- react()$uc |>
-        dplyr::filter(team == react()$teams$team[index]) |>
+      cheerleaders <- leader_data()$uc |>
+        dplyr::filter(team == leader_data()$teams$team[index]) |>
         dplyr::arrange(desc(followers)) |>
         dplyr::select(name, link, followers, subs,
                       instagram_followers,
