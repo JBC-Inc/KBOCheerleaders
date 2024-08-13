@@ -362,7 +362,7 @@ ultra_combo <- ultra_combo |>
       glue::glue(
         '<img height=50 src="www/team_logo/{team_img}"
         class="team-photo"
-        data-team="{team}">
+        data-tt="{team}">
         </img>'
         )
     ) |>
