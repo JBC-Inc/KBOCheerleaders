@@ -1679,13 +1679,18 @@
     },
     "reactR": {
       "Package": "reactR",
-      "Version": "0.6.0",
-      "Source": "Repository",
-      "Repository": "CRAN",
+      "Version": "0.5.0",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "reactR",
+      "RemoteUsername": "react-R",
+      "RemoteRef": "v0.5.0",
+      "RemoteSha": "fb3ba30749e83faf4433f62c0ea1dd558c81b64e",
       "Requirements": [
         "htmltools"
       ],
-      "Hash": "10f4d661c235181648a5958c02c0382a"
+      "Hash": "fbff8eadfffa97cdf13059ef4b619f9c"
     },
     "reactable": {
       "Package": "reactable",

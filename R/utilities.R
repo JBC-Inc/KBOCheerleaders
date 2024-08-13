@@ -116,6 +116,9 @@ makeStatsPage <- function() {
 #'
 makeReactable <- function(leader_data) {
 
+  # remove.packages("reactR)    https://github.com/glin/reactable/issues/388
+  # devtools::install_github("react-R/reactR@v0.5.0")
+
   reactable::reactable(
     data = leader_data()$teams,
     columns = list(

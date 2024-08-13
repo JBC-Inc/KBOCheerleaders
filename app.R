@@ -62,12 +62,7 @@ ui <- bslib::page_sidebar(
       value = "stats",
       "Team Stats",
       shiny::uiOutput("stats"),
-      shiny::uiOutput("reactable")
-    ),
-    bslib::nav_panel(                    # reactable
-      value = "accordion",
-      "Reactable",
-      shiny::uiOutput("reactable")
+      shiny::uiOutput("teamreact")
     ),
     bslib::nav_panel(                    # team/cheerleader
       value = "visual",
@@ -278,24 +273,7 @@ server <- function(input, output, session) {
 
   # Reactable -----------------------------------------------------------------
 
-    output$reactable <- shiny::renderUI({
-      bslib::card(
-        bslib::card_header(
-          bslib::tooltip(
-            shiny::span(
-              "Cheerleader Social Media Statistics by Team",
-              bsicons::bs_icon("question-circle-fill")
-            ),
-            "Click Cheerleader Image to view the page."),
-          class = "bg-dark"
-        ),
-        bslib::card_body(
-          reactable::reactableOutput("react")
-        )
-      )
-    })
-
-      leader_data <- shiny::reactive(label = "Reactable Data", {
+  leader_data <- shiny::reactive(label = "Reactable Data", {
       teams <- ultra_combo |>
         dplyr::group_by(team) |>
         dplyr::summarize(members = dplyr::n_distinct(name), .groups = 'drop')
@@ -309,7 +287,7 @@ server <- function(input, output, session) {
           instagram_followers = sum(instagram_followers, na.rm = TRUE),
           tiktok_followers = sum(tiktok_followers, na.rm = TRUE),
 
-        .groups = "drop") |>
+          .groups = "drop") |>
         dplyr::left_join(team_cheerleaders |>
                            dplyr::select(cheerleader, link),
                          by = c("name" = "cheerleader"))
@@ -317,12 +295,29 @@ server <- function(input, output, session) {
       list(
         teams = teams,
         uc = uc
-        )
+      )
     })
 
-      output$react <- reactable::renderReactable({
-        makeReactable(leader_data)
-      })
+  output$rt <- reactable::renderReactable({
+    makeReactable(leader_data)
+  })
+
+    output$teamreact <- shiny::renderUI({
+      bslib::card(
+        bslib::card_header(
+          bslib::tooltip(
+            shiny::span(
+              "Cheerleader Social Media Statistics by Team",
+              bsicons::bs_icon("question-circle-fill")
+            ),
+            "Click Cheerleader Image to view the page."),
+          class = "bg-dark"
+        ),
+        bslib::card_body(
+          reactable::reactableOutput("rt")
+        )
+      )
+    })
 
   # Team/Cheerleader ----------------------------------------------------------
 
