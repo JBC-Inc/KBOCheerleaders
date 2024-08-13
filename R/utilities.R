@@ -644,9 +644,11 @@ makeLeaderboards <- function() {
   )
 
   bslib::layout_column_wrap(
-    width = '800px',
+    width = '700px',
     fixed_width = TRUE,
     heights_equal = "row",
-    yt, inst, tt
+    yt,
+    inst,
+    tt
   )
 }

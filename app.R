@@ -53,7 +53,8 @@ ui <- bslib::page_sidebar(
       status = "danger"
       ),
 
-    shiny::uiOutput("song")
+    shiny::uiOutput("teamsong"),
+    shiny::uiOutput("startsong")
   ),
 
   bslib::navset_tab(
@@ -73,7 +74,11 @@ ui <- bslib::page_sidebar(
     bslib::nav_panel(                    # leaderboard
       value = "leader",
       "Leaderboards",
-      shiny::uiOutput("leaders")
+      shinycssloaders::withSpinner(
+        type = 2,
+        color = "#F3969A", color.background = "#78C2AD",
+        shiny::uiOutput("leaders")
+      )
     ),
     bslib::nav_spacer(),
     bslib::nav_menu(
@@ -94,6 +99,38 @@ ui <- bslib::page_sidebar(
 # SERVER ======================================================================
 
 server <- function(input, output, session) {
+
+  output$startsong <- shiny::renderUI({
+      song <- "https://www.youtube.com/watch?v=Aj8IY4mQQGo"
+      video_id <- sub(".*v=([^&]+).*", "\\1", song)
+      song <- paste0("https://www.youtube.com/embed/", video_id, "?autoplay=1")
+
+      shiny::tags$iframe(
+        width="0",
+        height="0",
+        src=song,
+        frameborder="0",
+        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture",
+        allowfullscreen=NA
+      )
+    })
+
+  shiny::showModal(
+    ui = shiny::modalDialog(
+      title = shiny::div(
+        shiny::h2("The Pikki Pikki Song Phenomenon",
+                  style="color: #78C2AD")
+        ),
+      introduction,
+      footer = shiny::tagList(
+        footer,
+        shiny::modalButton("Dismiss"),
+      ),
+      size = "xl"
+    )
+  )
+
+  #----------------------------------------------------------------------------
 
   td <- shiny::reactive(label = "Selected Team Data", {
 
@@ -161,7 +198,7 @@ server <- function(input, output, session) {
 
     song <- selected_song()
 
-    output$song <- shiny::renderUI(
+    output$teamsong <- shiny::renderUI(
       shiny::tags$iframe(
         width="200",
         height="113",
@@ -191,10 +228,6 @@ server <- function(input, output, session) {
   })
 
   # Team Stats ----------------------------------------------------------------
-
-  output$stats <- shiny::renderUI({
-    makeStatsPage()
-  })
 
   agg_follow <- shiny::reactive(label = "Followers Across Teams", {
 
@@ -236,6 +269,10 @@ server <- function(input, output, session) {
          plot.margin = ggplot2::margin(5, 5, 5, 5)
        )
    })
+
+  output$stats <- shiny::renderUI({
+    makeStatsPage()
+  })
 
   shiny::observe(label = "Plot click team logo", {
 
@@ -302,7 +339,7 @@ server <- function(input, output, session) {
     makeReactable(leader_data)
   })
 
-    output$teamreact <- shiny::renderUI({
+  output$teamreact <- shiny::renderUI({
       bslib::card(
         bslib::card_header(
           bslib::tooltip(
@@ -450,15 +487,15 @@ server <- function(input, output, session) {
     makeLeaderboards()
   })
 
-    output$leaderYT <- gt::render_gt({
+  output$leaderYT <- gt::render_gt({
       makegtYT(ultra_combo)
       })
 
-    output$leaderInst <- gt::render_gt({
+  output$leaderInst <- gt::render_gt({
       makegtInst(ultra_combo)
       })
 
-    output$leaderTT <- gt::render_gt({
+  output$leaderTT <- gt::render_gt({
       makegtTT(ultra_combo)
       })
 

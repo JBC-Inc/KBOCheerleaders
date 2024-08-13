@@ -28,7 +28,8 @@ data("team_photos")                     # char vector team photo
 data("team_logos")                      # char vector team logos
 data("team_caps")                       # char vector team caps
 
-
+data("introduction")
+data("footer")
 
 
 

@@ -277,11 +277,28 @@ fat_plot <- followersAcrossTeams(fat)
 
 usethis::use_data(fat_plot, overwrite = TRUE)
 
+introduction <-
+  shiny::HTML(
+  '<div style="padding: 20px; border-radius: 8px; background-color: #f9f9f9; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+    <p style="font-size: 16px;">The Pikki Pikki song, originally by Olive Beat\'s Lecon Studios, has become a viral sensation thanks to its association with KBO Baseball League cheerleaders. The song is famously linked to the Kia Tigers, where cheerleaders use it to celebrate and subtly taunt opposing teams with a unique, low-energy dance.</p>
+    <p style="font-size: 16px;">This cheer has sparked the Pikki Pikki Challenge and gained widespread attention on social media platforms. However, this Shiny app is not just about the Kia Tigers. It covers all KBO Baseball League cheerleading teams, focusing on their social media presence. The app aims to identify which cheerleaders have the most likes, followers, and subscribers across YouTube, Instagram, and TikTok.</p>
+    <p style="font-size: 16px;">By analyzing social media metrics, the app highlights the most popular cheerleaders, showcasing their influence and reach. This comprehensive approach allows fans to explore and appreciate the vibrant cheerleading culture across the entire KBO League. Enjoy!</p>
+  </div>')
 
+usethis::use_data(introduction)
 
+footer <-
+  shiny::HTML(
+  '<footer style="padding: 10px; border-top: 1px solid #ddd; text-align: center; background-color: #f1f1f1;">
+      <p style="font-size: 14px; color: #555;">Information about the KBO League and cheerleading teams is available on the following sources:</p>
+      <p style="font-size: 14px;">
+        <a href="https://en.wikipedia.org/wiki/KBO_League" target="_blank" style="color: #0056b3; text-decoration: none;">Wikipedia: KBO League</a><br>
+        <a href="https://en.namu.wiki/w/%EC%B9%98%EC%96%B4%EB%A6%AC%EB%8D%94/KBO%20%EB%A6%AC%EA%B7%B8" target="_blank" style="color: #0056b3; text-decoration: none;">Namu Wiki: KBO League Cheerleaders</a>
+      </p>
+    <p style="font-size: 14px; color: #555;">Both sources operate under Creative Commons licenses. Wikipedia content is available under the <a href="https://en.wikipedia.org/wiki/Wikipedia:Copyrights#Licenses" target="_blank" style="color: #0056b3; text-decoration: none;">Creative Commons Attribution-Share-Alike License</a>, and Namu Wiki operates under its own <a href="https://en.namu.wiki/w/%ED%81%AC%EB%A6%AC%EC%97%90%EC%9D%B4%ED%8B%B0%EB%B8%8C%20%EC%BB%A4%EB%A8%BC%EC%A6%88%20%EB%9D%BC%EC%9D%B4%EC%84%A0%EC%8A%A4" target="_blank" style="color: #0056b3; text-decoration: none;">Namu Wiki License</a>.</p>
+    </footer>')
 
-
-
+usethis::use_data(footer)
 
 
 

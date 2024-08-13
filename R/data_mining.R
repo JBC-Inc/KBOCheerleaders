@@ -570,7 +570,7 @@ getTikTok <- function(cheer_data) {
   tiktok
 }
 
-# stats followers across teams ------------------------------------------------
+# Followers across teams ------------------------------------------------
 
 #' Aggregate YouTube Instagram and TikTok follower data
 #'
@@ -647,6 +647,15 @@ followersAcrossTeams <- function(fat) {
       plot.margin = ggplot2::margin(5, 5, 5, 5)
     )
 }
+
+
+
+
+
+
+
+
+
 
 
 
