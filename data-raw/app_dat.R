@@ -279,13 +279,14 @@ usethis::use_data(fat_plot, overwrite = TRUE)
 
 introduction <-
   shiny::HTML(
-  '<div style="padding: 20px; border-radius: 8px; background-color: #f9f9f9; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
-    <p style="font-size: 16px;">The Pikki Pikki song, originally by Olive Beat\'s Lecon Studios, has become a viral sensation thanks to its association with KBO Baseball League cheerleaders. The song is famously linked to the Kia Tigers, where cheerleaders use it to celebrate and subtly taunt opposing teams with a unique, low-energy dance.</p>
+    '<div style="padding: 20px; border-radius: 8px; background-color: #f9f9f9; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+    <p style="font-size: 16px;">The Pikki Pikki song, originally by <a href="https://youtu.be/M5HXKSR1hKc?t=42" target="_blank">Olive Beat\'s Lecon Studios</a>, has become a viral sensation thanks to its association with KBO Baseball League cheerleaders. The song is famously linked to the Kia Tigers, where cheerleaders use it to celebrate and subtly taunt opposing teams with a unique, low-energy dance.</p>
     <p style="font-size: 16px;">This cheer has sparked the Pikki Pikki Challenge and gained widespread attention on social media platforms. However, this Shiny app is not just about the Kia Tigers. It covers all KBO Baseball League cheerleading teams, focusing on their social media presence. The app aims to identify which cheerleaders have the most likes, followers, and subscribers across YouTube, Instagram, and TikTok.</p>
     <p style="font-size: 16px;">By analyzing social media metrics, the app highlights the most popular cheerleaders, showcasing their influence and reach. This comprehensive approach allows fans to explore and appreciate the vibrant cheerleading culture across the entire KBO League. Enjoy!</p>
-  </div>')
+  </div>'
+  )
 
-usethis::use_data(introduction)
+usethis::use_data(introduction, overwrite = TRUE)
 
 footer <-
   shiny::HTML(

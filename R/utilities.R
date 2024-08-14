@@ -26,7 +26,7 @@ makeStatsPage <- function() {
         bslib::card_header(
           bslib::tooltip(
             shiny::span(
-              "Total Cheerleader Social Media Followers by Team",
+              "Total Cheerleader Social Media Followers by Team (YouTube, Instagram, TikTok)",
               bsicons::bs_icon("question-circle-fill")
             ),
             "Click Team Logo to view the page."),
@@ -439,7 +439,7 @@ makegtYT <- function(ultra_combo) {
     gt::cols_label(
       logo = "Team Logo",
       photo = "Cheerleader",
-      link = "Name",
+      link = "Name/Wiki",
       subs = "Subscribers",
       views = "Views",
       count = "Videos",
@@ -494,7 +494,7 @@ makegtInst <- function(ultra_combo) {
     gt::cols_label(
       logo = "Team Logo",
       photo = "Cheerleader",
-      link = "Name",
+      link = "Name/Wiki",
       instagram_followers = "Followers",
     ) |>
     gt::data_color(
@@ -549,7 +549,7 @@ makegtTT <- function(ultra_combo) {
     gt::cols_label(
       logo = "Team Logo",
       photo = "Cheerleader",
-      link = "Name",
+      link = "Name/Wiki",
       tiktok_followers = "Followers",
       likes = "Likes",
       likes_followers = "Likes/Followers"
@@ -644,7 +644,7 @@ makeLeaderboards <- function() {
   )
 
   bslib::layout_column_wrap(
-    width = '700px',
+    width = '60%',
     fixed_width = TRUE,
     heights_equal = "row",
     yt,
@@ -652,3 +652,17 @@ makeLeaderboards <- function() {
     tt
   )
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

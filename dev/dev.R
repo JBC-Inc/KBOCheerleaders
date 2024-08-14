@@ -1102,6 +1102,11 @@ createCheerleaderUI <- function(td, cheerleader, smm) {
 
 
 # shiny::tags$div(
+#
+# .fcon {
+#   height: 255px;
+#   margin-right: 10px;
+# }
 #   class = "d-flex align-items-center",
 #   shiny::tags$img(src = "https://shiny.posit.co/images/shiny-solo.png", class = "fcon"),
 #   shiny::tags$img(src = "https://glue.tidyverse.org/logo.png", class = "fcon"),

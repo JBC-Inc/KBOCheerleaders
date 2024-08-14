@@ -7,24 +7,12 @@ ui <- bslib::page_sidebar(
   theme = bslib::bs_theme(
     version = 5,
     base_font = "Roboto, sans-serif",
+    bootswatch = "minty"
     #primary = '#78C2AD',
     #secondary = '#F3969A',
     #success = '#56CC9D',
     #info = '#6CC3D5',
-    bootswatch = "minty",
-    ) |>
-    bslib::bs_add_rules("
-      body{
-        font-size: 12px;
-      }
-      .cardb {
-        text-align: center;
-      }
-      .fcon {
-        height: 55px;
-        margin-right: 10px;
-      }
-    "),
+  ),
 
   title = shiny::tags$div(
     class = "d-flex justify-content-between align-items-center w-100",
@@ -50,11 +38,12 @@ ui <- bslib::page_sidebar(
     shinyWidgets::materialSwitch(
       inputId = "play_video",
       label = "Play Team Themesong",
-      status = "danger"
-      ),
-
+      status = "danger"),
     shiny::uiOutput("teamsong"),
-    shiny::uiOutput("startsong")
+
+    shiny::br(),
+    "Piki Piki Song",
+    shiny::uiOutput("pikki")
   ),
 
   bslib::navset_tab(
@@ -74,11 +63,7 @@ ui <- bslib::page_sidebar(
     bslib::nav_panel(                    # leaderboard
       value = "leader",
       "Leaderboards",
-      shinycssloaders::withSpinner(
-        type = 2,
-        color = "#F3969A", color.background = "#78C2AD",
-        shiny::uiOutput("leaders")
-      )
+      shiny::uiOutput("leaders")
     ),
     bslib::nav_spacer(),
     bslib::nav_menu(
@@ -100,26 +85,22 @@ ui <- bslib::page_sidebar(
 
 server <- function(input, output, session) {
 
-  output$startsong <- shiny::renderUI({
-      song <- "https://www.youtube.com/watch?v=Aj8IY4mQQGo"
-      video_id <- sub(".*v=([^&]+).*", "\\1", song)
-      song <- paste0("https://www.youtube.com/embed/", video_id, "?autoplay=1")
-
-      shiny::tags$iframe(
-        width="0",
-        height="0",
-        src=song,
-        frameborder="0",
-        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture",
-        allowfullscreen=NA
-      )
+  output$pikki <- shiny::renderUI({
+    shiny::tags$iframe(
+      width="200",
+      height="113",
+      src="https://www.youtube.com/embed/Aj8IY4mQQGo?autoplay=0",
+      frameborder="0",
+      allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture",
+      allowfullscreen=NA
+    )
     })
 
   shiny::showModal(
     ui = shiny::modalDialog(
       title = shiny::div(
         shiny::h2("The Pikki Pikki Song Phenomenon",
-                  style="color: #78C2AD")
+                  style="color: #78C2AD;")
         ),
       introduction,
       footer = shiny::tagList(
@@ -182,16 +163,11 @@ server <- function(input, output, session) {
     shiny::bindEvent(input$cheerleader)
 
   selected_song <- shiny::reactive(label = "Song Selected", {
-
     shiny::req(input$team)
-
     song <- td()$song
-
     video_id <- sub(".*v=([^&]+).*", "\\1", song)
-
     autoplay <- if(input$play_video) "1" else "0"
-
-    song <- paste0("https://www.youtube.com/embed/", video_id, "?autoplay=", autoplay)
+    paste0("https://www.youtube.com/embed/", video_id, "?autoplay=", autoplay)
   })
 
   shiny::observe(label = "Play Themesong", {
@@ -502,6 +478,20 @@ server <- function(input, output, session) {
 } # server
 
 shinyApp(ui = ui, server = server)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

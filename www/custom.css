@@ -1,7 +1,13 @@
+/* -------------------------------------- body */
 
-/* above tabset */
-.main.bslib-gap-spacing.html-fill-container {
-  padding-top: 5px;
+body {
+  font-size: 14px !important;
+}
+
+/* -------------------------------------- modal header */
+
+.modal-header {
+  background-color: #343a40;
 }
 
 /* -------------------------------------- sidebar */
@@ -23,6 +29,11 @@ table td:first-child {
 
 /* -------------------------------------- tab-content */
 
+/* above tabset */
+.main.bslib-gap-spacing.html-fill-container {
+  padding-top: 5px;
+}
+
 .tab-content {
   padding-top: 10px;
 }
@@ -33,11 +44,7 @@ table td:first-child {
   padding: 0px;
 }
 
-#stat-fat,
-#f1,
-#f2,
-#f3,
-#f4 {
+#stat-fat, #f1, #f2, #f3, #f4 {
   padding-top: 0px;
 }
 
@@ -66,7 +73,9 @@ table td:first-child {
 }
 
 .color-box.purple {
-  background-color: purple;
+  /*background-color: purple;*/
+  fill: rgba(255, 255, 255, 0.6) !important;
+  background: linear-gradient(45deg, #FFD600, #FF7A00, #FF0069, #D300C5, #7638FA);
 }
 
 .color-box.black {
@@ -117,13 +126,18 @@ table td:first-child {
 
 
 
-/* -------------------------------------- cheerleader cards  */
+/* -------------------------------------- cheerleader/team cards  */
+
+/* center image */
+.cardb {
+  text-align: center;
+}
 
 .html-fill-container {
   display: block !important;
 }
 
-/* icon colors */
+/* cheerleader icon colors */
 
 .bslib-value-box.default .value-box-showcase svg.bi.bi-youtube {
     fill: #FF0000 !important;
@@ -134,6 +148,16 @@ table td:first-child {
     background: linear-gradient(45deg, #FFD600, #FF7A00, #FF0069, #D300C5, #7638FA);
     border-radius: 18px;
 }
+
+.bslib-value-box .value-box-value {
+  font-size: 2rem;
+}
+
+/* remove space on column wrap */
+.bslib-grid .bslib-mb-spacing {
+  display: flex !important;
+}
+
 
 /*
 .bslib-value-box.default .value-box-showcase svg.bi.bi-tiktok {
@@ -147,23 +171,15 @@ table td:first-child {
 }
 */
 
-/* icon padding */
+/* icon padding
 .value-box-showcase.html-fill-item.html-fill-container {
-  /*padding: 5px;*/
+  padding: 5px;
 }
 .value-box-area.html-fill-item.html-fill-container {
-  /*padding: 5px;*/
+  padding: 5px;
 }
+*/
 
-/* stat font size */
-
-.bslib-value-box .value-box-value {
-  font-size: 1rem;
-}
-
-.bslib-grid .bslib-mb-spacing {
-  display: flex !important;
-}
 
 
 
