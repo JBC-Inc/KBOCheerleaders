@@ -183,11 +183,11 @@ server <- function(input, output, session) {
     )
   })
 
-  output$rt <- reactable::renderReactable({
+    output$rt <- reactable::renderReactable({
     makeReactable(leader_data)
   })
 
-  output$teamreact <- shiny::renderUI({
+    output$teamreact <- shiny::renderUI({
     bslib::card(
       bslib::card_header(
         bslib::tooltip(
@@ -212,7 +212,7 @@ server <- function(input, output, session) {
     makeTeam(td)
   })
 
-  output$teamPhoto <- shiny::renderUI({
+    output$teamPhoto <- shiny::renderUI({
 
     if (input$team == "KT Wiz") {
       shiny::img(
@@ -223,12 +223,12 @@ server <- function(input, output, session) {
     }
   })
 
-  output$teamLogo <- shiny::renderUI({
+    output$teamLogo <- shiny::renderUI({
 
     shiny::img(src = paste0("team_logo/", td()$logo), height = "242px")
   })
 
-  output$capInsignia <- shiny::renderUI({
+    output$capInsignia <- shiny::renderUI({
 
     shiny::img(src = paste0("team_cap/", td()$cap), height = "242px")
   })
@@ -242,13 +242,13 @@ server <- function(input, output, session) {
     makeCheerleader(td, input$cheerleader, smm)
   })
 
-  output$cheerleaderPhoto <- shiny::renderUI({
+    output$cheerleaderPhoto <- shiny::renderUI({
 
     image <- paste0("./cheerleader_img/", input$cheerleader, ".png")
     shiny::img(src = image, height = "320px")
   })
 
-  output$cheerleaderBio <- DT::renderDataTable({
+    output$cheerleaderBio <- DT::renderDataTable({
 
     DT::datatable(
       data = cheer_data[[input$cheerleader]]$table,
