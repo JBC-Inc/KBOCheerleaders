@@ -6,6 +6,10 @@
 #' of followers by platform.
 #'
 #' These are all the UI cards that contain the actual plot outputs
+#' @param fat followers aggregate teams
+#' @param f1 ggplot2 distribution
+#' @param f2 ggplot2 distribution
+#' @param f3 ggplot2 distribution
 #'
 #' @return bslib::page_fillable
 #'
@@ -284,10 +288,12 @@ makeReactable <- function(leader_data) {
 #' @param td team_data reactive
 #' @param cheerleader input$cheerleader selected cheerleader
 #' @param smm social media metrics reactive
+#' @param cheerPhoto namespace for cheerPhoto ui
+#' @param cheerBio namespace for cheerBio ui
 #'
 #' @return Cheerleader bslib UI elements
 #'
-makeCheerleader <- function(td, cheerleader, smm) {
+makeCheerleader <- function(td, smm, cheerleader, cheerPhoto, cheerBio) {
 
   yt <- dplyr::filter(smm()$youtube, name == cheerleader)
   inst <- dplyr::filter(smm()$instagram, name == cheerleader)
@@ -304,11 +310,11 @@ makeCheerleader <- function(td, cheerleader, smm) {
     bslib::card_body(
       class = "cardb",
       fillable = TRUE,
-      shiny::uiOutput("cheerleaderPhoto"),
+      shiny::uiOutput(cheerPhoto),
     ),
     bslib::card_body(
       fillable = TRUE,
-      DT::dataTableOutput("cheerleaderBio")
+      DT::dataTableOutput(cheerBio)
     )
   )
 
@@ -417,7 +423,7 @@ makeCheerleader <- function(td, cheerleader, smm) {
 #'
 #' @param ultra_combo aggregate cheerleader social media metrics.
 #'
-#' @return
+#' @return gt
 #'
 makegtYT <- function(ultra_combo) {
 
@@ -475,7 +481,7 @@ makegtYT <- function(ultra_combo) {
 #'
 #' @param ultra_combo aggregate cheerleader social media metrics.
 #'
-#' @return
+#' @return gt
 #'
 makegtInst <- function(ultra_combo) {
 
@@ -526,7 +532,7 @@ makegtInst <- function(ultra_combo) {
 #'
 #' @param ultra_combo aggregate cheerleader social media metrics.
 #'
-#' @return
+#' @return gt
 #'
 makegtTT <- function(ultra_combo) {
 
@@ -577,9 +583,13 @@ makegtTT <- function(ultra_combo) {
 
 #' Generate Leaderboard Cards
 #'
-#' Houses the 3 Leaderboards
+#' Houses the 3 gt Leaderboard tables
 #'
-#' @return
+#' @param leaderYT namespace for youtube leaderboard
+#' @param leaderInst namespace for instagram leaderboard
+#' @param leaderTT namespace for tiktok leaderboard
+#'
+#' @return nice bslib card layout
 #'
 makeLeaderboards <- function(leaderYT, leaderInst, leaderTT) {
 
@@ -653,8 +663,17 @@ makeLeaderboards <- function(leaderYT, leaderInst, leaderTT) {
   )
 }
 
+#' Make the team photo, logo and hat insignia card layouts.
+#'
+#' @param td reactive team data
+#' @param teamPhoto namespace for team photo ui
+#' @param teamLogo namespace for team logo ui
+#' @param capInsignia namespace for cap insignia ui
+#'
+#' @return nice bslib card layout
+#'
+makeTeam <- function(td, teamPhoto, teamLogo, capInsignia) {
 
-makeTeam <- function(td) {
   bslib::layout_column_wrap(
     width = NULL,
     fill = FALSE,
@@ -670,7 +689,7 @@ makeTeam <- function(td) {
       bslib::card_body(
         class = "cardb",
         fillable = TRUE,
-        shiny::uiOutput("teamPhoto")
+        shiny::uiOutput(teamPhoto)
       )
     ),
     bslib::layout_column_wrap(
@@ -686,7 +705,10 @@ makeTeam <- function(td) {
           style = paste("background-color:", td()$color, "; color: #ffffff;"),
           paste0(td()$name, " Team Logo")
         ),
-        bslib::card_body(class = "cardb", shiny::uiOutput("teamLogo"))
+        bslib::card_body(
+          class = "cardb",
+          shiny::uiOutput(teamLogo)
+        )
       ),
 
       bslib::card(
@@ -697,12 +719,21 @@ makeTeam <- function(td) {
           style = paste("background-color:", td()$color, "; color: #ffffff;"),
           paste0(td()$name, " Cap Insignia")
         ),
-        bslib::card_body(class = "cardb", shiny::uiOutput("capInsignia"))
+        bslib::card_body(
+          class = "cardb",
+          shiny::uiOutput(capInsignia)
+        )
       )
     )
   )
 }
 
+#' Shiny app title
+#'
+#' @return
+#' @export
+#'
+#' @examples
 makeTitle <- function() {
   shiny::tags$div(
     class = "d-flex justify-content-between align-items-center w-100",
@@ -718,6 +749,12 @@ makeTitle <- function() {
   )
 }
 
+#' Shiny app navbar menu w/links
+#'
+#' @return
+#' @export
+#'
+#' @examples
 makeNavMenu <- function() {
   bslib::nav_menu(
     title = "References",
@@ -732,5 +769,99 @@ makeNavMenu <- function() {
         target = "_blank"))
   )
 }
+
+
+#' Manage visibility and updates for team/cheerleader UI's
+#'
+#' Reduce redundancy improve readability
+#'
+#' @param show_team_ui logical
+#' @param show_individual_ui logical
+#' @param selected_team input$'team-team'
+#' @param selected_cheerleader input$'cheer-cheerleader'
+#' @param session Current Shiny Session Environment
+#'
+#' @return
+#'
+# updateUI <- function(show_team_ui,
+#                      show_individual_ui,
+#                      selected_team = NULL,
+#                      selected_cheerleader = NULL,
+#                      session) {
+#   if (show_team_ui) {
+#     shinyjs::show("team-ui", asis = TRUE)
+#     shinyjs::hide("individual-ui", asis = TRUE)
+#     if (!is.null(selected_team)) {
+#       shiny::updateSelectizeInput(session, "team-team", selected = selected_team)
+#     }
+#   } else if (show_individual_ui) {
+#     shinyjs::hide("team-ui", asis = TRUE)
+#     shinyjs::show("individual-ui", asis = TRUE)
+#     if (!is.null(selected_cheerleader)) {
+#       shiny::updateRadioButtons(session, "cheer-cheerleader", selected = selected_cheerleader)
+#     }
+#   }
+# }
+#
+# if (update_select) {
+#   shinyjs::show("team-ui", asis = TRUE)
+#   shinyjs::hide("individual-ui", asis = TRUE)
+#   shiny::updateSelectizeInput(session, "team-team", selected = selected_team)
+# } else if (update_radio) {
+#   if (cheer) {
+#     shinyjs::hide("team-ui", asis = TRUE)
+#     shinyjs::show("individual-ui", asis = TRUE)
+#   } else if (randteam) {
+#     shinyjs::show("team-ui", asis = TRUE)
+#     shinyjs::hide("individual-ui", asis = TRUE)
+#   }
+#   shiny::updateRadioButtons(session, "cheer-cheerleader", selected = selected_cheerleader)
+# }
+
+
+updateUI <- function(session, state, selected_team = NULL, selected_cheerleader = NULL) {
+  # Hide or show UI elements based on the state
+  switch(state,
+         "team" = {
+           shinyjs::show("team-ui", asis = TRUE)
+           shinyjs::hide("individual-ui", asis = TRUE)
+           shiny::updateSelectizeInput(session, "team-team", selected = selected_team)
+         },
+         "cheer" = {
+           shinyjs::hide("team-ui", asis = TRUE)
+           shinyjs::show("individual-ui", asis = TRUE)
+           shiny::updateRadioButtons(session, "cheer-cheerleader", selected = selected_cheerleader)
+         },
+         "randteam" = {
+           shinyjs::show("team-ui", asis = TRUE)
+           shinyjs::hide("individual-ui", asis = TRUE)
+           shiny::updateRadioButtons(session, "cheer-cheerleader", selected = NULL)
+         },
+         "default" = {
+           # Handle any other states or do nothing
+         }
+  )
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

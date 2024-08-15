@@ -13,6 +13,7 @@ mod_cheer_server <- function(id, td, smm) {
     ns <- session$ns
 
     output$cheerleaderUI <- shiny::renderUI({
+
       shiny::req(td())
 
       team_name <- td()$name
@@ -69,5 +70,7 @@ mod_cheer_server <- function(id, td, smm) {
         style = "auto"
       )
     })
+
   })
 }
+

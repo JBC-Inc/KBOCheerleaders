@@ -1,8 +1,8 @@
 
 mod_leaderboard_ui <- function(id) {
   ns <- shiny::NS(id)
-  shiny::tagList(
-    shiny::uiOutput(ns("leaders"))
+  list(
+    ui = shiny::uiOutput(ns("leaders"))
   )
 }
 
