@@ -150,13 +150,18 @@ table td:first-child {
 }
 
 .bslib-value-box .value-box-value {
-  font-size: 2rem;
+  font-size: 1.2rem;
 }
 
 /* remove space on column wrap */
 .bslib-grid .bslib-mb-spacing {
   display: flex !important;
 }
+
+.card-body.bslib-gap-spacing.html-fill-item.html-fill-container {
+  padding: 7px !important;
+}
+
 
 
 /*

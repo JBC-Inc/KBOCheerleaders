@@ -9,7 +9,7 @@
 #'
 #' @return bslib::page_fillable
 #'
-makeStatsPage <- function() {
+makeStatsPage <- function(fat, f1, f2, f3) {
 
   bslib::page_fillable(
 
@@ -33,7 +33,7 @@ makeStatsPage <- function() {
           class = "bg-dark"
         ),
         bslib::card_body(
-          shiny::plotOutput("fat", click = "plot_click", height = '600px')
+          shiny::plotOutput(fat, click = "plot_click", height = '600px')
         ),
         # bslib::card_footer("Click Team `Logo` to view.", class = "bg-info")
       )
@@ -53,21 +53,21 @@ makeStatsPage <- function() {
         full_screen = TRUE,
         # bslib::card_header("Distribution Avg Followers per Platform", class = "bg-dark"),
         bslib::card_header("Average Followers per Platform (95% Percentile)", class = "bg-dark"),
-        bslib::card_body(shiny::plotOutput("f1", height = '100%'))
+        bslib::card_body(shiny::plotOutput(f1, height = '100%'))
       ),
       bslib::card(
         id = "f2",
         height = 269,
         full_screen = TRUE,
         bslib::card_header("Capped Average Followers per Platform", class = "bg-dark"),
-        bslib::card_body(shiny::plotOutput("f2", height = '100%'))
+        bslib::card_body(shiny::plotOutput(f2, height = '100%'))
       ),
       bslib::card(
         id = "f3",
         height = 269,
         full_screen = TRUE,
         bslib::card_header("Log-Transformed Average Followers per Platform", class = "bg-dark"),
-        bslib::card_body(shiny::plotOutput("f3", height = '100%'))
+        bslib::card_body(shiny::plotOutput(f3, height = '100%'))
       ),
 
       bslib::card(
@@ -581,7 +581,7 @@ makegtTT <- function(ultra_combo) {
 #'
 #' @return
 #'
-makeLeaderboards <- function() {
+makeLeaderboards <- function(leaderYT, leaderInst, leaderTT) {
 
   yt <- bslib::card(
     id = "ytleader",
@@ -593,7 +593,7 @@ makeLeaderboards <- function() {
     ),
     bslib::card_body(
       fillable = TRUE,
-      gt::gt_output("leaderYT")
+      gt::gt_output(leaderYT)
     ),
     bslib::card_footer(
       "Click Team Logo/Cheerleader Photo to view.",
@@ -614,7 +614,7 @@ makeLeaderboards <- function() {
     ),
     bslib::card_body(
       fillable = TRUE,
-      gt::gt_output("leaderInst")
+      gt::gt_output(leaderInst)
     ),
     bslib::card_footer(
       "Click Team Logo/Cheerleader Photo to view.",
@@ -635,7 +635,7 @@ makeLeaderboards <- function() {
     ),
     bslib::card_body(
       fillable = TRUE,
-      gt::gt_output("leaderTT")
+      gt::gt_output(leaderTT)
     ),
     bslib::card_footer(
       "Click Team Logo/Cheerleader Photo to view.",
@@ -654,15 +654,83 @@ makeLeaderboards <- function() {
 }
 
 
+makeTeam <- function(td) {
+  bslib::layout_column_wrap(
+    width = NULL,
+    fill = FALSE,
+    style = bslib::css(grid_template_columns = "2.5fr 1fr"),
 
+    bslib::card(
+      id = "teamCard",
+      full_screen = TRUE,
+      bslib::card_header(
+        style = paste("background-color:", td()$color, "; color: #ffffff;"),
+        td()$name
+      ),
+      bslib::card_body(
+        class = "cardb",
+        fillable = TRUE,
+        shiny::uiOutput("teamPhoto")
+      )
+    ),
+    bslib::layout_column_wrap(
+      width = NULL,
+      fill = FALSE,
+      style = bslib::css(flex_direction = "column"),
 
+      bslib::card(
+        id = "teamLogoCard",
+        min_height = 324,
+        max_height = 324,
+        bslib::card_header(
+          style = paste("background-color:", td()$color, "; color: #ffffff;"),
+          paste0(td()$name, " Team Logo")
+        ),
+        bslib::card_body(class = "cardb", shiny::uiOutput("teamLogo"))
+      ),
 
+      bslib::card(
+        id = "teamCapInsignia",
+        min_height = 324,
+        max_height = 324,
+        bslib::card_header(
+          style = paste("background-color:", td()$color, "; color: #ffffff;"),
+          paste0(td()$name, " Cap Insignia")
+        ),
+        bslib::card_body(class = "cardb", shiny::uiOutput("capInsignia"))
+      )
+    )
+  )
+}
 
+makeTitle <- function() {
+  shiny::tags$div(
+    class = "d-flex justify-content-between align-items-center w-100",
+    shiny::tags$div(
+      class = "d-flex align-items-center",
+      shiny::tags$img(
+        src = "https://upload.wikimedia.org/wikipedia/en/thumb/5/59/KBO_League.svg/1920px-KBO_League.svg.png",
+        height = "55px",
+        style = "margin-right: 10px;"
+        ),
+      shiny::tags$h1("Cheerleaders!", style = "font-family: 'Bangers', cursive;")
+    )
+  )
+}
 
-
-
-
-
-
+makeNavMenu <- function() {
+  bslib::nav_menu(
+    title = "References",
+    bslib::nav_item(
+      shiny::tags$a(
+        shiny::tags$img(src="wikipedia.png", height = "20px", width = "20px"), "Wikipedia",
+        href = "https://en.wikipedia.org/wiki/KBO_League", target = "_blank")),
+    bslib::nav_item(
+      shiny::tags$a(
+        shiny::tags$img(src="namuwiki.svg", height = "20px", width = "20px"), "namuwiki",
+        href = "https://en.namu.wiki/w/%EC%B9%98%EC%96%B4%EB%A6%AC%EB%8D%94/KBO%20%EB%A6%AC%EA%B7%B8",
+        target = "_blank"))
+  )
+}
 
 

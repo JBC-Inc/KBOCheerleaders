@@ -39,5 +39,28 @@ addExternalResources <- function() {
     # shiny::tags$script(src = "https://kit.fontawesome.com/38ef58b8f5.js"),
 
     # shinyFeedback::useShinyFeedback(feedback = FALSE)
+
+    # shiny::tags$script(shiny::HTML("
+    #   $(document).on('click', '.team-photo', function() {
+    #     var team = $(this).data('tt');
+    #
+    #     console.log(team);
+    #
+    #     Shiny.setInputValue('team-team', team);
+    #   });
+    # ")),
+    #
+    # shiny::tags$script(shiny::HTML("
+    #   $(document).on('click', '.cheerleader-photo', function() {
+    #     var team = $(this).data('team');
+    #     var name = $(this).data('name');
+    #
+    #     console.log(team);
+    #     console.log(name);
+    #
+    #     Shiny.setInputValue('team-team', team);
+    #     Shiny.setInputValue('cheer-cheerleader', name);
+    #   });
+    # ")),
   )
 }
