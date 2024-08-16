@@ -6,5 +6,5 @@
 .quarto
 .auth_yt
 .Renviron
-/dev
+dev/
 docs
