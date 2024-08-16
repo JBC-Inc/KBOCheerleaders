@@ -1,4 +1,9 @@
 url: https://jbc-inc.github.io/KBOCheerleaders/
 template:
   bootstrap: 5
+  bslib:
+    bootswatch: minty
+    base_font:
+      google: Roboto
+    pkgdown-nav-height: 42px
 
