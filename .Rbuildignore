@@ -6,3 +6,8 @@
 ^\.httr-oauth$
 ^\.auth_yt$
 ^data-raw$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^\.github$
+^README\.Rmd$
