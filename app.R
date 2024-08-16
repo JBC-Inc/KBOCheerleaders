@@ -93,8 +93,6 @@ server <- function(input, output, session) {
 
   mod_react_server("react", td)
 
-  mod_stats_server("stats", agg_follow)
-
   agg_follow <- shiny::reactive(label = "Followers Across Teams", {
 
     fat |>
@@ -103,6 +101,8 @@ server <- function(input, output, session) {
       dplyr::summarize(followers = sum(followers), .groups = 'drop') |>
       dplyr::arrange(dplyr::desc(followers))
   })
+
+  mod_stats_server("stats", agg_follow)
 
   shiny::observeEvent(input$plot_click, label = "Plot click team logo", {
 
