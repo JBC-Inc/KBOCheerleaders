@@ -16,12 +16,10 @@ You can install the development version of KBOCheerleaders from
 devtools::install_github("JBC-Inc/KBOCheerleaders")
 ```
 
-## Example
+## Team/Cheerlader Followers
 
-<div style="display: flex; gap: 1rem; align-items: center; min-height: 0; margin: 2rem; padding: 2rem; border-bottom: 1px solid #efefef;">
+## Team Stats
 
-<h1>
-KBOCheeR!
-</h1>
+## Biographic Information
 
-</div>
+## Leaderboards
