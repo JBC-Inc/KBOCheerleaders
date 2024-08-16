@@ -417,6 +417,49 @@ youtube_uc |>
     use_seps = TRUE
     )
 
+# teams agg followers stacked platform
+
+fat |>
+  tidyr::drop_na() |>
+  dplyr::group_by(team, color, logo) |>
+  dplyr::summarize(followers = sum(followers), .groups = 'drop') |>
+  dplyr::arrange(dplyr::desc(followers))
+
+
+ultra_combo |>
+  mutate(across(c(subs, instagram_followers, tiktok_followers), ~replace_na(.x, 0))) |>
+  group_by(team, cat) |>
+  summarize(followers = sum(subs, instagram_followers, tiktok_followers, na.rm = TRUE),
+            .groups = 'drop') |>
+  ggplot(aes(x = reorder(team, -followers),  y = followers, fill = cat)) +
+  geom_bar(stat = "identity", position = "stack") +
+  scale_fill_manual(
+    values = c("youtube" = "#ff0000", "instagram" = "orange", "tiktok" = "#000000"),
+    breaks = c("youtube", "instagram", "tiktok")
+    )
+
+d <- data.frame(x = 1:3, y = 1:3)
+
+# interpolate values from zero to y and create corresponding number of x values
+vals <- lapply(d$y, function(y) seq(0, y, by = 0.01))
+y <- unlist(vals)
+mid <- rep(d$x, lengths(vals))
+d2 <- data.frame(x = mid - 0.4,
+                 xend = mid + 0.4,
+                 y = y,
+                 yend = y)
+
+ggplot(data = d2, aes(x = x, xend = xend, y = y, yend = yend, color = y)) +
+  geom_segment(size = 2) +
+  scale_color_gradient2(low = "red", mid = "yellow", high = "green",
+                        midpoint = max(d2$y)/2)
+
+
+
+
+
+
+
 
 
 
