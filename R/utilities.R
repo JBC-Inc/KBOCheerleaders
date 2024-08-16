@@ -775,34 +775,46 @@ makeNavMenu <- function() {
 #'
 #' Reduce redundancy improve readability
 #'
-#' @param selected_team input$'team-team'
-#' @param selected_cheerleader input$'cheer-cheerleader'
 #' @param session Current Shiny Session Environment
 #' @param state
+#' @param selected_team input$'team-team'
+#' @param selected_cheerleader input$'cheer-cheerleader'
 #'
 #' @return
 #'
-updateUI <- function(session, state, selected_team = NULL, selected_cheerleader = NULL) {
-  # Hide or show UI elements based on the state
-  switch(state,
-         "team" = {
-           shinyjs::show("team-ui", asis = TRUE)
-           shinyjs::hide("individual-ui", asis = TRUE)
-           shiny::updateSelectizeInput(session, "team-team", selected = selected_team)
-         },
-         "cheer" = {
-           shinyjs::hide("team-ui", asis = TRUE)
-           shinyjs::show("individual-ui", asis = TRUE)
-           shiny::updateRadioButtons(session, "cheer-cheerleader", selected = selected_cheerleader)
-         },
-         "randteam" = {
-           shinyjs::show("team-ui", asis = TRUE)
-           shinyjs::hide("individual-ui", asis = TRUE)
-           shiny::updateRadioButtons(session, "cheer-cheerleader", selected = NULL)
-         },
-         "default" = {
-           # Handle any other states or do nothing
-         }
+updateUI <- function(session,
+                     state,
+                     team = NULL,
+                     cheerleader = NULL) {
+
+  shiny::updateNavbarPage(inputId = "tabs", selected = "visual")
+
+  switch(
+    state,
+    "team" = {
+      shinyjs::show("team-ui", asis = TRUE)
+      shinyjs::hide("individual-ui", asis = TRUE)
+      shiny::updateSelectizeInput(session, "team-team", selected = team)
+    },
+    "cheer" = {
+      shinyjs::hide("team-ui", asis = TRUE)
+      shinyjs::show("individual-ui", asis = TRUE)
+      shiny::updateRadioButtons(session, "cheer-cheerleader", selected = cheerleader)
+    },
+    "randteam" = {
+      shinyjs::show("team-ui", asis = TRUE)
+      shinyjs::hide("individual-ui", asis = TRUE)
+      shiny::updateRadioButtons(session, "cheer-cheerleader", selected = character(0))
+    },
+    "followers" = {
+      shinyjs::show("team-ui", asis = TRUE)
+      shinyjs::hide("individual-ui", asis = TRUE)
+      shiny::updateSelectizeInput(session, "team-team", selected = team)
+      shiny::updateRadioButtons(session, "cheer-cheerleader", selected = character(0))
+    },
+    "default" = {
+      # Handle any other states or do nothing
+    }
   )
 }
 

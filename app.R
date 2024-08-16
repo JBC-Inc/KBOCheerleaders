@@ -13,6 +13,7 @@ ui <- bslib::page_sidebar(
   title = makeTitle(),
 
   sidebar = bslib::sidebar(
+
     mod_team_ui("team")$select,
     mod_cheer_ui("cheer")$select,
     mod_song_ui("song")$switch,
@@ -74,27 +75,19 @@ server <- function(input, output, session) {
   })
 
   shiny::observeEvent(input$`team-team`, label = "Team Input", {
-
-    shiny::updateNavbarPage(inputId = "tabs", selected = "visual")
-    updateUI(session, state = "team", selected_team = input$`team-team`)
+    updateUI(session, state = "team", team = input$`team-team`)
   }, ignoreInit = TRUE)
 
   shiny::observe(label = "Cheerleader Input", {
-
     shiny::req(length(input$`cheer-cheerleader`) > 0)
-    shiny::updateNavbarPage(inputId = "tabs", selected = "visual")
-    updateUI(session, state = "cheer", selected_cheerleader = input$`cheer-cheerleader`)
+    updateUI(session, state = "cheer", cheerleader = input$`cheer-cheerleader`)
   })
 
   shiny::observeEvent(input$randteam, label = "Duplicate Team", {
-
-    shiny::updateNavbarPage(inputId = "tabs", selected = "visual")
     updateUI(session, state = "randteam")
   })
 
   shiny::observeEvent(input$randcheer, label = "Duplicate Cheer", {
-
-    shiny::updateNavbarPage(inputId = "tabs", selected = "visual")
     updateUI(session, state = "default")
   })
 
@@ -114,6 +107,7 @@ server <- function(input, output, session) {
   shiny::observeEvent(input$plot_click, label = "Plot click team logo", {
 
     point <- shiny::nearPoints(
+
       df = agg_follow(),
       coordinfo = input$plot_click,
       xvar = 'team',
@@ -123,9 +117,9 @@ server <- function(input, output, session) {
     )
 
     if (nrow(point) != 0) {
-      shiny::updateNavbarPage(inputId = "tabs", selected = "visual")
-      shiny::updateSelectInput(session, "team-team", selected = point$team)
-      shiny::updateRadioButtons(session, "cheer-cheerleader", selected = character(0))
+
+      updateUI(session, state = "followers", team = point$team,
+               cheerleader = character(0))
     }
   })
 
@@ -134,8 +128,6 @@ server <- function(input, output, session) {
   mod_cheer_server("cheer", td, smm)
 
   mod_leaderboard_server("leaderboard")
-
 }
 
 shinyApp(ui = ui, server = server)
-
