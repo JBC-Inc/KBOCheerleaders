@@ -1,14 +1,5 @@
 
-<!-- README.md is generated from README.Rmd. Please edit that file -->
-
-<div style="display: flex; gap: 1rem; align-items: center; min-height: 0; margin: 2rem; padding: 2rem; border-bottom: 1px solid #efefef;">
-
-<img src="www/KBOCheeR.png" class="logo" alt="Hex Sticker" style="height: 342px; float: right;">
-<h1>
-KBOCheeR!
-</h1>
-
-</div>
+# KBOCheerleaders
 
 An open source exploration into the world of Korean Baseball
 Cheerleaders. Explore the vibrant world of Korean Baseball cheerleaders
@@ -26,3 +17,11 @@ devtools::install_github("JBC-Inc/KBOCheerleaders")
 ```
 
 ## Example
+
+<div style="display: flex; gap: 1rem; align-items: center; min-height: 0; margin: 2rem; padding: 2rem; border-bottom: 1px solid #efefef;">
+
+<h1>
+KBOCheeR!
+</h1>
+
+</div>
