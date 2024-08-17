@@ -14,7 +14,7 @@ open-source interactive app. Explore detailed profiles, vibrant photos,
 and fascinating insights about your favorite KBO League cheerleaders.
 This comprehensive platform brings together all the information you need
 to discover and appreciate the stars of Korean Baseball cheerleading,
-offering a rich and immersive experience in one convenient place!
+offering a rich and immerse experience in one convenient place!
 </p>
 
 ## Installation
