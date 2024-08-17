@@ -1,3 +1,4 @@
+options(scipen = 999)
 
 wiki_url <- "https://en.namu.wiki"
 
@@ -267,15 +268,82 @@ tiktok$cat <- "tiktok"
 
 usethis::use_data(tiktok, overwrite = TRUE)
 
+#==============================================================================
+# ULTRA COMBO =================================================================
+#==============================================================================
+
+ultraCombo <- function(youtube, instagram, tiktok) {
+
+  yt <- youtube |> dplyr::select(name, subs, views, count, cat)
+  inst <- instagram |> dplyr::select(name, followers, cat)
+  tt <- tiktok |> dplyr::select(cheername, followers, likes, cat)
+  tt <- tt |> dplyr::rename(name = cheername)
+
+  ultra_combo <- yt |>
+    dplyr::full_join(inst, by = c("name", "cat")) |>
+    dplyr::full_join(tt, by = c("name", "cat")) |>
+    dplyr::mutate(instagram_followers = followers.x,
+                  tiktok_followers = followers.y) |>
+    dplyr::select(-c(followers.x, followers.y))
+
+  # add team
+  ultra_combo <- ultra_combo %>%
+    dplyr::left_join(team_cheerleaders, by = c("name" = "cheerleader"))
+
+  # add team logo url and color
+  # names(team_logos) <- team_data$name
+  team_logos_df <- data.frame(name = team_data$name,
+                              team_img = unlist(team_logos),
+                              color = team_data$color)
+
+  ultra_combo <- ultra_combo |>
+    dplyr::left_join(team_logos_df , by = c("team" = "name"))
+
+  ultra_combo <- ultra_combo |>
+    dplyr::mutate(
+      logo =
+        glue::glue(
+          '<img height=50 src="www/team_logo/{team_img}"
+            class="team-photo"
+            data-tt="{team}">
+          </img>')
+    ) |>
+    dplyr::mutate(
+      photo =
+        glue::glue(
+          '<img height=50 src="www/cheerleader_img/{name}.png"
+             class="cheerleader-photo"
+             data-team="{team}"
+             data-name="{name}">
+            </img>')
+    ) |>
+    dplyr::mutate(logo = stringr::str_replace(logo, "Wiz\\.webp", "Wiz.jpg")) |>
+    dplyr::mutate(logo = stringr::str_replace(logo, "Lions\\.webp", "Lions.jpg")) |>
+    dplyr::mutate(avg_views_per_video = as.integer(views / count)) |>
+    dplyr::mutate(link = glue::glue('<a href="{wiki_url}{link}" target="_blank">{name}</a>'))
+
+  ultra_combo
+}
+
+ultra_combo <- ultraCombo(youtube, instagram, tiktok)
+
+usethis::use_data(ultra_combo, overwrite = TRUE)
+
 # Followers Across Teams ======================================================
 
-fat <- makeFat(youtube, instagram, tiktok)
-
-usethis::use_data(fat, overwrite = TRUE)
-
-fat_plot <- followersAcrossTeams(fat)
+fat_plot <- fatPlot(ultra_combo)
 
 usethis::use_data(fat_plot, overwrite = TRUE)
+
+fat_distro_plot <- fatDistroPlot(ultra_combo)
+
+usethis::use_data(fat_distro, overwrite = TRUE)
+
+
+
+
+
+
 
 introduction <-
   shiny::HTML(
@@ -300,6 +368,14 @@ footer <-
     </footer>')
 
 usethis::use_data(footer)
+
+
+
+
+
+
+
+
 
 
 

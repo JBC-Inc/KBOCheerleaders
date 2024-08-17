@@ -1,4 +1,10 @@
 
+#' Leaderboard UI
+#'
+#' @param id A unique identifier string for the module’s UI.
+#'
+#' @return Shiny reactive UI output
+#'
 mod_leaderboard_ui <- function(id) {
   ns <- shiny::NS(id)
   list(
@@ -6,6 +12,23 @@ mod_leaderboard_ui <- function(id) {
   )
 }
 
+#' Leaderboard Server
+#'
+#' Generate the leaderboard UI that holds the 3 cheerleader leaderboard
+#' cards for
+#'  - YouTube
+#'  - Instagram
+#'  - TikTok
+#'
+#' @param id An ID string that corresponds with the ID used to call the
+#' module's UI function.
+#'
+#' @return Side effect is to render and update the three leaderboards:
+#'  - leaderYT
+#'  - leaderInst
+#'  - leaderTT
+#'  using gt tables and dynamically generate UI elements for display.
+#'
 mod_leaderboard_server <- function(id) {
   shiny::moduleServer(id, function(input, output, session) {
     ns <- session$ns

@@ -4,14 +4,18 @@
 \alias{makeCheerleader}
 \title{Generate Cheerleader Image, Biography and Social Metric cards.}
 \usage{
-makeCheerleader(td, cheerleader, smm)
+makeCheerleader(td, smm, cheerleader, cheerPhoto, cheerBio)
 }
 \arguments{
 \item{td}{team_data reactive}
 
+\item{smm}{social media metrics reactive}
+
 \item{cheerleader}{input$cheerleader selected cheerleader}
 
-\item{smm}{social media metrics reactive}
+\item{cheerPhoto}{namespace for cheerPhoto ui}
+
+\item{cheerBio}{namespace for cheerBio ui}
 }
 \value{
 Cheerleader bslib UI elements

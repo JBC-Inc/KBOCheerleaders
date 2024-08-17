@@ -730,10 +730,8 @@ makeTeam <- function(td, teamPhoto, teamLogo, capInsignia) {
 
 #' Shiny app title
 #'
-#' @return
-#' @export
+#' @return shiny tags for the app title
 #'
-#' @examples
 makeTitle <- function() {
   shiny::tags$div(
     class = "d-flex justify-content-between align-items-center w-100",
@@ -751,10 +749,8 @@ makeTitle <- function() {
 
 #' Shiny app navbar menu w/links
 #'
-#' @return
-#' @export
+#' @return bslib::nav_menu object
 #'
-#' @examples
 makeNavMenu <- function() {
   bslib::nav_menu(
     title = "References",
@@ -776,11 +772,11 @@ makeNavMenu <- function() {
 #' Reduce redundancy improve readability
 #'
 #' @param session Current Shiny Session Environment
-#' @param state
+#' @param state Current state of reactive input to handle.
 #' @param selected_team input$'team-team'
 #' @param selected_cheerleader input$'cheer-cheerleader'
 #'
-#' @return
+#' @return commands to be sent to update the app UI.
 #'
 updateUI <- function(session,
                      state,

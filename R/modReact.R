@@ -1,4 +1,10 @@
 
+#' Reactable UI
+#'
+#' @param id A unique identifier string for the module’s UI.
+#'
+#' @return Shiny reactive output
+#'
 mod_react_ui <- function(id) {
   ns <- shiny::NS(id)
   list(
@@ -6,6 +12,17 @@ mod_react_ui <- function(id) {
   )
 }
 
+#' Reactable Server
+#'
+#' A reactable with expanding rows, for each team display all the cheerleaders
+#' for that team, and their followers statistics.
+#'
+#' @param id An ID string that corresponds with the ID used to call the
+#' module's UI function.
+#' @param td reactive team_data
+#'
+#' @return side effect render the reactable
+#'
 mod_react_server <- function(id, td) {
   shiny::moduleServer(id, function(input, output, session) {
     ns <- session$ns

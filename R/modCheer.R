@@ -1,4 +1,10 @@
 
+#' Cheerleader UI
+#'
+#' @param id A unique identifier string for the module’s UI.
+#'
+#' @return list of Shiny reactive outputs.
+#'
 mod_cheer_ui <- function(id) {
   ns <- shiny::NS(id)
 
@@ -8,6 +14,19 @@ mod_cheer_ui <- function(id) {
   )
 }
 
+#' Title
+#'
+#' @param id An ID string that corresponds with the ID used to call the
+#' module's UI function.
+#' @param td reactive team_data
+#' @param smm reactive social media metrics
+#'
+#' @return Side effect is to dynamically generate and update UI components
+#' for selecting and displaying cheerleader information:
+#'  - Radio buttons for selecting a cheerleader
+#'  - UI Elements to display the cheerleaders photo
+#'  - DT:: for displaying the cheerleaders biography or data.
+#'
 mod_cheer_server <- function(id, td, smm) {
   shiny::moduleServer(id, function(input, output, session) {
     ns <- session$ns

@@ -4,7 +4,16 @@
 \alias{makeStatsPage}
 \title{Generate stats tab}
 \usage{
-makeStatsPage()
+makeStatsPage(fat, f1, f2, f3)
+}
+\arguments{
+\item{fat}{followers aggregate teams}
+
+\item{f1}{ggplot2 distribution}
+
+\item{f2}{ggplot2 distribution}
+
+\item{f3}{ggplot2 distribution}
 }
 \value{
 bslib::page_fillable

@@ -1,4 +1,9 @@
-
+#' Team UI
+#'
+#' @param id  @param id A unique identifier string for the module’s UI.
+#'
+#' @return list of shiny reactive input and output.
+#'
 mod_team_ui <- function(id) {
   ns <- shiny::NS(id)
 
@@ -13,12 +18,22 @@ mod_team_ui <- function(id) {
   )
 }
 
+#' Team Server
+#'
+#' @param id An ID string that corresponds with the ID used to call the
+#' module's UI function.
+#' @param td reactive team_data object
+#'
+#' @return side effect is to render ui which consists of
+#'  - team photo
+#'  - team logo
+#'  - team cap insignia
+#'
 mod_team_server <- function(id, td) {
   shiny::moduleServer(id, function(input, output, session) {
     ns <- session$ns
 
     output$ui <- shiny::renderUI({
-
       makeTeam(
         td,
         ns("teamPhoto"),

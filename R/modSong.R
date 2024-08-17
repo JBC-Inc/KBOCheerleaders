@@ -1,4 +1,13 @@
 
+#' Song UI
+#'
+#' @param id A unique identifier string for the module’s UI.
+#'
+#' @return list of Shiny reactive input and output:
+#'  - Team song toggle switch
+#'  - UI for team song
+#'  - UI for piki piki song
+#'
 mod_song_ui <- function(id) {
   ns <- shiny::NS(id)
 
@@ -12,6 +21,16 @@ mod_song_ui <- function(id) {
   )
 }
 
+#' Song Server
+#'
+#' Hosts 2 songs, the team song can be turned off but the piki piki song cannot
+#' Also home of the App startup informational modal.
+#'
+#' @param id An ID string that corresponds with the ID used to call the
+#' module's UI function.
+#'
+#' @return reactive url of the selected team song.
+#'
 mod_song_server <- function(id, td) {
   shiny::moduleServer(id, function(input, output, session) {
     ns <- session$ns

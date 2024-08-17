@@ -13,13 +13,13 @@ data("keyword_image_mapping")            # List(name, img name)
   data("instagram")                     # instagram stats
   data("tiktok")                        # tiktok stats
 
+  # ultra combo -------------------------
+  data("ultra_combo")                   # leaderboards, reactable, fat plot/distro
+
   # social media statistics -------------
-  data("fat")                           # followers all teams
   data("fat_plot")                      # followers all teams plot
-  data("fat_dist")                      # distributions data
   data("fat_distro")                    # distributions plots
 
-  data("ultra_combo")                   # leaderboard
 
 # values --------------------------------
 data("wiki_url")                        # wiki url prefix
@@ -30,8 +30,6 @@ data("team_caps")                       # char vector team caps
 
 data("introduction")
 data("footer")
-
-
 
 
 

@@ -4,8 +4,18 @@
 \alias{makeLeaderboards}
 \title{Generate Leaderboard Cards}
 \usage{
-makeLeaderboards()
+makeLeaderboards(leaderYT, leaderInst, leaderTT)
+}
+\arguments{
+\item{leaderYT}{namespace for youtube leaderboard}
+
+\item{leaderInst}{namespace for instagram leaderboard}
+
+\item{leaderTT}{namespace for tiktok leaderboard}
+}
+\value{
+nice bslib card layout
 }
 \description{
-Houses the 3 Leaderboards
+Houses the 3 gt Leaderboard tables
 }

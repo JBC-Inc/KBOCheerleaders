@@ -75,19 +75,23 @@ server <- function(input, output, session) {
   })
 
   shiny::observeEvent(input$`team-team`, label = "Team Input", {
+
     updateUI(session, state = "team", team = input$`team-team`)
   }, ignoreInit = TRUE)
 
   shiny::observe(label = "Cheerleader Input", {
+
     shiny::req(length(input$`cheer-cheerleader`) > 0)
     updateUI(session, state = "cheer", cheerleader = input$`cheer-cheerleader`)
   })
 
   shiny::observeEvent(input$randteam, label = "Duplicate Team", {
+
     updateUI(session, state = "randteam")
   })
 
   shiny::observeEvent(input$randcheer, label = "Duplicate Cheer", {
+
     updateUI(session, state = "default")
   })
 
@@ -95,9 +99,12 @@ server <- function(input, output, session) {
 
   agg_follow <- shiny::reactive(label = "Followers Across Teams", {
 
-    fat |>
-      tidyr::drop_na() |>
-      dplyr::group_by(team, color, logo) |>
+    ultra_combo |>
+      dplyr::rowwise() |>
+      dplyr::mutate(
+        followers = sum(c(subs, instagram_followers, tiktok_followers),
+                        na.rm =TRUE)) |>
+      dplyr::group_by(team, color, team_img) |>
       dplyr::summarize(followers = sum(followers), .groups = 'drop') |>
       dplyr::arrange(dplyr::desc(followers))
   })
@@ -118,7 +125,9 @@ server <- function(input, output, session) {
 
     if (nrow(point) != 0) {
 
-      updateUI(session, state = "followers", team = point$team,
+      updateUI(session = session,
+               state = "followers",
+               team = point$team,
                cheerleader = character(0))
     }
   })
@@ -131,3 +140,8 @@ server <- function(input, output, session) {
 }
 
 shinyApp(ui = ui, server = server)
+
+
+
+
+

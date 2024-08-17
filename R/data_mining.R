@@ -1,7 +1,8 @@
 # Extraction Functions =========================================================
 
+#------------------------------------------------------------------------------
 # Team Page -------------------------------------------------------------------
-
+#------------------------------------------------------------------------------
 #' Get cheerleaders
 #'
 #' Query the team wiki page for a list of cheerleaders and url to their
@@ -179,7 +180,9 @@ getTeamCap <- function(team_caps) {
   }
 }
 
+#------------------------------------------------------------------------------
 # Cheerleader page ------------------------------------------------------------
+#------------------------------------------------------------------------------
 
 #' Get Cheerleader Page
 #'
@@ -397,7 +400,9 @@ getCheerleaderPhotos <- function(bio_tables) {
   }
 }
 
-# Social Media ----------------------------------------------------------------
+
+
+# Social Media Functions ======================================================
 
 # YouTube ---------------------------------------------------------------------
 
@@ -436,7 +441,6 @@ extract_channel_id <- function(url) {
   # Return NULL if no valid channel_id is found
   return(NULL)
 }
-# for each girl, use either youtube, instagram or tiktok links to gather social media metrics
 
 getYouTube <- function(cheer_data) {
 
@@ -570,67 +574,36 @@ getTikTok <- function(cheer_data) {
   tiktok
 }
 
-# Followers across teams ------------------------------------------------
-
-#' Aggregate YouTube Instagram and TikTok follower data
-#'
-#' @param youtube cheerleader YouTube data
-#' @param instagram cheerleader Instagram data
-#' @param tiktok cheerleader TikTok data
-#'
-#' @return data.frame: team name, logo, color and followers per cheerleader
-#'
-makeFat <- function(youtube, instagram, tiktok) {
-
-  yt <- youtube |> dplyr::select(team, subs)
-  colnames(yt) <- c("team", "followers")
-  ist <- instagram |> dplyr::select(team, followers)
-  tt <- tiktok |> dplyr::select(team, followers)
-
-  fat <- dplyr::bind_rows(yt, ist, tt)
-
-  team_colors <- data.frame(name = team_data$name, color = team_data$color)
-
-  fat <- fat |>
-    dplyr::left_join(team_colors, by = c("team" = "name"))
-
-  team_logos_df <- data.frame(
-    name = team_data$name,
-    logo = unlist(team_logos)
-  )
-
-  fat |>
-    dplyr::left_join(team_logos_df , by = c("team" = "name"))
-}
+# Followers across teams ------------------------------------------------------
 
 #' Aggregate Team Followers plot
 #'
 #' Allows faster loading times.
 #'
-#' @param fat followers across teams data.frame
+#' @param ultra_combo followers across teams data.frame
 #'
 #' @return ggplot2 with team logo images
 #'
-followersAcrossTeams <- function(fat) {
+fatPlot <- function(ultra_combo) {
 
-  fat |>
-    tidyr::drop_na() |>
-    dplyr::group_by(team, color, logo) |>
-    dplyr::summarize(followers = sum(followers), .groups = 'drop') |>
+  ultra_combo |>
+    dplyr::rowwise() |>
+    dplyr::mutate(followers = sum(c(subs, instagram_followers, tiktok_followers), na.rm =TRUE)) |>
+    dplyr::group_by(team, color, team_img) |>
+    dplyr::summarize(followers = sum(followers, na.rm =TRUE), .groups ="drop") |>
     dplyr::arrange(dplyr::desc(followers)) |>
 
-    ggplot2::ggplot(mapping = ggplot2::aes(
-      x = reorder(team, -followers),
-      y = followers,
-      fill = color
-    )) +
+    ggplot2::ggplot(
+      ggplot2::aes(x = reorder(team, -followers),
+                   y = followers,
+                   fill = color)) +
     ggplot2::geom_bar(stat = "identity") +
     ggimage::geom_image(
-      mapping = ggplot2::aes(image = paste0("www/team_logo/", logo)),
+      mapping = ggplot2::aes(image = paste0("www/team_logo/", team_img)),
       size = 0.2) +
     ggplot2::scale_fill_identity() +
     ggplot2::scale_y_continuous(
-      breaks = seq(0, 5000000, 500000),
+      breaks = seq(0, 5000000, 1000000),
       labels = scales::comma_format(),
       # scales::label_number(scale = 1e-6, suffix = "M")) +
       limits = c(0, 4000000)
@@ -649,28 +622,128 @@ followersAcrossTeams <- function(fat) {
 }
 
 
+#' Followers Across Teams Distribution Graphs
+#'
+#' @param ultra_combo all the datas
+#'
+#' @return list of distribution graphs
+#'  - normal distribution
+#'  - capped outliers @ 100k
+#'  - log scale 1k - 1M
+#'  - 95% percentile
+#'
+fatDistroPlot <- function(ultra_combo) {
 
+  new_combo <- ultra_combo |>
+    dplyr::rowwise() |>
+    dplyr::mutate(followers = sum(c(subs, instagram_followers,
+                                    tiktok_followers), na.rm =TRUE)) |>
+    dplyr::group_by(team, cat, followers) |>
+    dplyr::summarize(avg_followers = mean(followers), .groups ="drop") |>
+    dplyr::arrange(dplyr::desc(followers))
 
+  f1 <- new_combo |>
+    dplyr::group_by(team, cat, followers) |>
+    dplyr::summarize(avg_followers = mean(followers), .groups ="drop") |>
+    dplyr::arrange(dplyr::desc(followers)) |>
 
+    ggplot2::ggplot(ggplot2::aes(x = avg_followers, fill = cat)) +
+    ggplot2::geom_density(alpha = 0.6) +
 
+    ggplot2::scale_x_continuous(
+      breaks = seq(0, 10000000, 500000),
+      labels = scales::comma_format()) +
+    ggplot2::scale_fill_manual(values = c("youtube" = "red",
+                                          "tiktok" = "black",
+                                          "instagram" = "purple")) +
 
+    ggplot2::labs(title = "",
+                  fill = "Social Media Platform",
+                  x = "",
+                  y = "") +
+    ggplot2::theme_minimal() +
+    ggplot2::theme(plot.margin = ggplot2::margin(0, 0, 0, 0),
+                   legend.position = "none")
 
+  # CAPPED OUTLIERS @ 100,000
+  f2 <- new_combo |>
+    dplyr::group_by(team, cat) |>
+    dplyr::summarize(avg_followers = mean(followers), .groups = 'drop') |>
+    dplyr::mutate(avg_followers = pmin(avg_followers, 100000)) |>
+    ggplot2::ggplot(aes(x = avg_followers, fill = cat)) +
+    ggplot2::geom_density(alpha = 0.6) +
+    ggplot2::scale_x_continuous(
+      breaks = seq(0, 200000, 25000),
+      labels = scales::comma_format()) +
+    ggplot2::scale_fill_manual(values = c("youtube" = "red",
+                                          "tiktok" = "black",
+                                          "instagram" = "purple")) +
+    ggplot2::labs(title = "", fill = "Social Media Platform",
+                  x = "Average Followers per Team",
+                  y = "Density") +
+    ggplot2::theme_minimal() +
+    ggplot2::theme(plot.margin = ggplot2::margin(0, 0, 0, 0),
+                   legend.position = "none")
 
+  # LOG SCALE
+  f3 <- new_combo |>
+    tidyr::drop_na() |>
+    dplyr::group_by(team, cat) |>
+    dplyr::summarize(avg_followers = mean(followers), .groups = 'drop') |>
+    dplyr::mutate(log_avg_followers = log1p(avg_followers)) |>
+    ggplot2::ggplot(aes(x = log_avg_followers, fill = cat)) +
+    ggplot2::geom_density(alpha = 0.6) +
+    ggplot2::scale_fill_manual(values = c("youtube" = "red",
+                                          "tiktok" = "black",
+                                          "instagram" = "purple")) +
+    ggplot2::scale_x_continuous(
+      labels = function(x) scales::comma_format()(exp(x) - 1),
+      breaks = log1p(c(1000, 10000, 100000, 1000000)),
+      limits = log1p(c(1000, 1000000))
+    ) +
+    ggplot2::labs(
+      title = "", fill = "Social Media Platform",
+      x = "Log(Average Followers per Team)",
+      y = "Density") +
+    ggplot2::theme_minimal() +
+    ggplot2::theme(plot.margin = ggplot2::margin(0, 0, 0, 0),
+                   legend.position = "none")
 
+  # DENSITY w/TRIMMED
+  average_followers <- new_combo |>
+    dplyr::group_by(team, cat) |>
+    dplyr::summarize(avg_followers = mean(followers), .groups = 'drop')
 
+  # Trim extreme values (e.g., keep only the bottom 95% of data)
+  threshold <- quantile(average_followers$avg_followers, 0.95, na.rm = TRUE)
+  trimmed_data <- average_followers |>
+    dplyr::filter(avg_followers <= threshold)
 
+  # Plot the density of trimmed average followers by platform category
+  f4 <- trimmed_data |>
+    ggplot2::ggplot(ggplot2::aes(x = avg_followers, fill = cat)) +
+    ggplot2::geom_density(alpha = 0.6) +
+    ggplot2::scale_x_continuous(
+      breaks = seq(0, 200000, 25000),
+      labels = scales::comma_format()) +
+    ggplot2::scale_fill_manual(values = c("youtube" = "red",
+                                          "tiktok" = "black",
+                                          "instagram" = "purple")) +
+    ggplot2::labs(title = "", fill = "Social Media Platform",
+                  x = "Average Followers per Team",
+                  y = "Density") +
+    ggplot2::theme_minimal() +
+    ggplot2::theme(plot.margin = ggplot2::margin(0, 0, 0, 0),
+                   legend.position = "none")
 
-
-
-
-
-
-
-
-
-
-
-
+  return(
+    list(
+      f1 = f1,
+      f2 = f2,
+      f3 = f3,
+      f4 = f4
+    ))
+}
 
 
 

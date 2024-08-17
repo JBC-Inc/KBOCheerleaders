@@ -9,6 +9,9 @@ makegtYT(ultra_combo)
 \arguments{
 \item{ultra_combo}{aggregate cheerleader social media metrics.}
 }
+\value{
+gt
+}
 \description{
 Function takes all cheerleader social media metrics and generates
 the YouTube leaderboard for top 5 cheerleaders with the most

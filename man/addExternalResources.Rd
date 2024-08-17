@@ -6,6 +6,17 @@
 \usage{
 addExternalResources()
 }
+\value{
+adds external resources to the Shiny app by returning a
+\code{tags$head} element that includes:
+\itemize{
+\item Resource Paths
+\item JavaScript and CSS scripts
+\item Favicon
+\item Font Links
+\item Custom JS Handles
+}
+}
 \description{
 Make scripts available to their components.
 }
