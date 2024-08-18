@@ -15,7 +15,7 @@ mod_song_ui <- function(id) {
     switch = shinyWidgets::materialSwitch(
       inputId = ns("play_video"),
       label = "Play Team Themesong",
-      status = "danger"),
+      status = "primary"),
     ui_team = shiny::uiOutput(ns("teamsong")),
     ui_piki = shiny::uiOutput(ns("pikki"))
   )
