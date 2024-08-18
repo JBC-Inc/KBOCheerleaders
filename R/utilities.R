@@ -766,7 +766,6 @@ makeNavMenu <- function() {
   )
 }
 
-
 #' Manage visibility and updates for team/cheerleader UI's
 #'
 #' Reduce redundancy improve readability
@@ -813,6 +812,10 @@ updateUI <- function(session,
     }
   )
 }
+
+
+
+
 
 
 

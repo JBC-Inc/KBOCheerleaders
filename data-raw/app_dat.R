@@ -1,343 +1,276 @@
-options(scipen = 999)
+# # Team Page Data ==============================================================
+#
+# team_cheerleaders <-getTeamCheerleaders(team_data$url)
+#
+# usethis::use_data(team_cheerleaders, overwrite = TRUE)
+#
+# getTeamPhotos(team_data)
+#
+# team_photos <- list.files("./www/team_img")
+#
+# usethis::use_data(team_photos, overwrite = TRUE)
+#
+# # Cheerleader Page Data =======================================================
+#
+# cheer_data <- cheerData(wiki_url = wiki_url,
+#                         team_cheerleaders = team_cheerleaders,
+#                         values = c("nationality", "birth"))
+#
+# # store html nodes in .rds
+# bio_tables <- purrr::map(names(cheer_data), ~ {
+#   cheerleader_data <- cheer_data[[.x]]
+#   as.character(cheerleader_data$bio_table)
+# })
+#
+# names(bio_tables) <- names(cheer_data)
+#
+# readr::write_rds(bio_tables, "./data/bio_tables.rds")
+#
+# # clean cheer data
+# # remove bio_table
+# cheer_data <- lapply(cheer_data, function(item) {
+#   item[!names(item) %in% "bio_table"]
+# })
+# # omit NA links
+# cheer_data <- purrr::map(cheer_data, ~ {
+#   if ("links" %in% names(.x)) {
+#     .x$links <- .x$links[!is.na(.x$links)]
+#   }
+#   .x
+# })
+# # omit dupe link
+# cheer_data$`Hannah Kim`$table <- cheer_data$`Hannah Kim`$table[-1, ]
+# cheer_data$`Hyein Na`$table <- cheer_data$`Hyein Na`$table[-1, ]
+#
+# usethis::use_data(cheer_data, overwrite = TRUE)
+#
+# # get cheerleader photos
+#
+# getCheerleaderPhotos(bio_tables)
+#
+# # Social Media Data ===========================================================
+#
+# # YouTube =====================================================================
+#
+# global_token <- NULL
+#
+# authenticateYouTube <- function() {
+#
+#   # make the token
+#   # YTAnalytics::youtube_oauth(
+#   #   clientId = Sys.getenv("YT_CLIENT_ID"),
+#   #   clientSecret = Sys.getenv("YT_CLIENT_SECRET")
+#   #   )
+#
+#   # file.remove(".httr-oauth")
+#   #
+#   # tuber::yt_oauth(
+#   #   app_id = Sys.getenv("YT_CLIENT_ID"),
+#   #   app_secret = Sys.getenv("YT_CLIENT_SECRET"),
+#   #   token = '.httr-oauth'
+#   # )
+#   # global_token <<- TRUE
+#
+#   # shiny::observe(label = "Authenticate", priority = 300, {
+#   #   if (is.null(global_token)) {
+#   #     authenticateYouTube()
+#   #   }
+#   # })
+#
+#   # if (is.null(global_token)) {
+#   #   authenticateYouTube()
+#   # }
+# }
+#
+# youtube <- getYouTube(cheer_data)
+# lookup <- setNames(team_cheerleaders$team, team_cheerleaders$cheerleader)
+# youtube$team <- lookup[youtube$name]
+# youtube$cat <- "youtube"
+#
+# usethis::use_data(youtube, overwrite = TRUE)
+#
+# # Instagram ===================================================================
+#
+# instagram <- getInstagram(cheer_data)
+#
+# glimpse(instagram)
+#
+# lookup <- setNames(team_cheerleaders$team, team_cheerleaders$cheerleader)
+# instagram$team <- lookup[instagram$name]
+# instagram$cat <- "instagram"
+#
+# usethis::use_data(instagram, overwrite = TRUE)
+#
+# # TikTok ======================================================================
+#
+# tiktok <- getTikTok(cheer_data)
+#
+# glimpse(tiktok)
+#
+# lookup <- setNames(team_cheerleaders$team, team_cheerleaders$cheerleader)
+# tiktok$team <- lookup[tiktok$cheername]
+# tiktok$cat <- "tiktok"
+#
+# usethis::use_data(tiktok, overwrite = TRUE)
+#
+# # ultra_combo =================================================================
+#
+# ultra_combo <- ultraCombo(youtube, instagram, tiktok)
+#
+# usethis::use_data(ultra_combo, overwrite = TRUE)
+#
+# # Followers Across Teams ======================================================
+#
+# fat_plot <- fatPlot(ultra_combo)
+#
+# usethis::use_data(fat_plot, overwrite = TRUE)
+#
+# fat_distro_plot <- fatDistroPlot(ultra_combo)
+#
+# usethis::use_data(fat_distro, overwrite = TRUE)
 
-wiki_url <- "https://en.namu.wiki"
+#####
 
-usethis::use_data(wiki_url, internal = FALSE, overwrite = TRUE)
+KBODataUpdate <- function() {
 
-###############################################################################
-############################# TEAM DATA #######################################
-###############################################################################
+  # Source all functions to backup/generate new data:
 
-# "Doosan Bears"  = "",
-# "Hanwha Eagles" = "",
-# "Kia Tigers"    = "",
-# "Kiwoom Heros"  = "",
-# "KT Wiz"        = "",
-# "LG Twins"      = "",
-# "Lotte Giants"  = "",
-# "NC Dinos"      = "",
-# "Samsung Lions" = "",
-# "SSG Landers"   = ""
+  source("./R/data_mining.R")
 
-name <- c(
-  "Doosan Bears",
-  "Hanwha Eagles",
-  "Kia Tigers",
-  "Kiwoom Heros",
-  "KT Wiz",
-  "LG Twins",
-  "Lotte Giants",
-  "NC Dinos",
-  "Samsung Lions",
-  "SSG Landers"
-  )
+  #   backup()
+  #   getTeamCheerleaders()
+  #   getTeamPhotos()
+  #   cheerData()
+  #   getCheerleaderPhotos()
+  #   getYouTube()
+  #   getInstagram()
+  #   getTikTok()
+  #   ultra_combo(youtube, instagram, tiktok)
+  #   fat_plot(ultra_combo)
+  #   fat_dist_plot(ultra_combo)
 
-url = c(
-  "https://en.namu.wiki/w/%EB%91%90%EC%82%B0%20%EB%B2%A0%EC%96%B4%EC%8A%A4/%EC%B9%98%EC%96%B4%EB%A6%AC%EB%8D%94",
-  "https://en.namu.wiki/w/%ED%95%9C%ED%99%94%20%EC%9D%B4%EA%B8%80%EC%8A%A4/%EC%B9%98%EC%96%B4%EB%A6%AC%EB%8D%94",
-  "https://en.namu.wiki/w/KIA%20%ED%83%80%EC%9D%B4%EA%B1%B0%EC%A6%88/%EC%B9%98%EC%96%B4%EB%A6%AC%EB%8D%94#s-5.1",
-  "https://en.namu.wiki/w/%ED%82%A4%EC%9B%80%20%ED%9E%88%EC%96%B4%EB%A1%9C%EC%A6%88/%EC%B9%98%EC%96%B4%EB%A6%AC%EB%8D%94",
-  "https://en.namu.wiki/w/kt%20wiz/%EC%B9%98%EC%96%B4%EB%A6%AC%EB%8D%94",
-  "https://en.namu.wiki/w/LG%20%ED%8A%B8%EC%9C%88%EC%8A%A4/%EC%B9%98%EC%96%B4%EB%A6%AC%EB%8D%94",
-  "https://en.namu.wiki/w/%EB%A1%AF%EB%8D%B0%20%EC%9E%90%EC%9D%B4%EC%96%B8%EC%B8%A0/%EC%B9%98%EC%96%B4%EB%A6%AC%EB%8D%94",
-  "https://en.namu.wiki/w/NC%20%EB%8B%A4%EC%9D%B4%EB%85%B8%EC%8A%A4/%EC%B9%98%EC%96%B4%EB%A6%AC%EB%8D%94",
-  "https://en.namu.wiki/w/%EC%82%BC%EC%84%B1%20%EB%9D%BC%EC%9D%B4%EC%98%A8%EC%A6%88/%EC%B9%98%EC%96%B4%EB%A6%AC%EB%8D%94",
-  "https://en.namu.wiki/w/SSG%20%EB%9E%9C%EB%8D%94%EC%8A%A4/%EC%B9%98%EC%96%B4%EB%A6%AC%EB%8D%94"
-  )
-
-color = c(
-  "#131230",
-  "#ff6600",
-  "#EC0F32",
-  "#820023",
-  "#000000",
-  "#a50034",
-  "#041e42",
-  "#071d3d",
-  "#074CA1",
-  "#CF112D"
-  )
-
-themesong = c(
-  "https://www.youtube.com/watch?v=IeyOr91IuyA",
-  "https://www.youtube.com/watch?v=45IrJtdGtDk",
-  "https://www.youtube.com/watch?v=6RiMyqT3_t0",
-  "https://www.youtube.com/watch?v=antR6UYqZKk",
-  "https://www.youtube.com/watch?v=bsWBORqEjpI",
-  "https://www.youtube.com/watch?v=CeGiBg9eXG0",
-  "https://www.youtube.com/watch?v=NSR5kAxIEi0",
-  "https://www.youtube.com/watch?v=QmgeKEe-LEE",
-  "https://www.youtube.com/watch?v=AmQC5K6_HUs",
-  "https://www.youtube.com/watch?v=zX7uot4biaQ"
-)
-
-team_data <-
-  data.frame(
-    name = name,
-    url = url,
-    color = color,
-    song = themesong
-  )
-
-usethis::use_data(team_data, internal = FALSE, overwrite = TRUE)
-
-###############################################################################
-############################# TEAM LOGO #######################################
-###############################################################################
-
-team_logos = list(
-  "Doosan Bears"  = "https://upload.wikimedia.org/wikipedia/en/thumb/9/98/Doosan_Bears.svg/1280px-Doosan_Bears.svg.png",
-  "Hanwha Eagles" = "https://upload.wikimedia.org/wikipedia/en/thumb/d/d3/Hanwha_Eagles.svg/1920px-Hanwha_Eagles.svg.png",
-  "Kia Tigers"    = "https://upload.wikimedia.org/wikipedia/en/e/e0/Kia_Tigers_2017_New_Team_Logo.png",
-  "Kiwoom Heros"  = "https://upload.wikimedia.org/wikipedia/en/4/4f/Kiwoom_Heroes.png",
-  "KT Wiz"        = "https://upload.wikimedia.org/wikipedia/en/thumb/e/e5/KT_Wiz.svg/1024px-KT_Wiz.svg.png",
-  "LG Twins"      = "https://upload.wikimedia.org/wikipedia/commons/4/41/LG_Twins_2017.png",
-  "Lotte Giants"  = "https://upload.wikimedia.org/wikipedia/en/thumb/6/65/Lotte_Giants.svg/1280px-Lotte_Giants.svg.png",
-  "NC Dinos"      = "https://upload.wikimedia.org/wikipedia/en/thumb/5/54/NC_Dinos_Emblem.svg/1280px-NC_Dinos_Emblem.svg.png",
-  "Samsung Lions" = "https://upload.wikimedia.org/wikipedia/en/thumb/0/0e/Samsung_Lions.svg/1280px-Samsung_Lions.svg.png",
-  "SSG Landers"   = "https://upload.wikimedia.org/wikipedia/en/8/86/SSG_Landers.png"
-)
-
-getTeamLogos(team_logos)
-
-team_logos <- list.files("./www/team_logo")
-
-usethis::use_data(team_logos, overwrite = TRUE)
-
-###############################################################################
-############################# TEAM CAP ########################################
-###############################################################################
-
-team_caps = list(
-  "Doosan Bears"  = "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Doosan_Bears_insignia.svg/1024px-Doosan_Bears_insignia.svg.png",
-  "Hanwha Eagles" = "https://upload.wikimedia.org/wikipedia/en/thumb/d/d4/Hanwha_Eagles_cap_logo.svg/1024px-Hanwha_Eagles_cap_logo.svg.png",
-  "Kia Tigers"    = "https://upload.wikimedia.org/wikipedia/en/8/8c/Kia_Tigers_2017_New_insignia.png",
-  "Kiwoom Heros"  = "https://upload.wikimedia.org/wikipedia/commons/6/6e/Kiwoom_Heroes_insignia.png",
-  "KT Wiz"        = "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/KT_Wiz_insignia.svg/1024px-KT_Wiz_insignia.svg.png",
-  "LG Twins"      = "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/LG_Twins_Cap_Logo.svg/1024px-LG_Twins_Cap_Logo.svg.png",
-  # "Lotte Giants"  = "https://upload.wikimedia.org/wikipedia/commons/b/bf/Busan_Giants_cap_insignia.svg",
-  "NC Dinos"      = "https://upload.wikimedia.org/wikipedia/en/0/09/NC_Dinos_cap_insignia.png",
-  "Samsung Lions" = "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Samsung_Lions_insignia.svg/1024px-Samsung_Lions_insignia.svg.png",
-  "SSG Landers"   = "https://upload.wikimedia.org/wikipedia/commons/2/2f/SSG_Landers_insignia.png"
-)
-
-getTeamCap(team_caps)
-
-team_caps <- list.files("./www/team_cap")
-
-usethis::use_data(team_caps, overwrite = TRUE)
-
-###############################################################################
-#################### Social Media Icon Mapping ################################
-###############################################################################
-
-keyword_image_mapping = list(
-  afreecatv  = "afreecatv.jpg",
-  facebook   = "facebook.png",
-  instagram  = "instagram.png",
-  likey      = "likey.jpg",
-  naver      = "naver.jpg",
-  threads    = "threads.jpg",
-  tiktok     = "tiktok.jpg",
-  `x.com`    = "twitter.jpg",
-  youtube    = "youtube.png"
-)
-
-usethis::use_data(keyword_image_mapping, overwrite = TRUE)
-
-###############################################################################
-############################ TEAM PAGE DATA ###################################
-###############################################################################
-
-team_cheerleaders <-getTeamCheerleaders(team_data$url)
-
-usethis::use_data(team_cheerleaders, overwrite = TRUE)
-
-getTeamPhotos(team_data)
-
-team_photos <- list.files("./www/team_img")
-
-usethis::use_data(team_photos, overwrite = TRUE)
-
-###############################################################################
-######################## CHEERLEADER PAGE DATA ################################
-###############################################################################
-
-cheer_data <- cheerData(wiki_url = wiki_url,
-                        team_cheerleaders = team_cheerleaders,
-                        values = c("nationality", "birth"))
-
-# store html nodes in .rds
-bio_tables <- purrr::map(names(cheer_data), ~ {
-  cheerleader_data <- cheer_data[[.x]]
-  as.character(cheerleader_data$bio_table)
-})
-
-names(bio_tables) <- names(cheer_data)
-
-readr::write_rds(bio_tables, "./data/bio_tables.rds")
-
-# clean cheer data
-# remove bio_table
-cheer_data <- lapply(cheer_data, function(item) {
-  item[!names(item) %in% "bio_table"]
-})
-# omit NA links
-cheer_data <- purrr::map(cheer_data, ~ {
-  if ("links" %in% names(.x)) {
-    .x$links <- .x$links[!is.na(.x$links)]
-  }
-  .x
-})
-# omit dupe link
-cheer_data$`Hannah Kim`$table <- cheer_data$`Hannah Kim`$table[-1, ]
-cheer_data$`Hyein Na`$table <- cheer_data$`Hyein Na`$table[-1, ]
-
-usethis::use_data(cheer_data, overwrite = TRUE)
-
-# get cheerleader photos
-
-getCheerleaderPhotos(bio_tables)
-
-###############################################################################
-######################## SOCIAL MEDIA METRICS #################################
-###############################################################################
-
-# YouTube =====================================================================
-
-# Authentication ==============================================================
-
-global_token <- NULL
-
-authenticateYouTube <- function() {
-
-  # make the token
-  # YTAnalytics::youtube_oauth(
-  #   clientId = Sys.getenv("YT_CLIENT_ID"),
-  #   clientSecret = Sys.getenv("YT_CLIENT_SECRET")
-  #   )
-
-  # file.remove(".httr-oauth")
+  # Backup --------------------------------------------------------------------
   #
+  # ./data/*
+  # ./www/*
+
+  backup()
+
+  # Create and Save Data:
+
+  source("./data-raw/sources.R")
+
+  #   wiki_url
+  #   team_data
+  #   team_logos              getTeamLogos()
+  #   team_caps               getTeamCap()
+  #   keyword_image_mapping
+  #   introduction
+  #   footer
+
+  # Team Cheerleaders/Team Photos ---------------------------------------------
+
+  team_cheerleaders <-getTeamCheerleaders(team_data$url)
+  usethis::use_data(team_cheerleaders, overwrite = TRUE)
+  print("Successfully made team_cheerleaders.rda")
+
+  getTeamPhotos(team_data)
+  team_photos <- list.files("./www/team_img")
+  usethis::use_data(team_photos, overwrite = TRUE)
+  print("Successfully made team_photos.rda")
+
+  # Cheerleader Data ----------------------------------------------------------
+
+  cheer_data <- cheerData(wiki_url = wiki_url,
+                          team_cheerleaders = team_cheerleaders,
+                          values = c("nationality", "birth"))
+  # store html nodes in .rds
+  bio_tables <- purrr::map(names(cheer_data), ~ {
+    cheerleader_data <- cheer_data[[.x]]
+    as.character(cheerleader_data$bio_table)
+  })
+  names(bio_tables) <- names(cheer_data)
+  readr::write_rds(bio_tables, "./data/bio_tables.rds")
+  print("Successfully made bio_data.rds")
+
+
+  cheer_data <- lapply(cheer_data, function(item) {
+    item[!names(item) %in% "bio_table"]
+  })
+  cheer_data <- purrr::map(cheer_data, ~ {
+    if ("links" %in% names(.x)) {
+      .x$links <- .x$links[!is.na(.x$links)]
+    }
+    .x
+  })
+  cheer_data$`Hannah Kim`$table <- cheer_data$`Hannah Kim`$table[-1, ]
+  cheer_data$`Hyein Na`$table <- cheer_data$`Hyein Na`$table[-1, ]
+  usethis::use_data(cheer_data, overwrite = TRUE)
+
+  # cheerleader photos
+  getCheerleaderPhotos(bio_tables, cheer_data)
+  print("Successfully made cheer_data.rda and bio_data.rds")
+
+  # Social Media Data ---------------------------------------------------------
+
+  # authenticate youtube
+  # file.remove(".httr-oauth")
   # tuber::yt_oauth(
   #   app_id = Sys.getenv("YT_CLIENT_ID"),
-  #   app_secret = Sys.getenv("YT_CLIENT_SECRET"),
-  #   token = '.httr-oauth'
-  # )
-  # global_token <<- TRUE
+  #   app_secret = Sys.getenv("YT_CLIENT_SECRET")
+  #   )
+  #
+  # Sys.sleep(3)
 
-  # shiny::observe(label = "Authenticate", priority = 300, {
-  #   if (is.null(global_token)) {
-  #     authenticateYouTube()
-  #   }
-  # })
+  # youtube
+  youtube <- getYouTube(cheer_data)
+  lookup <- setNames(team_cheerleaders$team, team_cheerleaders$cheerleader)
+  youtube$team <- lookup[youtube$name]
+  youtube$cat <- "youtube"
 
-  # if (is.null(global_token)) {
-  #   authenticateYouTube()
-  # }
+  # instagram
+  instagram <- getInstagram(cheer_data)
+
+  lookup <- setNames(team_cheerleaders$team, team_cheerleaders$cheerleader)
+  instagram$team <- lookup[instagram$name]
+  instagram$cat <- "instagram"
+
+  # tiktok
+  tiktok <- getTikTok(cheer_data)
+
+  lookup <- setNames(team_cheerleaders$team, team_cheerleaders$cheerleader)
+  tiktok$team <- lookup[tiktok$cheername]
+  tiktok$cat <- "tiktok"
+
+  usethis::use_data(youtube, overwrite = TRUE)
+  usethis::use_data(instagram, overwrite = TRUE)
+  usethis::use_data(tiktok, overwrite = TRUE)
+
+  print("Successfully made YouTube.rds, Instagram.rds and TikTok.rds")
+
+  # Ultra Combo ---------------------------------------------------------------
+
+  ultra_combo <- ultraCombo(team_cheerleaders, youtube, instagram, tiktok)
+  usethis::use_data(ultra_combo, overwrite = TRUE)
+
+  fat_plot <- fatPlot(ultra_combo)
+  usethis::use_data(fat_plot, overwrite = TRUE)
+
+  fat_distro_plot <- fatDistroPlot(ultra_combo)
+  usethis::use_data(fat_distro_plot, overwrite = TRUE)
+
+  print("Successfully made ultra_combo.rds, fat_plot.rds, fat_distro_plot.rds")
+
 }
 
-youtube <- getYouTube(cheer_data)
-lookup <- setNames(team_cheerleaders$team, team_cheerleaders$cheerleader)
-youtube$team <- lookup[youtube$name]
-youtube$cat <- "youtube"
 
-usethis::use_data(youtube, overwrite = TRUE)
 
-# Instagram ===================================================================
+KBODataUpdate()
 
-instagram <- getInstagram(cheer_data)
-
-glimpse(instagram)
-
-lookup <- setNames(team_cheerleaders$team, team_cheerleaders$cheerleader)
-instagram$team <- lookup[instagram$name]
-instagram$cat <- "instagram"
-
-usethis::use_data(instagram, overwrite = TRUE)
-
-# TikTok ======================================================================
-
-tiktok <- getTikTok(cheer_data)
-
-glimpse(tiktok)
-
-lookup <- setNames(team_cheerleaders$team, team_cheerleaders$cheerleader)
-tiktok$team <- lookup[tiktok$cheername]
-tiktok$cat <- "tiktok"
-
-usethis::use_data(tiktok, overwrite = TRUE)
-
-#==============================================================================
-# ULTRA COMBO =================================================================
-#==============================================================================
-
-ultraCombo <- function(youtube, instagram, tiktok) {
-
-  yt <- youtube |> dplyr::select(name, subs, views, count, cat)
-  inst <- instagram |> dplyr::select(name, followers, cat)
-  tt <- tiktok |> dplyr::select(cheername, followers, likes, cat)
-  tt <- tt |> dplyr::rename(name = cheername)
-
-  ultra_combo <- yt |>
-    dplyr::full_join(inst, by = c("name", "cat")) |>
-    dplyr::full_join(tt, by = c("name", "cat")) |>
-    dplyr::mutate(instagram_followers = followers.x,
-                  tiktok_followers = followers.y) |>
-    dplyr::select(-c(followers.x, followers.y))
-
-  # add team
-  ultra_combo <- ultra_combo %>%
-    dplyr::left_join(team_cheerleaders, by = c("name" = "cheerleader"))
-
-  # add team logo url and color
-  # names(team_logos) <- team_data$name
-  team_logos_df <- data.frame(name = team_data$name,
-                              team_img = unlist(team_logos),
-                              color = team_data$color)
-
-  ultra_combo <- ultra_combo |>
-    dplyr::left_join(team_logos_df , by = c("team" = "name"))
-
-  ultra_combo <- ultra_combo |>
-    dplyr::mutate(
-      logo =
-        glue::glue(
-          '<img height=50 src="www/team_logo/{team_img}"
-            class="team-photo"
-            data-tt="{team}">
-          </img>')
-    ) |>
-    dplyr::mutate(
-      photo =
-        glue::glue(
-          '<img height=50 src="www/cheerleader_img/{name}.png"
-             class="cheerleader-photo"
-             data-team="{team}"
-             data-name="{name}">
-            </img>')
-    ) |>
-    dplyr::mutate(logo = stringr::str_replace(logo, "Wiz\\.webp", "Wiz.jpg")) |>
-    dplyr::mutate(logo = stringr::str_replace(logo, "Lions\\.webp", "Lions.jpg")) |>
-    dplyr::mutate(avg_views_per_video = as.integer(views / count)) |>
-    dplyr::mutate(link = glue::glue('<a href="{wiki_url}{link}" target="_blank">{name}</a>'))
-
-  ultra_combo
-}
-
-ultra_combo <- ultraCombo(youtube, instagram, tiktok)
-
-usethis::use_data(ultra_combo, overwrite = TRUE)
-
-# Followers Across Teams ======================================================
-
-fat_plot <- fatPlot(ultra_combo)
-
-usethis::use_data(fat_plot, overwrite = TRUE)
-
-fat_distro_plot <- fatDistroPlot(ultra_combo)
-
-usethis::use_data(fat_distro, overwrite = TRUE)
+# backup()
+# 8.1.24  original made on 8.17.24
+# 8.17.24 2 week of social media updates
+# 8.24.24 1 week of social media updates
 
 
 
@@ -345,29 +278,28 @@ usethis::use_data(fat_distro, overwrite = TRUE)
 
 
 
-introduction <-
-  shiny::HTML(
-    '<div style="padding: 20px; border-radius: 8px; background-color: #f9f9f9; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
-    <p style="font-size: 16px;">The Pikki Pikki song, originally by <a href="https://youtu.be/M5HXKSR1hKc?t=42" target="_blank">Olive Beat\'s Lecon Studios</a>, has become a viral sensation thanks to its association with KBO Baseball League cheerleaders. The song is famously linked to the Kia Tigers, where cheerleaders use it to celebrate and subtly taunt opposing teams with a unique, low-energy dance.</p>
-    <p style="font-size: 16px;">This cheer has sparked the Pikki Pikki Challenge and gained widespread attention on social media platforms. However, this Shiny app is not just about the Kia Tigers. It covers all KBO Baseball League cheerleading teams, focusing on their social media presence. The app aims to identify which cheerleaders have the most likes, followers, and subscribers across YouTube, Instagram, and TikTok.</p>
-    <p style="font-size: 16px;">By analyzing social media metrics, the app highlights the most popular cheerleaders, showcasing their influence and reach. This comprehensive approach allows fans to explore and appreciate the vibrant cheerleading culture across the entire KBO League. Enjoy!</p>
-  </div>'
-  )
 
-usethis::use_data(introduction, overwrite = TRUE)
 
-footer <-
-  shiny::HTML(
-  '<footer style="padding: 10px; border-top: 1px solid #ddd; text-align: center; background-color: #f1f1f1;">
-      <p style="font-size: 14px; color: #555;">Information about the KBO League and cheerleading teams is available on the following sources:</p>
-      <p style="font-size: 14px;">
-        <a href="https://en.wikipedia.org/wiki/KBO_League" target="_blank" style="color: #0056b3; text-decoration: none;">Wikipedia: KBO League</a><br>
-        <a href="https://en.namu.wiki/w/%EC%B9%98%EC%96%B4%EB%A6%AC%EB%8D%94/KBO%20%EB%A6%AC%EA%B7%B8" target="_blank" style="color: #0056b3; text-decoration: none;">Namu Wiki: KBO League Cheerleaders</a>
-      </p>
-    <p style="font-size: 14px; color: #555;">Both sources operate under Creative Commons licenses. Wikipedia content is available under the <a href="https://en.wikipedia.org/wiki/Wikipedia:Copyrights#Licenses" target="_blank" style="color: #0056b3; text-decoration: none;">Creative Commons Attribution-Share-Alike License</a>, and Namu Wiki operates under its own <a href="https://en.namu.wiki/w/%ED%81%AC%EB%A6%AC%EC%97%90%EC%9D%B4%ED%8B%B0%EB%B8%8C%20%EC%BB%A4%EB%A8%BC%EC%A6%88%20%EB%9D%BC%EC%9D%B4%EC%84%A0%EC%8A%A4" target="_blank" style="color: #0056b3; text-decoration: none;">Namu Wiki License</a>.</p>
-    </footer>')
 
-usethis::use_data(footer)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

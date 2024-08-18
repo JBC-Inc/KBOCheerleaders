@@ -63,7 +63,6 @@ getCheerleaders <- function(team_url) {
 #' @return integer of the table index the cheerleader list belongs to.
 #'
 cheerTableIndex <- function(tables, keyword) {
-
   index <- purrr::map_lgl(tables, ~ {
     if (ncol(.x) == 4) {
       any(.x$X2 == keyword)
@@ -72,7 +71,13 @@ cheerTableIndex <- function(tables, keyword) {
     }
   })
 
-  which(index)[1] %>% as.integer() %>% {ifelse(length(.) > 0, ., NULL)}
+  result <- which(index)
+
+  if (length(result) > 0) {
+    return(as.integer(result[1]))
+  } else {
+    return(NULL)
+  }
 }
 
 #' Get Team Page Cheerleaders
@@ -135,7 +140,13 @@ getTeamPhotos <- function(team_data) {
                   mode = "wb")
   }
 
-  # manual cleanup (for now)
+  # lotte giants manual replacement
+  file.remove("./www/team_img/Lotte Giants.webp")
+  file.copy(from = "./www/Lotte Giants.webp",
+            to = "./www/team_img/Lotte Giants.webp")
+
+  file.remove("./www/team_img/KT Wiz.webp")
+  file.remove("./www/team_img/Samsung Lions.webp")
 
   # # case KT WIZ
   # file.remove("./www/team_img/KT Wiz.webp")
@@ -206,6 +217,12 @@ getTeamCap <- function(team_caps) {
 getCheerleaderPage <- function(wiki_url, cheerleader_url, values) {
 
   url <- paste0(wiki_url, cheerleader_url)
+
+  # special case Hanseul Kim
+  if (url == "https://en.namu.wiki/w/%EA%B9%80%ED%95%9C%EC%8A%AC(%EC%B9%98%EC%96%B4%EB%A6%AC%EB%8D%94)") {
+    url = "https://en.namu.wiki/w/%EA%B9%80%ED%95%9C%EC%8A%AC(1996)"
+  }
+
   req <- httr2::request(url)
 
   if (is.null(req)) {
@@ -370,18 +387,21 @@ cheerData <- function(wiki_url, team_cheerleaders, values) {
 #' Get Cheerleader Photo
 #'
 #' @param bio_table html node from cheer_data$cheerleader$bio_table
+#' @param cheer_data all cheerleader table data
 #'
 #' @return side effect is to save the image to /cheerleader_img
 #'
-getCheerleaderPhotos <- function(bio_tables) {
+getCheerleaderPhotos <- function(bio_tables, cheer_data) {
 
   if (!dir.exists("./www/cheerleader_img")) {
     dir.create(dir_path, recursive = TRUE)
   }
   for (cheerleader in seq_along(bio_tables)) {
 
-    bio_image <- stringr::str_extract(string = bio_tables[cheerleader],
-                                      pattern = "//[^\\s]+\\.webp")
+    bio_image <- stringr::str_extract(
+      string = bio_tables[cheerleader],
+      pattern = "//[^\\s]+\\.webp"
+      )
 
     if (!is.na(bio_image)) {
       bio_image <- paste0("https:", bio_image)
@@ -401,8 +421,9 @@ getCheerleaderPhotos <- function(bio_tables) {
 }
 
 
-
-# Social Media Functions ======================================================
+#------------------------------------------------------------------------------
+# Social Media Functions
+#------------------------------------------------------------------------------
 
 # YouTube ---------------------------------------------------------------------
 
@@ -534,14 +555,17 @@ getTikTok <- function(cheer_data) {
                       followers = NA, likes = NA)
 
   for (cheerleader in seq_along(names(cheer_data))) {
+
+    # if(names(cheer_data)[cheerleader] == "Yeonjung Kim") {browser()}
+
     links <- cheer_data[[cheerleader]][[2]]
     tt_link <- links[grepl("tiktok", links)]
 
     if (length(tt_link) != 0) {
       tt_link <- tt_link[1]
       page <- tryCatch({
-        httr2::request(tt_link) %>%
-          httr2::req_perform() %>%
+        httr2::request(tt_link) |>
+          httr2::req_perform() |>
           httr2::resp_body_string()
       }, error = function(e) {
         return(NULL)
@@ -551,8 +575,8 @@ getTikTok <- function(cheer_data) {
 
       if (!is.null(page)) {
         stats <- stringr::str_extract(page, '"stats":\\{[^}]*\\}')
-        tt_followers <- str_extract(stats, '(?<=followerCount":)\\d+')
-        tt_likes <- str_extract(stats, '(?<=heart":)\\d+')
+        tt_followers <- stringr::str_extract(stats, '(?<=followerCount":)\\d+')
+        tt_likes <- stringr::str_extract(stats, '(?<=heart":)\\d+')
       } else {
         tt_followers <- NA
         tt_likes <- NA
@@ -575,6 +599,67 @@ getTikTok <- function(cheer_data) {
 }
 
 # Followers across teams ------------------------------------------------------
+
+#' All cheerleader/team data with social media metrics
+#'
+#' @param youtube
+#' @param instagram
+#' @param tiktok
+#'
+#' @return data.frame with 14 columns
+#'
+ultraCombo <- function(team_cheerleaders, youtube, instagram, tiktok) {
+
+  yt <- youtube |> dplyr::select(name, subs, views, count, cat)
+  inst <- instagram |> dplyr::select(name, followers, cat)
+  tt <- tiktok |> dplyr::select(cheername, followers, likes, cat)
+  tt <- tt |> dplyr::rename(name = cheername)
+
+  ultra_combo <- yt |>
+    dplyr::full_join(inst, by = c("name", "cat")) |>
+    dplyr::full_join(tt, by = c("name", "cat")) |>
+    dplyr::mutate(instagram_followers = followers.x,
+                  tiktok_followers = followers.y) |>
+    dplyr::select(-c(followers.x, followers.y))
+
+  # add team
+  ultra_combo <- ultra_combo |>
+    dplyr::left_join(team_cheerleaders, by = c("name" = "cheerleader"))
+
+  # add team logo url and color
+  # names(team_logos) <- team_data$name
+  team_logos_df <- data.frame(name = team_data$name,
+                              team_img = unlist(team_logos),
+                              color = team_data$color)
+
+  ultra_combo <- ultra_combo |>
+    dplyr::left_join(team_logos_df , by = c("team" = "name"))
+
+  ultra_combo <- ultra_combo |>
+    dplyr::mutate(
+      logo =
+        glue::glue(
+          '<img height=50 src="www/team_logo/{team_img}"
+            class="team-photo"
+            data-tt="{team}">
+          </img>')
+    ) |>
+    dplyr::mutate(
+      photo =
+        glue::glue(
+          '<img height=50 src="www/cheerleader_img/{name}.png"
+             class="cheerleader-photo"
+             data-team="{team}"
+             data-name="{name}">
+            </img>')
+    ) |>
+    dplyr::mutate(logo = stringr::str_replace(logo, "Wiz\\.webp", "Wiz.jpg")) |>
+    dplyr::mutate(logo = stringr::str_replace(logo, "Lions\\.webp", "Lions.jpg")) |>
+    dplyr::mutate(avg_views_per_video = as.integer(views / count)) |>
+    dplyr::mutate(link = glue::glue('<a href="{wiki_url}{link}" target="_blank">{name}</a>'))
+
+  ultra_combo
+}
 
 #' Aggregate Team Followers plot
 #'
@@ -620,7 +705,6 @@ fatPlot <- function(ultra_combo) {
       plot.margin = ggplot2::margin(5, 5, 5, 5)
     )
 }
-
 
 #' Followers Across Teams Distribution Graphs
 #'
@@ -670,7 +754,7 @@ fatDistroPlot <- function(ultra_combo) {
     dplyr::group_by(team, cat) |>
     dplyr::summarize(avg_followers = mean(followers), .groups = 'drop') |>
     dplyr::mutate(avg_followers = pmin(avg_followers, 100000)) |>
-    ggplot2::ggplot(aes(x = avg_followers, fill = cat)) +
+    ggplot2::ggplot(ggplot2::aes(x = avg_followers, fill = cat)) +
     ggplot2::geom_density(alpha = 0.6) +
     ggplot2::scale_x_continuous(
       breaks = seq(0, 200000, 25000),
@@ -691,7 +775,7 @@ fatDistroPlot <- function(ultra_combo) {
     dplyr::group_by(team, cat) |>
     dplyr::summarize(avg_followers = mean(followers), .groups = 'drop') |>
     dplyr::mutate(log_avg_followers = log1p(avg_followers)) |>
-    ggplot2::ggplot(aes(x = log_avg_followers, fill = cat)) +
+    ggplot2::ggplot(ggplot2::aes(x = log_avg_followers, fill = cat)) +
     ggplot2::geom_density(alpha = 0.6) +
     ggplot2::scale_fill_manual(values = c("youtube" = "red",
                                           "tiktok" = "black",
@@ -746,24 +830,78 @@ fatDistroPlot <- function(ultra_combo) {
 }
 
 
+#==============================================================================
+#'
+#' Backup Data
+#'
+#' Backup /data and /www and all contents. Store in timestamped folder.
+#'
+#' ex. KBO_Cheerleaders_Backup_20240817_201241/data
+#'                                            /www/cheerleader_img
+#'                                            /www/social_icons
+#'                                            /www/team_cap
+#'                                            /www/team_img
+#'                                            /www/team_logo
+#' @return
+#'
+backup <- function() {
 
+  data_dir <- "./data"
+  www_dir <- "./www"
+  timestamp <- format(Sys.time(), "%Y%m%d_%H%M%S")  # Format as YYYYMMDD_HHMMSS
+  backup_dir <- file.path(
+    paste0("C:/Users/cragg/OneDrive/code/github/KBO_Cheerleaders_Backup_", timestamp))
 
+  if (!dir.exists(backup_dir)) {
+    dir.create(backup_dir)
+  }
 
+  # /data =====================================================================
 
+  data_files <- list.files(data_dir, pattern = "\\.(rda|rds)$", full.names = TRUE)
 
+  copy_files <- function(files, dest_dir) {
+    for (file in files) {
+      dest_file <- file.path(dest_dir, basename(file))
+      file.copy(file, dest_file, overwrite = TRUE)
+    }
+  }
 
+  copy_files(data_files, backup_dir)
 
+  # /www ======================================================================
+  copy_directory_recursively <- function(src_dir, dest_dir) {
 
+    # Create the destination directory if it doesn't exist
+    if (!dir.exists(dest_dir)) {
+      dir.create(dest_dir, recursive = TRUE)
+    }
 
+    items <- list.files(src_dir, full.names = TRUE, recursive = TRUE)
 
+    for (item in items) {
+      relative_path <- sub(paste0("^", normalizePath(src_dir, winslash = "/"), "/"), "",
+                           normalizePath(item, winslash = "/"))
+      dest_path <- file.path(dest_dir, relative_path)
 
+      if (file.info(item)$isdir) {
+        if (!dir.exists(dest_path)) {
+          dir.create(dest_path, recursive = TRUE)
+        }
+      } else {
+        parent_dir <- dirname(dest_path)
+        if (!dir.exists(parent_dir)) {
+          dir.create(parent_dir, recursive = TRUE)
+        }
+        file.copy(item, dest_path, overwrite = TRUE)
+      }
+    }
+  }
 
+  copy_directory_recursively(www_dir, file.path(backup_dir, "www"))
 
-
-
-
-
-
+  cat("Backup completed. Files have been copied to:", backup_dir, "\n")
+}
 
 
 
