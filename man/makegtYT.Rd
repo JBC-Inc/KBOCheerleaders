@@ -4,16 +4,19 @@
 \alias{makegtYT}
 \title{Generate \code{gt} tables for YouTube Leaderboard}
 \usage{
-makegtYT(ultra_combo)
+makegtYT(ultra_combo, top_count)
 }
 \arguments{
 \item{ultra_combo}{aggregate cheerleader social media metrics.}
+
+\item{top_count}{product of number of weeks of historic data and records.
+ex. 3 weeks data for top 5 cheerleaders = 15}
 }
 \value{
 gt
 }
 \description{
 Function takes all cheerleader social media metrics and generates
-the YouTube leaderboard for top 5 cheerleaders with the most
+the YouTube leaderboard for top (x) cheerleaders with the most
 YouTube followers.
 }

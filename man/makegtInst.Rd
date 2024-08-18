@@ -4,16 +4,19 @@
 \alias{makegtInst}
 \title{Generate \code{gt} tables for Instagram Leaderboard}
 \usage{
-makegtInst(ultra_combo)
+makegtInst(ultra_combo, top_count)
 }
 \arguments{
 \item{ultra_combo}{aggregate cheerleader social media metrics.}
+
+\item{top_count}{product of number of weeks of historic data and records.
+ex. 3 weeks data for top 5 cheerleaders = 15}
 }
 \value{
 gt
 }
 \description{
 Function takes all cheerleader social media metrics and generates
-the Instagram leaderboard for top 5 cheerleaders with the most
+the Instagram leaderboard for top (x) cheerleaders with the most
 Instagram followers.
 }

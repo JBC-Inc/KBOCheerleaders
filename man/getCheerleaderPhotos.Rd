@@ -4,9 +4,11 @@
 \alias{getCheerleaderPhotos}
 \title{Get Cheerleader Photo}
 \usage{
-getCheerleaderPhotos(bio_tables)
+getCheerleaderPhotos(bio_tables, cheer_data)
 }
 \arguments{
+\item{cheer_data}{all cheerleader table data}
+
 \item{bio_table}{html node from cheer_data$cheerleader$bio_table}
 }
 \value{
