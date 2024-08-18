@@ -15,10 +15,11 @@ data("keyword_image_mapping")            # List(name, img name)
 
   # ultra combo -------------------------
   data("ultra_combo")                   # leaderboards, reactable, fat plot/distro
+  data("historic")                      # historical ultra_combos (trend lines)
 
   # social media statistics -------------
   data("fat_plot")                      # followers all teams plot
-  data("fat_distro")                    # distributions plots
+  data("fat_distro_plot")               # distributions plots
 
 
 # values --------------------------------

@@ -60,15 +60,15 @@ mod_stats_server <- function(id, agg_follow) {
     })
 
     output$f1 <- shiny::renderPlot({
-      fat_distro[[4]]
+      fat_distro_plot[[4]]
     })
 
     output$f2 <- shiny::renderPlot({
-      fat_distro[[2]]
+      fat_distro_plot[[2]]
     })
 
     output$f3 <- shiny::renderPlot({
-      fat_distro[[3]]
+      fat_distro_plot[[3]]
     })
   })
 }

@@ -602,9 +602,9 @@ getTikTok <- function(cheer_data) {
 
 #' All cheerleader/team data with social media metrics
 #'
-#' @param youtube
-#' @param instagram
-#' @param tiktok
+#' @param youtube youtube
+#' @param instagram instagram
+#' @param tiktok tiktok
 #'
 #' @return data.frame with 14 columns
 #'
@@ -842,7 +842,7 @@ fatDistroPlot <- function(ultra_combo) {
 #'                                            /www/team_cap
 #'                                            /www/team_img
 #'                                            /www/team_logo
-#' @return
+#' @return side effect is to make the historical backup data
 #'
 backup <- function() {
 
@@ -903,6 +903,44 @@ backup <- function() {
   cat("Backup completed. Files have been copied to:", backup_dir, "\n")
 }
 
+
+#' Create historical ultra_combo
+#'
+#' @param base_path backup folders directory
+#'
+#' @return data.frame with cheerleader historical social media metrics
+#'
+load_historic_data <- function(base_path = "../") {
+
+  backup_dirs <- list.dirs(base_path, recursive = TRUE, full.names = TRUE)
+  backup_dirs <- backup_dirs[grepl(".*Backup.*", backup_dirs, ignore.case = TRUE)]
+
+  historic <- data.frame()
+
+  for (dir in backup_dirs) {
+
+    rda_file <- file.path(dir, "ultra_combo.rda")
+
+    if (file.exists(rda_file)) {
+      load(rda_file)
+
+      if (exists("ultra_combo")) {
+
+        datetime_str <- dir |>
+          basename() |>
+          stringr::str_extract("\\d{8}_\\d{6}")
+
+        datetime <- lubridate::ymd_hms(datetime_str, tz = "UTC")
+
+        ultra_combo <- ultra_combo |>
+          dplyr::mutate(datetime = datetime)
+
+        historic <- dplyr::bind_rows(historic, ultra_combo)
+      }
+    }
+  }
+  return(historic)
+}
 
 
 

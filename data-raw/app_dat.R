@@ -253,13 +253,17 @@ KBODataUpdate <- function() {
   ultra_combo <- ultraCombo(team_cheerleaders, youtube, instagram, tiktok)
   usethis::use_data(ultra_combo, overwrite = TRUE)
 
+  historic <- load_historic_data("../")
+
+  usethis::use_data(historic, overwrite = TRUE)
+
   fat_plot <- fatPlot(ultra_combo)
   usethis::use_data(fat_plot, overwrite = TRUE)
 
   fat_distro_plot <- fatDistroPlot(ultra_combo)
   usethis::use_data(fat_distro_plot, overwrite = TRUE)
 
-  print("Successfully made ultra_combo.rds, fat_plot.rds, fat_distro_plot.rds")
+  print("Successfully made ultra_combo.rds, histori.rds, fat_plot.rds, fat_distro_plot.rds")
 
 }
 
