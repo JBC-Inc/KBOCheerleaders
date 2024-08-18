@@ -7,7 +7,7 @@
 getTeamCheerleaders(team_url)
 }
 \arguments{
-\item{team_url}{}
+\item{team_url}{team_data$url}
 }
 \value{
 data.frame with the team, cheerleader name and their page url.

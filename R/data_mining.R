@@ -8,7 +8,7 @@
 #' Query the team wiki page for a list of cheerleaders and url to their
 #' personal pages.
 #'
-#' @param team_url
+#' @param team_url team_data$url
 #'
 #' @return character vector of cheerleader url links and names
 #'
@@ -86,7 +86,7 @@ cheerTableIndex <- function(tables, keyword) {
 #' personal pages. Iterates through a list of all the cheerleaders for
 #' all teams.
 #'
-#' @param team_url
+#' @param team_url team_data$url
 #'
 #' @return data.frame with the team, cheerleader name and their page url.
 #'
@@ -114,7 +114,7 @@ getTeamCheerleaders <- function(team_url) {
 #'
 #' Iterate through all the team page data to download each team photo.
 #'
-#' @param team_data
+#' @param team_data team_data(name, url, color, song)
 #'
 #' @return side effect is to download the team photo for each team and store
 #' it in the local directory.
@@ -165,30 +165,52 @@ getTeamPhotos <- function(team_data) {
   # print(magick::image_read(paste0("./www/team_img/", team_data$name[[7]], ".webp")))
 }
 
+#' Save team logos
+#'
+#' Download the team logo.
+#'
+#' @param team_logos team_logos
+#'
+#' @return side effect is to download the team_logos/* images.
+#'
 getTeamLogos <- function(team_logos) {
-  if (!dir.exists("./www/team_logo")) {
-    dir.create("./www/team_logo", recursive = TRUE)
+  dir_path <- "./www/team_logo"
+
+  if (!dir.exists(dir_path)) {
+    dir.create(dir_path, recursive = TRUE)
   }
-  for (team in seq_along(team_logos)) {
-    download.file(
-      url = team_logos[[team]],
-      destfile = paste0("./www/team_logo/", names(team_logos[team]), ".png"),
+
+  purrr::walk2(
+    .x = team_logos, names(team_logos),
+    .f = ~ download.file(
+      url = .x,
+      destfile = paste0(dir_path, "/", .y, ".png"),
       mode = "wb"
     )
-  }
+  )
 }
 
+#' Save team cap insignia
+#'
+#' @param team_caps team_caps
+#'
+#' @return side effect is to download the team_cap/* images.
+#'
 getTeamCap <- function(team_caps) {
-  if (!dir.exists("./www/team_cap")) {
-    dir.create("./www/team_cap", recursive = TRUE)
+  dir_path <- "./www/team_cap"
+
+  if (!dir.exists(dir_path)) {
+    dir.create(dir_path, recursive = TRUE)
   }
-  for (team in seq_along(team_caps)) {
-    download.file(
-      url = team_caps[[team]],
-      destfile = paste0("./www/team_cap/", names(team_caps[team]), ".png"),
+
+  purrr::walk2(
+    .x = team_caps, names(team_caps),
+    .f = ~ download.file(
+      url = .x,
+      destfile = paste0(dir_path, "/", .y, ".png"),
       mode = "wb"
     )
-  }
+  )
 }
 
 #------------------------------------------------------------------------------
@@ -206,7 +228,7 @@ getTeamCap <- function(team_caps) {
 #'
 #' @param wiki_url string wiki url prefix
 #' @param cheerleader_url string wiki cheerleader url suffix
-#' @param values values that exist in the cheerleader table
+#' @param values values that exist in the cheerleader table to match upon
 #'
 #' @return returns a named list of
 #'  - name/index Cheerleaders name
@@ -270,8 +292,6 @@ getCheerleaderPage <- function(wiki_url, cheerleader_url, values) {
 
   social_links <- hrefs[grepl("http", hrefs)]
 
-  # social_icons <- matchIconsToLinks(social_links, keyword_image_mapping)
-
   social_icons <- purrr::map_chr(social_links, function(link) {
     keyword <- purrr::detect(
       names(keyword_image_mapping), ~
@@ -283,23 +303,14 @@ getCheerleaderPage <- function(wiki_url, cheerleader_url, values) {
     }
   })
 
-  # if (cheerleader_url == "/w/%EC%84%9C%EC%9C%A0%EB%A6%BC") {
-  #   browser()
-  # }
-
-  # account for missing values
   valid_links <- !is.na(social_icons) & social_icons != ""
 
   social_links <- social_links[valid_links]
   social_icons <- social_icons[valid_links]
 
-  # createHTML(social_links, social_icons)
-
   html_content <- purrr::map2(social_links, social_icons, ~glue::glue(
     '<a href="{.x}" target="_blank"><img src="{.y}" width="42" height="42"></a>&nbsp'
   )) |> paste(collapse = "")
-
-  # extractBioTable(df_tables, values = c("nationality", "birth"))
 
   table <- df_tables|>
     purrr::detect(~ any(.x[[1]] %in% values, na.rm = TRUE)) |>
@@ -377,6 +388,17 @@ getCheerleaderPage <- function(wiki_url, cheerleader_url, values) {
   )
 }
 
+#' Get Cheerleader Data
+#'
+#' Iterate over team cheerleader URLs to make the list of HTML, data.frame
+#' and link vectors.
+#'
+#' @param wiki_url namuwiki cheerleader page prefix
+#' @param team_cheerleaders data.frame with team, cheerleader and namu wiki url
+#' @param values values to match on that exist in all cheerleader tables.
+#'
+#' @return list all cheerleaders bio(HTML, data.frame) and social media links
+#'
 cheerData <- function(wiki_url, team_cheerleaders, values) {
 
   team_cheerleaders$link |>
@@ -427,7 +449,17 @@ getCheerleaderPhotos <- function(bio_tables, cheer_data) {
 
 # YouTube ---------------------------------------------------------------------
 
-extract_channel_id <- function(url) {
+#' Extract YouTube channel ID from a given URL.
+#'
+#' The YouTube channel ID will either be found in the url or in the raw HTML
+#' for the page. The pattern to search of is a 24 character length string.
+#'
+#' @param url Cheerleader YouTube URL
+#'
+#' @return channel_id
+#'
+extractChannelID <- function(url) {
+
   if (stringr::str_detect(url, "@")) {
     page <- tryCatch({
       response <- httr2::request(url) |>
@@ -459,10 +491,22 @@ extract_channel_id <- function(url) {
     }
   }
 
-  # Return NULL if no valid channel_id is found
   return(NULL)
 }
 
+#' Get Cheerleader YouTube Statistics.
+#'
+#' @param cheer_data data.frame of cheerleader data.
+#'
+#' @return data.frame with YouTube statistics
+#'  - Cheerleader name
+#'  - YouTube channel
+#'  - Subscriber count
+#'  - Video view count
+#'  - Video count
+#'  - Cheerleader team
+#'  - Type of social media platform
+#'
 getYouTube <- function(cheer_data) {
 
   youtube <- data.frame()
@@ -476,7 +520,7 @@ getYouTube <- function(cheer_data) {
 
     if (length(yt_link) != 0) {
       for (link in yt_link) {
-        channel_id <- extract_channel_id(link)
+        channel_id <- extractChannelID(link)
         if (!is.null(channel_id)) {
           channel_stats <- tryCatch({
             tuber::get_channel_stats(channel_id = channel_id)
@@ -502,6 +546,17 @@ getYouTube <- function(cheer_data) {
 
 # instagram -------------------------------------------------------------------
 
+#' Get Cheerleader Instagram Statistics.
+#'
+#' @param cheer_data data.frame of cheerleader data.
+#'
+#' @return data.frame with Instagram statistics
+#'  - Cheerleader name
+#'  - Instagram account name
+#'  - Instagram followers
+#'  - Cheerleader team
+#'  - Type of social media platform
+#'
 getInstagram <- function(cheer_data) {
 
   instagram <- data.frame()
@@ -547,6 +602,18 @@ getInstagram <- function(cheer_data) {
 
 # tiktok ----------------------------------------------------------------------
 
+#' Get Cheerleader TikTok Statistics.
+#'
+#' @param cheer_data data.frame of cheerleader data.
+#'
+#' @return data.frame with Instagram statistics
+#'  - Cheerleader name
+#'  - TikTok account name
+#'  - TikTok follower count
+#'  - TikTok likes count
+#'  - Cheerleader team
+#'  - Type of social media platform
+#'
 getTikTok <- function(cheer_data) {
 
   tiktok <- data.frame()
@@ -598,10 +665,9 @@ getTikTok <- function(cheer_data) {
   tiktok
 }
 
-# Followers across teams ------------------------------------------------------
-
 #' All cheerleader/team data with social media metrics
 #'
+#' @param team_cheerleaders Cheerleader team, name and wiki url
 #' @param youtube youtube
 #' @param instagram instagram
 #' @param tiktok tiktok
@@ -622,7 +688,6 @@ ultraCombo <- function(team_cheerleaders, youtube, instagram, tiktok) {
                   tiktok_followers = followers.y) |>
     dplyr::select(-c(followers.x, followers.y))
 
-  # add team
   ultra_combo <- ultra_combo |>
     dplyr::left_join(team_cheerleaders, by = c("name" = "cheerleader"))
 
@@ -842,7 +907,8 @@ fatDistroPlot <- function(ultra_combo) {
 #'                                            /www/team_cap
 #'                                            /www/team_img
 #'                                            /www/team_logo
-#' @return side effect is to make the historical backup data
+#' @return side effect is to make the historical backup data that will later
+#' be extracted for 'historical' trendlines within the leaderboards.
 #'
 backup <- function() {
 
@@ -903,14 +969,16 @@ backup <- function() {
   cat("Backup completed. Files have been copied to:", backup_dir, "\n")
 }
 
-
 #' Create historical ultra_combo
+#'
+#' Will be run weekly after backups to gather historical social media metrics.
+#' Used in leaderboard sparkline plots.
 #'
 #' @param base_path backup folders directory
 #'
 #' @return data.frame with cheerleader historical social media metrics
 #'
-load_historic_data <- function(base_path = "../") {
+loadHistoricalData <- function(base_path = "../") {
 
   backup_dirs <- list.dirs(base_path, recursive = TRUE, full.names = TRUE)
   backup_dirs <- backup_dirs[grepl(".*Backup.*", backup_dirs, ignore.case = TRUE)]

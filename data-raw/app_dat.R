@@ -253,7 +253,7 @@ KBODataUpdate <- function() {
   ultra_combo <- ultraCombo(team_cheerleaders, youtube, instagram, tiktok)
   usethis::use_data(ultra_combo, overwrite = TRUE)
 
-  historic <- load_historic_data("../")
+  historic <- loadHistoricalData("../")
 
   usethis::use_data(historic, overwrite = TRUE)
 

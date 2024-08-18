@@ -7,7 +7,8 @@
 backup()
 }
 \value{
-side effect is to make the historical backup data
+side effect is to make the historical backup data that will later
+be extracted for 'historical' trendlines within the leaderboards.
 }
 \description{
 Backup /data and /www and all contents. Store in timestamped folder.

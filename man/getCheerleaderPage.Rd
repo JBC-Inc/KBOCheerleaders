@@ -11,7 +11,7 @@ getCheerleaderPage(wiki_url, cheerleader_url, values)
 
 \item{cheerleader_url}{string wiki cheerleader url suffix}
 
-\item{values}{values that exist in the cheerleader table}
+\item{values}{values that exist in the cheerleader table to match upon}
 }
 \value{
 returns a named list of

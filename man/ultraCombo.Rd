@@ -7,6 +7,8 @@
 ultraCombo(team_cheerleaders, youtube, instagram, tiktok)
 }
 \arguments{
+\item{team_cheerleaders}{Cheerleader team, name and wiki url}
+
 \item{youtube}{youtube}
 
 \item{instagram}{instagram}

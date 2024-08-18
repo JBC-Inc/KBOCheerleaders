@@ -7,7 +7,7 @@
 getCheerleaders(team_url)
 }
 \arguments{
-\item{team_url}{}
+\item{team_url}{team_data$url}
 }
 \value{
 character vector of cheerleader url links and names

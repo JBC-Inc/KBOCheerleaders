@@ -514,7 +514,7 @@ makegtInst <- function(ultra_combo, top_count) {
     dplyr::arrange(dplyr::desc(instagram_followers)) |>
 
     gt::gt() |>
-    # gt::cols_hide(columns = c(team)) |>
+    gt::cols_hide(columns = c(name)) |>
     gt::fmt_markdown(columns = c(logo, photo, link)) |>
     gt::cols_label(
       plot = "Followers Trend",

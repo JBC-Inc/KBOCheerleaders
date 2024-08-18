@@ -5,6 +5,6 @@ account: kraggle
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 12417986
-bundleId: 8991278
+bundleId: 8997167
 url: https://kraggle.shinyapps.io/kbocheerleaders/
 version: 1

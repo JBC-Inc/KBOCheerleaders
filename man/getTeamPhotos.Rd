@@ -7,7 +7,7 @@
 getTeamPhotos(team_data)
 }
 \arguments{
-\item{team_data}{}
+\item{team_data}{team_data(name, url, color, song)}
 }
 \value{
 side effect is to download the team photo for each team and store
