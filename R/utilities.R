@@ -418,31 +418,40 @@ makeCheerleader <- function(td, smm, cheerleader, cheerPhoto, cheerBio) {
 #' Generate `gt` tables for YouTube Leaderboard
 #'
 #' Function takes all cheerleader social media metrics and generates
-#' the YouTube leaderboard for top 5 cheerleaders with the most
+#' the YouTube leaderboard for top (x) cheerleaders with the most
 #' YouTube followers.
 #'
 #' @param ultra_combo aggregate cheerleader social media metrics.
+#' @param top_count product of number of weeks of historic data and records.
+#' ex. 3 weeks data for top 5 cheerleaders = 15
 #'
 #' @return gt
 #'
-makegtYT <- function(ultra_combo) {
+makegtYT <- function(ultra_combo, top_count) {
 
-  ultra_combo |>
-    dplyr::select(team,
-                  logo,
-                  photo,
-                  link,
-                  subs,
-                  views,
-                  count,
-                  avg_views_per_video) |>
-    dplyr::arrange(dplyr::desc(views)) |>
-    dplyr::slice_head(n = 5) |>
+  historic |>
+    dplyr::filter(cat == "youtube") |>
+    dplyr::arrange(dplyr::desc(subs)) |>
+    dplyr::slice_head(n = top_count) |>
+    dplyr::group_by(name) |>
+    dplyr::summarize(
+      plot = list(rev(subs)),
+      logo = unique(logo),
+      photo = unique(photo),
+      link = unique(link),
+      subs = max(subs),
+      views = max(views),
+      count = max(count),
+      avg_views_per_video = max(avg_views_per_video),
+      .groups = "drop") |>
+
+    dplyr::arrange(dplyr::desc(subs)) |>
 
     gt::gt() |>
-    gt::cols_hide(columns = c(team)) |>
+    gt::cols_hide(columns = c(name)) |>
     gt::fmt_markdown(columns = c(logo, photo, link)) |>
     gt::cols_label(
+      plot = "Trendline",
       logo = "Team Logo",
       photo = "Cheerleader",
       link = "Name/Wiki",
@@ -454,50 +463,61 @@ makegtYT <- function(ultra_combo) {
     gt::data_color(
       columns = c(avg_views_per_video),
       fn = scales::col_numeric(
-        #palette = c("red", "yellow", "green"),
         palette = c("#FF9999", "#FFFF99", "#99FF99"),
-        domain = NULL)
+        domain = NULL
+      )
     ) |>
     gt::tab_style(
       style = gt::cell_text(align = "center"),
-      locations = gt::cells_column_labels(dplyr::everything())
+      locations = gt::cells_column_labels(everything())
     ) |>
     gt::tab_style(
       style = gt::cell_text(align = "center"),
-      locations = gt::cells_body(columns = dplyr::everything())
+      locations = gt::cells_body(columns = everything())
     ) |>
     gt::fmt_number(
       columns = c(subs, views, count, avg_views_per_video),
       decimals = 0,
       use_seps = TRUE
-    )
+    ) |>
+    gt::cols_move(columns = plot, after = subs) |>
+    gtExtras::gt_plt_sparkline(plot, type = "shaded", fig_dim = c(7, 30))
 }
 
 #' Generate `gt` tables for Instagram Leaderboard
 #'
 #' Function takes all cheerleader social media metrics and generates
-#' the Instagram leaderboard for top 5 cheerleaders with the most
+#' the Instagram leaderboard for top (x) cheerleaders with the most
 #' Instagram followers.
 #'
 #' @param ultra_combo aggregate cheerleader social media metrics.
+#' @param top_count product of number of weeks of historic data and records.
+#' ex. 3 weeks data for top 5 cheerleaders = 15
 #'
 #' @return gt
 #'
-makegtInst <- function(ultra_combo) {
+makegtInst <- function(ultra_combo, top_count) {
 
-  ultra_combo |>
-    dplyr::select(team,
-                  logo,
-                  photo,
-                  link,
-                  instagram_followers) |>
+  historic |>
+    dplyr::filter(cat == "instagram") |>
     dplyr::arrange(dplyr::desc(instagram_followers)) |>
-    dplyr::slice_head(n = 5) |>
+    dplyr::slice_head(n = top_count) |>
+    dplyr::group_by(name) |>
+    dplyr::summarize(
+      plot = list(rev(instagram_followers)),
+      logo = unique(logo),
+      photo = unique(photo),
+      link = unique(link),
+      instagram_followers = max(instagram_followers),
+      .groups = "drop") |>
+
+    dplyr::arrange(dplyr::desc(instagram_followers)) |>
 
     gt::gt() |>
-    gt::cols_hide(columns = c(team)) |>
+    # gt::cols_hide(columns = c(team)) |>
     gt::fmt_markdown(columns = c(logo, photo, link)) |>
     gt::cols_label(
+      plot = "Followers Trend",
       logo = "Team Logo",
       photo = "Cheerleader",
       link = "Name/Wiki",
@@ -521,7 +541,10 @@ makegtInst <- function(ultra_combo) {
       columns = c(instagram_followers),
       decimals = 0,
       use_seps = TRUE
-    )
+    ) |>
+    gt::cols_move(columns = plot, after = instagram_followers) |>
+    gtExtras::gt_plt_sparkline(plot, type = "shaded", fig_dim = c(7, 42))
+
 }
 
 #' Generate `gt` tables for TikTok Leaderboard
@@ -531,28 +554,36 @@ makegtInst <- function(ultra_combo) {
 #' TikTok followers.
 #'
 #' @param ultra_combo aggregate cheerleader social media metrics.
+#' @param top_count product of number of weeks of historic data and records.
+#' ex. 3 weeks data for top 5 cheerleaders = 15
 #'
 #' @return gt
 #'
-makegtTT <- function(ultra_combo) {
+makegtTT <- function(ultra_combo, top_count) {
 
-  ultra_combo |>
+  historic |>
     dplyr::mutate(likes_followers = as.integer(likes/tiktok_followers)) |>
-    dplyr::select(team,
-                  logo,
-                  photo,
-                  link,
-                  tiktok_followers,
-                  likes,
-                  likes_followers
-    ) |>
+    dplyr::filter(cat == "tiktok") |>
     dplyr::arrange(dplyr::desc(tiktok_followers)) |>
-    dplyr::slice_head(n = 5) |>
+    dplyr::slice_head(n = top_count) |>
+    dplyr::group_by(name) |>
+    dplyr::summarize(
+      plot = list(rev(tiktok_followers)),  # Keep historical data for sparklines
+      logo = unique(logo),
+      photo = unique(photo),
+      link = unique(link),
+      tiktok_followers = max(tiktok_followers),
+      likes = max(likes),
+      likes_followers = as.integer(max(likes) / max(tiktok_followers)),
+      .groups = "drop") |>
+
+    dplyr::arrange(dplyr::desc(tiktok_followers)) |>
 
     gt::gt() |>
-    gt::cols_hide(columns = c(team)) |>
+    gt::cols_hide(columns = c(name)) |>
     gt::fmt_markdown(columns = c(logo, photo, link)) |>
     gt::cols_label(
+      plot = "Followers Trend",
       logo = "Team Logo",
       photo = "Cheerleader",
       link = "Name/Wiki",
@@ -578,7 +609,9 @@ makegtTT <- function(ultra_combo) {
       columns = c(tiktok_followers, likes, likes_followers),
       decimals = 0,
       use_seps = TRUE
-    )
+    ) |>
+    gt::cols_move(columns = plot, after = tiktok_followers) |>
+    gtExtras::gt_plt_sparkline(plot, type = "shaded", fig_dim = c(7, 42))
 }
 
 #' Generate Leaderboard Cards
@@ -599,7 +632,7 @@ makeLeaderboards <- function(leaderYT, leaderInst, leaderTT) {
     bslib::card_header(
       style = paste("background-color: #ff0000; color: #ffffff;"),
       bsicons::bs_icon("youtube"),
-      "Top 5 YouTube Subscribers/Views"
+      "Top YouTube Subscribers/Views"
     ),
     bslib::card_body(
       fillable = TRUE,
@@ -620,7 +653,7 @@ makeLeaderboards <- function(leaderYT, leaderInst, leaderTT) {
         background: linear-gradient(45deg, #FFD600, #FF7A00, #FF0069, #D300C5, #7638FA);"
       ),
       bsicons::bs_icon("instagram"),
-      "Top 5 Insagram Followers"
+      "Top Insagram Followers"
     ),
     bslib::card_body(
       fillable = TRUE,
@@ -641,7 +674,7 @@ makeLeaderboards <- function(leaderYT, leaderInst, leaderTT) {
     bslib::card_header(
       style = paste("background-color: #000000; color: #ffffff;"),
       bsicons::bs_icon("tiktok"),
-      "Top 5 TikTok Followers/Likes"
+      "Top TikTok Followers/Likes"
     ),
     bslib::card_body(
       fillable = TRUE,
