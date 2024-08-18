@@ -3,7 +3,7 @@ Title: Korean Baseball Organization Cheerleaders interactive database.
 Version: 0.0.0.9000
 Authors@R: 
     person("Jeff", "Craggy", , "craggyjeff@gmail.com", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
+           comment = c(ORCID = "0009-0008-9165-5075"))
 Description: Shiny app based on the Korean Baseball League Cheerleader namuwiki pages.
 License: GPL (>= 3)
 Encoding: UTF-8

@@ -6,6 +6,3 @@ template:
     base_font:
       google: Roboto
     pkgdown-nav-height: 42px
-authors:
- - name: "Joe Schmoe"
-   orcid: "https://orcid.org/0009-0008-9165-5075"
