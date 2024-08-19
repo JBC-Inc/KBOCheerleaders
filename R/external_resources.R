@@ -13,6 +13,8 @@
 #'
 addExternalResources <- function() {
 
+  options(shiny.reactlog = TRUE)
+
   shiny::addResourcePath("www", "www")
 
   shiny::tags$head(
@@ -53,8 +55,8 @@ addExternalResources <- function() {
        $(document).on('click', '.cheerleader-photo', function() {
          var team = $(this).data('team');
          var name = $(this).data('name');
-         console.log('Team: ' + team);
-         console.log('Name: ' + name);
+         //console.log('Team: ' + team);
+         //console.log('Name: ' + name);
          Shiny.setInputValue('team-team', team);
          Shiny.setInputValue('cheer-cheerleader', name);
          Shiny.setInputValue('randcheer', Math.random());

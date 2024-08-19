@@ -79,11 +79,11 @@ server <- function(input, output, session) {
     updateUI(session, state = "team", team = input$`team-team`)
   }, ignoreInit = TRUE)
 
-  shiny::observe(label = "Cheerleader Input", {
+  shiny::observeEvent(input$`cheer-cheerleader`, label = "Cheerleader Input", {
 
     shiny::req(length(input$`cheer-cheerleader`) > 0)
     updateUI(session, state = "cheer", cheerleader = input$`cheer-cheerleader`)
-  })
+  }, ignoreInit = TRUE)
 
   shiny::observeEvent(input$randteam, label = "Duplicate Team", {
 
