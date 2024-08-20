@@ -75,7 +75,13 @@ mod_react_server <- function(id, td) {
           class = "bg-dark"
         ),
         bslib::card_body(
-          reactable::reactableOutput(ns("rt"))
+          shinycssloaders::withSpinner(
+            ui_element = reactable::reactableOutput(ns("rt")),
+            image = "www/favicon-32x32.png",
+            image.width = 242,
+            image.height = 242,
+            caption = "...LOADING..."
+          )
         )
       )
     })

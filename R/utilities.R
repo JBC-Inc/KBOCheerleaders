@@ -38,7 +38,13 @@ makeStatsPage <- function(fat, f1, f2, f3) {
           class = "bg-dark"
         ),
         bslib::card_body(
-          shiny::plotOutput(fat, click = "plot_click", height = '600px')
+          shinycssloaders::withSpinner(
+            ui_element = shiny::plotOutput(fat, click = "plot_click", height = '600px'),
+            image = "www/favicon-32x32.png",
+            image.width = 242,
+            image.height = 242,
+            caption = "...LOADING..."
+          )
         ),
         # bslib::card_footer("Click Team `Logo` to view.", class = "bg-info")
       )
@@ -58,7 +64,8 @@ makeStatsPage <- function(fat, f1, f2, f3) {
         full_screen = TRUE,
         # bslib::card_header("Distribution Avg Followers per Platform", class = "bg-dark"),
         bslib::card_header("Average Followers per Platform (95% Percentile)", class = "bg-dark"),
-        bslib::card_body(shiny::plotOutput(f1, height = '100%'))
+        bslib::card_body(
+          shiny::plotOutput(f1, height = '100%'))
       ),
       bslib::card(
         id = "f2",
@@ -643,7 +650,13 @@ makeLeaderboards <- function(leaderYT, leaderInst, leaderTT) {
     ),
     bslib::card_body(
       fillable = TRUE,
-      gt::gt_output(leaderYT)
+      shinycssloaders::withSpinner(
+        ui_element = gt::gt_output(leaderYT),
+        image = "www/favicon-32x32.png",
+        image.width = 242,
+        image.height = 242,
+        caption = "...LOADING..."
+      )
     ),
     bslib::card_footer(
       "Click Team Logo/Cheerleader Photo to view.",
@@ -664,7 +677,13 @@ makeLeaderboards <- function(leaderYT, leaderInst, leaderTT) {
     ),
     bslib::card_body(
       fillable = TRUE,
-      gt::gt_output(leaderInst)
+      shinycssloaders::withSpinner(
+        ui_element = gt::gt_output(leaderInst),
+        image = "www/favicon-32x32.png",
+        image.width = 242,
+        image.height = 242,
+        caption = "...LOADING..."
+      )
     ),
     bslib::card_footer(
       "Click Team Logo/Cheerleader Photo to view.",
@@ -685,7 +704,13 @@ makeLeaderboards <- function(leaderYT, leaderInst, leaderTT) {
     ),
     bslib::card_body(
       fillable = TRUE,
-      gt::gt_output(leaderTT)
+      shinycssloaders::withSpinner(
+        ui_element = gt::gt_output(leaderTT),
+        image = "www/favicon-32x32.png",
+        image.width = 242,
+        image.height = 242,
+        caption = "...LOADING..."
+      )
     ),
     bslib::card_footer(
       "Click Team Logo/Cheerleader Photo to view.",
@@ -826,7 +851,7 @@ updateUI <- function(session,
                      team = NULL,
                      cheerleader = NULL) {
 
-  shiny::updateNavbarPage(inputId = "tabs", selected = "visual")
+  shiny::updateNavbarPage(session, inputId = "tabs", selected = "visual")
 
   switch(
     state,
