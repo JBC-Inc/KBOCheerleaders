@@ -3,6 +3,7 @@
 #'
 #' Make scripts available to their components.
 #'
+#' @keywords internal
 #' @return adds external resources to the Shiny app by returning a
 #' `tags$head` element that includes:
 #'  - Resource Paths
@@ -10,7 +11,6 @@
 #'  - Favicon
 #'  - Font Links
 #'  - Custom JS Handles
-#'  @keywords internal
 #'
 addExternalResources <- function() {
 

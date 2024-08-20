@@ -53,6 +53,9 @@ mod_stats_server <- function(id, agg_follow, plot_click, sesh) {
       )
 
       if (nrow(point) != 0) {
+
+        shiny::updateNavbarPage(session, inputId = "tabs", selected = "visual")
+
         updateUI(session = sesh,
                  state = "followers",
                  team = point$team,
