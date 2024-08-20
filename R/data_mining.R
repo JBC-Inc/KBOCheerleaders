@@ -1,8 +1,85 @@
-# Extraction Functions =========================================================
 
-#------------------------------------------------------------------------------
+# httr2 -----------------------------------------------------------------------
+
+#' Fetch and Parse Content from URLs
+#'
+#' This function retrieves content from one or more URLs using the `httr2`
+#' package. It supports returning either parsed HTML documents or raw HTML
+#' strings. The function includes error handling for failed requests, non-200
+#' HTTP status codes, and other issues.
+#'
+#' @details The function performs HTTP GET requests and either parses the HTML
+#' content or returns it as a string, depending on the `return_type` argument.
+#' If an error occurs (e.g., network issues, invalid URLs), or if the HTTP
+#' status is 400 or above, the function will handle the error gracefully and
+#' return `NULL` for that URL.
+#'
+#' @param urls A character vector containing one or more URLs. If a single URL
+#' is provided as a string, it will be converted to a vector internally.
+#' @param return_type A character string specifying the return type. Options
+#' are `"html"` (default) to return parsed HTML documents using
+#' `httr2::resp_body_html()` or `"string"` to return raw HTML as strings
+#' using `httr2::resp_body_string()`.
+#'
+#' @return If a single URL is provided, the function returns the requested
+#' content (HTML document or raw HTML string). If multiple URLs are provided,
+#' the function returns a list of the requested content (or `NULL` if a request
+#'  fails).
+#'
+#' @keywords internal
+#'
+fetchHTML <- function(urls, return_type = c("html", "string")) {
+  return_type <- match.arg(return_type)
+
+  # Ensure `urls` is a vector, even if a single URL is provided
+  if (!is.vector(urls)) {
+    urls <- c(urls)
+  }
+
+  # Function to handle a single request
+  get_content <- function(url) {
+    req <- httr2::request(url)
+    if (is.null(req)) {
+      return(NULL)
+    }
+
+    tryCatch({
+      resp <- httr2::req_perform(req)
+      status <- httr2::resp_status(resp)
+
+      if (status < 400) {
+        if (return_type == "html") {
+          return(httr2::resp_body_html(resp))
+        } else if (return_type == "string") {
+          raw_html <- httr2::resp_body_string(resp)
+          if (nzchar(raw_html)) {
+            return(raw_html)
+          } else {
+            return(NULL)
+          }
+        }
+      } else {
+        message("Request failed for URL: ", url, " (status: ", status, ")")
+        return(NULL)
+      }
+    }, error = function(e) {
+      message("Error fetching URL: ", url, " (error: ", e$message, ")")
+      return(NULL)
+    })
+  }
+
+  # Apply the function to a list of URLs
+  contents <- lapply(urls, get_content)
+
+  # Return the content if a single URL was provided, otherwise return a list
+  if (length(contents) == 1) {
+    return(contents[[1]])
+  }
+  return(contents)
+}
+
 # Team Page -------------------------------------------------------------------
-#------------------------------------------------------------------------------
+
 #' Get cheerleaders
 #'
 #' Query the team wiki page for a list of cheerleaders and url to their
@@ -15,9 +92,11 @@
 #'
 getCheerleaders <- function(team_url) {
 
-  html_content <- httr2::request(team_url) |>
-    httr2::req_perform() |>
-    httr2::resp_body_html()
+  # html_content <- httr2::request(team_url) |>
+  #   httr2::req_perform() |>
+  #   httr2::resp_body_html()
+
+  html_content <- fetchHTML(team_url, "html")
 
   xml_tables <- rvest::html_nodes(html_content, "table")
 
@@ -131,9 +210,7 @@ getTeamPhotos <- function(team_data) {
 
   for (team in seq_along(team_data$url)) {
 
-    html_content <- httr2::request(team_data$url[[team]]) |>
-      httr2::req_perform() |>
-      httr2::resp_body_html()
+    html_content <- fetchHTML(team_data$url[[team]], "html")
 
     team_image_url <- html_content |>
       rvest::html_node("tr td img[src$='.webp']") |>
@@ -219,9 +296,7 @@ getTeamCap <- function(team_caps) {
   )
 }
 
-#------------------------------------------------------------------------------
 # Cheerleader page ------------------------------------------------------------
-#------------------------------------------------------------------------------
 
 #' Get Cheerleader Page
 #'
@@ -252,25 +327,7 @@ getCheerleaderPage <- function(wiki_url, cheerleader_url, values) {
     url = "https://en.namu.wiki/w/%EA%B9%80%ED%95%9C%EC%8A%AC(1996)"
   }
 
-  req <- httr2::request(url)
-
-  if (is.null(req)) {
-    return(NULL)
-  }
-
-  html_content <- tryCatch({
-    resp <- httr2::req_perform(req)
-    status <- httr2::resp_status(resp)
-    if (status < 400) {
-      httr2::resp_body_html(resp)
-    } else {
-      message("The requested cheerleader page is not available.", status)
-      return(NULL)
-    }
-  }, error = function(e) {
-    message("Error in fetching the cheerleader page: ", e$message)
-    return(NULL)
-  })
+  html_content <- fetchHTML(url, "html")
 
   if (is.null(html_content)) {
     return(list(
@@ -452,9 +509,7 @@ getCheerleaderPhotos <- function(bio_tables, cheer_data) {
 }
 
 
-#------------------------------------------------------------------------------
-# Social Media Functions
-#------------------------------------------------------------------------------
+# Social Media Functions ------------------------------------------------------
 
 # YouTube ---------------------------------------------------------------------
 
@@ -471,11 +526,9 @@ getCheerleaderPhotos <- function(bio_tables, cheer_data) {
 extractChannelID <- function(url) {
 
   if (stringr::str_detect(url, "@")) {
-    page <- tryCatch({
-      response <- httr2::request(url) |>
-        httr2::req_perform() |>
-        httr2::resp_body_string()
 
+    page <- tryCatch({
+      response <- fetchHTML(url, "string")
       if (nzchar(response)) {
         rvest::read_html(response) |>
           rvest::html_text2()
@@ -643,13 +696,8 @@ getTikTok <- function(cheer_data) {
 
     if (length(tt_link) != 0) {
       tt_link <- tt_link[1]
-      page <- tryCatch({
-        httr2::request(tt_link) |>
-          httr2::req_perform() |>
-          httr2::resp_body_string()
-      }, error = function(e) {
-        return(NULL)
-      })
+
+      page <- fetchHTML(tt_link, "string")
 
       tt_name <- stringr::str_extract(tt_link, "(?<=/)[^/]+/?$")
 
@@ -911,8 +959,8 @@ fatDistroPlot <- function(ultra_combo) {
 }
 
 
-#==============================================================================
-#'
+# Backup/Historical -----------------------------------------------------------
+
 #' Backup Data
 #'
 #' Backup /data and /www and all contents. Store in timestamped folder.
@@ -1027,8 +1075,3 @@ loadHistoricalData <- function(base_path = "../") {
   }
   return(historic)
 }
-
-
-
-
-
