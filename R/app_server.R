@@ -64,3 +64,6 @@ app_server <- function(input, output, session) {
 
   mod_leaderboard_server("leaderboard")
 }
+
+#' @export
+app_server

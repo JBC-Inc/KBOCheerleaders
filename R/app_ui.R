@@ -40,3 +40,6 @@ app_ui <- function() {
     )
   )
 }
+
+#' @export
+app_ui
