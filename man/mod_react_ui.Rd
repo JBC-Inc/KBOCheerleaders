@@ -15,3 +15,4 @@ Shiny reactive output
 \description{
 Reactable UI
 }
+\keyword{internal}

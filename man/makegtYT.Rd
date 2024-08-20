@@ -20,3 +20,4 @@ Function takes all cheerleader social media metrics and generates
 the YouTube leaderboard for top (x) cheerleaders with the most
 YouTube followers.
 }
+\keyword{internal}

@@ -24,3 +24,4 @@ data.frame with YouTube statistics
 \description{
 Get Cheerleader YouTube Statistics.
 }
+\keyword{internal}

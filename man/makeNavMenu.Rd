@@ -12,3 +12,4 @@ bslib::nav_menu object
 \description{
 Shiny app navbar menu w/links
 }
+\keyword{internal}

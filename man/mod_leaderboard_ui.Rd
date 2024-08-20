@@ -15,3 +15,4 @@ Shiny reactive UI output
 \description{
 Leaderboard UI
 }
+\keyword{internal}

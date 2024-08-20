@@ -15,3 +15,4 @@ side effect is to download the team_cap/* images.
 \description{
 Save team cap insignia
 }
+\keyword{internal}

@@ -15,3 +15,4 @@ side effect is to download the team_logos/* images.
 \description{
 Download the team logo.
 }
+\keyword{internal}

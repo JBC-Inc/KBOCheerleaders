@@ -21,3 +21,4 @@ ex. KBO_Cheerleaders_Backup_20240817_201241/data
 /www/team_img
 /www/team_logo
 }
+\keyword{internal}

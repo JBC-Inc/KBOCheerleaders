@@ -12,6 +12,7 @@
 #' @param f3 ggplot2 distribution
 #'
 #' @return bslib::page_fillable
+#' @keywords internal
 #'
 makeStatsPage <- function(fat, f1, f2, f3) {
 
@@ -117,6 +118,7 @@ makeStatsPage <- function(fat, f1, f2, f3) {
 #' @param leader_data reactive list of ultra_combo and teams
 #'
 #' @return `reactable::reactable`
+#' @keywords internal
 #'
 makeReactable <- function(leader_data) {
 
@@ -292,6 +294,7 @@ makeReactable <- function(leader_data) {
 #' @param cheerBio namespace for cheerBio ui
 #'
 #' @return Cheerleader bslib UI elements
+#' @keywords internal
 #'
 makeCheerleader <- function(td, smm, cheerleader, cheerPhoto, cheerBio) {
 
@@ -426,6 +429,7 @@ makeCheerleader <- function(td, smm, cheerleader, cheerPhoto, cheerBio) {
 #' ex. 3 weeks data for top 5 cheerleaders = 15
 #'
 #' @return gt
+#' @keywords internal
 #'
 makegtYT <- function(ultra_combo, top_count) {
 
@@ -495,6 +499,7 @@ makegtYT <- function(ultra_combo, top_count) {
 #' ex. 3 weeks data for top 5 cheerleaders = 15
 #'
 #' @return gt
+#' @keywords internal
 #'
 makegtInst <- function(ultra_combo, top_count) {
 
@@ -558,6 +563,7 @@ makegtInst <- function(ultra_combo, top_count) {
 #' ex. 3 weeks data for top 5 cheerleaders = 15
 #'
 #' @return gt
+#' @keywords internal
 #'
 makegtTT <- function(ultra_combo, top_count) {
 
@@ -623,6 +629,7 @@ makegtTT <- function(ultra_combo, top_count) {
 #' @param leaderTT namespace for tiktok leaderboard
 #'
 #' @return nice bslib card layout
+#' @keywords internal
 #'
 makeLeaderboards <- function(leaderYT, leaderInst, leaderTT) {
 
@@ -704,6 +711,7 @@ makeLeaderboards <- function(leaderYT, leaderInst, leaderTT) {
 #' @param capInsignia namespace for cap insignia ui
 #'
 #' @return nice bslib card layout
+#' @keywords internal
 #'
 makeTeam <- function(td, teamPhoto, teamLogo, capInsignia) {
 
@@ -764,6 +772,7 @@ makeTeam <- function(td, teamPhoto, teamLogo, capInsignia) {
 #' Shiny app title
 #'
 #' @return shiny tags for the app title
+#' @keywords internal
 #'
 makeTitle <- function() {
   shiny::tags$div(
@@ -783,6 +792,7 @@ makeTitle <- function() {
 #' Shiny app navbar menu w/links
 #'
 #' @return bslib::nav_menu object
+#' @keywords internal
 #'
 makeNavMenu <- function() {
   bslib::nav_menu(
@@ -809,6 +819,7 @@ makeNavMenu <- function() {
 #' @param selected_cheerleader input$'cheer-cheerleader'
 #'
 #' @return commands to be sent to update the app UI.
+#' @keywords internal
 #'
 updateUI <- function(session,
                      state,
@@ -845,12 +856,6 @@ updateUI <- function(session,
     }
   )
 }
-
-
-
-
-
-
 
 
 

@@ -17,3 +17,4 @@ Query the team wiki page for a list of cheerleaders and url to their
 personal pages. Iterates through a list of all the cheerleaders for
 all teams.
 }
+\keyword{internal}

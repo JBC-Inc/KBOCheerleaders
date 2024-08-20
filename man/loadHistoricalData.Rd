@@ -16,3 +16,4 @@ data.frame with cheerleader historical social media metrics
 Will be run weekly after backups to gather historical social media metrics.
 Used in leaderboard sparkline plots.
 }
+\keyword{internal}

@@ -3,6 +3,7 @@
 #' @param id  @param id A unique identifier string for the module’s UI.
 #'
 #' @return shiny::uiOutput
+#' @keywords internal
 #'
 mod_stats_ui <- function(id) {
   ns <- shiny::NS(id)
@@ -18,10 +19,46 @@ mod_stats_ui <- function(id) {
 #'  - image
 #'
 #' @return ggplot2 with interactive team logo
+#' @keywords internal
 #'
-mod_stats_server <- function(id, agg_follow) {
+mod_stats_server <- function(id, agg_follow, plot_click, sesh) {
   shiny::moduleServer(id, function(input, output, session) {
     ns <- session$ns
+
+    pc <- shiny::reactive({
+      plot_click()
+    })
+
+    agg_follow <- shiny::reactive(label = "Followers Across Teams", {
+
+      ultra_combo |>
+        dplyr::rowwise() |>
+        dplyr::mutate(
+          followers = sum(c(subs, instagram_followers, tiktok_followers),
+                          na.rm =TRUE)) |>
+        dplyr::group_by(team, color, team_img) |>
+        dplyr::summarize(followers = sum(followers), .groups = 'drop') |>
+        dplyr::arrange(dplyr::desc(followers))
+    })
+
+    shiny::observeEvent(pc(), label = "Plot click team logo", {
+
+      point <- shiny::nearPoints(
+        df = agg_follow(),
+        coordinfo = pc(),
+        xvar = 'team',
+        threshold = 42,
+        maxpoints = 1,
+        addDist = TRUE
+      )
+
+      if (nrow(point) != 0) {
+        updateUI(session = sesh,
+                 state = "followers",
+                 team = point$team,
+                 cheerleader = character(0))
+      }
+    })
 
     output$stats <- shiny::renderUI({
       makeStatsPage(ns("fat"), ns("f1"), ns("f2"), ns("f3"))

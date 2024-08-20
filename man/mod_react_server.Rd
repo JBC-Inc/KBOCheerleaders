@@ -19,3 +19,4 @@ side effect render the reactable
 A reactable with expanding rows, for each team display all the cheerleaders
 for that team, and their followers statistics.
 }
+\keyword{internal}

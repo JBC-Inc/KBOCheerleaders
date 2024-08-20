@@ -12,3 +12,4 @@ shiny tags for the app title
 \description{
 Shiny app title
 }
+\keyword{internal}

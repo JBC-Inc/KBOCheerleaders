@@ -16,3 +16,4 @@ it in the local directory.
 \description{
 Iterate through all the team page data to download each team photo.
 }
+\keyword{internal}

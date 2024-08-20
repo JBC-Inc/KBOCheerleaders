@@ -7,6 +7,7 @@
 #'  - Team song toggle switch
 #'  - UI for team song
 #'  - UI for piki piki song
+#'  @keywords internal
 #'
 mod_song_ui <- function(id) {
   ns <- shiny::NS(id)
@@ -30,6 +31,7 @@ mod_song_ui <- function(id) {
 #' module's UI function.
 #'
 #' @return reactive url of the selected team song.
+#' @keywords internal
 #'
 mod_song_server <- function(id, td) {
   shiny::moduleServer(id, function(input, output, session) {

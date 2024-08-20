@@ -17,3 +17,4 @@ side effect is to save the image to /cheerleader_img
 \description{
 Get Cheerleader Photo
 }
+\keyword{internal}

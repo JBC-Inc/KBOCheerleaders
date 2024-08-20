@@ -22,3 +22,4 @@ data.frame with Instagram statistics
 \description{
 Get Cheerleader Instagram Statistics.
 }
+\keyword{internal}

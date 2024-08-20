@@ -19,3 +19,4 @@ nice bslib card layout
 \description{
 Houses the 3 gt Leaderboard tables
 }
+\keyword{internal}

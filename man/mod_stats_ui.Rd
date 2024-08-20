@@ -15,3 +15,4 @@ shiny::uiOutput
 \description{
 User Interface module for team followers
 }
+\keyword{internal}

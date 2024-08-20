@@ -16,3 +16,4 @@ character vector of cheerleader url links and names
 Query the team wiki page for a list of cheerleaders and url to their
 personal pages.
 }
+\keyword{internal}

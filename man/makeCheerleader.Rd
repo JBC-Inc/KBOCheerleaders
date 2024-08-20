@@ -23,3 +23,4 @@ Cheerleader bslib UI elements
 \description{
 Generate Cheerleader Image, Biography and Social Metric cards.
 }
+\keyword{internal}

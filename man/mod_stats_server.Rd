@@ -4,7 +4,7 @@
 \alias{mod_stats_server}
 \title{Team followers server}
 \usage{
-mod_stats_server(id, agg_follow)
+mod_stats_server(id, agg_follow, plot_click, sesh)
 }
 \arguments{
 \item{id}{An ID string that corresponds with the ID used to call the module's UI function.}
@@ -22,3 +22,4 @@ ggplot2 with interactive team logo
 \description{
 Team followers server
 }
+\keyword{internal}

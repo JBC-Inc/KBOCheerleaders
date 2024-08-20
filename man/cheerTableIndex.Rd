@@ -18,3 +18,4 @@ integer of the table index the cheerleader list belongs to.
 \description{
 Get the index of the cheerleader table
 }
+\keyword{internal}

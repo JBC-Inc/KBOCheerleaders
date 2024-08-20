@@ -4,6 +4,7 @@
 #' @param id A unique identifier string for the module’s UI.
 #'
 #' @return Shiny reactive output
+#' @keywords internal
 #'
 mod_react_ui <- function(id) {
   ns <- shiny::NS(id)
@@ -22,6 +23,7 @@ mod_react_ui <- function(id) {
 #' @param td reactive team_data
 #'
 #' @return side effect render the reactable
+#' @keywords internal
 #'
 mod_react_server <- function(id, td) {
   shiny::moduleServer(id, function(input, output, session) {

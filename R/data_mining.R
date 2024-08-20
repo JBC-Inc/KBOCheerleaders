@@ -11,6 +11,7 @@
 #' @param team_url team_data$url
 #'
 #' @return character vector of cheerleader url links and names
+#' @keywords internal
 #'
 getCheerleaders <- function(team_url) {
 
@@ -61,6 +62,7 @@ getCheerleaders <- function(team_url) {
 #'                cheerleader tables share
 #'
 #' @return integer of the table index the cheerleader list belongs to.
+#' @keywords internal
 #'
 cheerTableIndex <- function(tables, keyword) {
   index <- purrr::map_lgl(tables, ~ {
@@ -89,6 +91,7 @@ cheerTableIndex <- function(tables, keyword) {
 #' @param team_url team_data$url
 #'
 #' @return data.frame with the team, cheerleader name and their page url.
+#' @keywords internal
 #'
 getTeamCheerleaders <- function(team_url) {
 
@@ -118,6 +121,7 @@ getTeamCheerleaders <- function(team_url) {
 #'
 #' @return side effect is to download the team photo for each team and store
 #' it in the local directory.
+#' @keywords internal
 #'
 getTeamPhotos <- function(team_data) {
 
@@ -172,6 +176,7 @@ getTeamPhotos <- function(team_data) {
 #' @param team_logos team_logos
 #'
 #' @return side effect is to download the team_logos/* images.
+#' @keywords internal
 #'
 getTeamLogos <- function(team_logos) {
   dir_path <- "./www/team_logo"
@@ -195,6 +200,7 @@ getTeamLogos <- function(team_logos) {
 #' @param team_caps team_caps
 #'
 #' @return side effect is to download the team_cap/* images.
+#' @keywords internal
 #'
 getTeamCap <- function(team_caps) {
   dir_path <- "./www/team_cap"
@@ -235,6 +241,7 @@ getTeamCap <- function(team_caps) {
 #'  - data.frame the cheerleaders biography
 #'  - list the cheerleaders biography as html node
 #'  - character vector of social media links
+#' @keywords internal
 #'
 getCheerleaderPage <- function(wiki_url, cheerleader_url, values) {
 
@@ -398,6 +405,7 @@ getCheerleaderPage <- function(wiki_url, cheerleader_url, values) {
 #' @param values values to match on that exist in all cheerleader tables.
 #'
 #' @return list all cheerleaders bio(HTML, data.frame) and social media links
+#' @keywords internal
 #'
 cheerData <- function(wiki_url, team_cheerleaders, values) {
 
@@ -412,6 +420,7 @@ cheerData <- function(wiki_url, team_cheerleaders, values) {
 #' @param cheer_data all cheerleader table data
 #'
 #' @return side effect is to save the image to /cheerleader_img
+#' @keywords internal
 #'
 getCheerleaderPhotos <- function(bio_tables, cheer_data) {
 
@@ -457,6 +466,7 @@ getCheerleaderPhotos <- function(bio_tables, cheer_data) {
 #' @param url Cheerleader YouTube URL
 #'
 #' @return channel_id
+#' @keywords internal
 #'
 extractChannelID <- function(url) {
 
@@ -506,6 +516,7 @@ extractChannelID <- function(url) {
 #'  - Video count
 #'  - Cheerleader team
 #'  - Type of social media platform
+#' @keywords internal
 #'
 getYouTube <- function(cheer_data) {
 
@@ -556,6 +567,7 @@ getYouTube <- function(cheer_data) {
 #'  - Instagram followers
 #'  - Cheerleader team
 #'  - Type of social media platform
+#' @keywords internal
 #'
 getInstagram <- function(cheer_data) {
 
@@ -613,6 +625,7 @@ getInstagram <- function(cheer_data) {
 #'  - TikTok likes count
 #'  - Cheerleader team
 #'  - Type of social media platform
+#' @keywords internal
 #'
 getTikTok <- function(cheer_data) {
 
@@ -673,6 +686,7 @@ getTikTok <- function(cheer_data) {
 #' @param tiktok tiktok
 #'
 #' @return data.frame with 14 columns
+#' @keywords internal
 #'
 ultraCombo <- function(team_cheerleaders, youtube, instagram, tiktok) {
 
@@ -733,6 +747,7 @@ ultraCombo <- function(team_cheerleaders, youtube, instagram, tiktok) {
 #' @param ultra_combo followers across teams data.frame
 #'
 #' @return ggplot2 with team logo images
+#' @keywords internal
 #'
 fatPlot <- function(ultra_combo) {
 
@@ -780,6 +795,7 @@ fatPlot <- function(ultra_combo) {
 #'  - capped outliers @ 100k
 #'  - log scale 1k - 1M
 #'  - 95% percentile
+#' @keywords internal
 #'
 fatDistroPlot <- function(ultra_combo) {
 
@@ -909,6 +925,7 @@ fatDistroPlot <- function(ultra_combo) {
 #'                                            /www/team_logo
 #' @return side effect is to make the historical backup data that will later
 #' be extracted for 'historical' trendlines within the leaderboards.
+#' @keywords internal
 #'
 backup <- function() {
 
@@ -977,6 +994,7 @@ backup <- function() {
 #' @param base_path backup folders directory
 #'
 #' @return data.frame with cheerleader historical social media metrics
+#' @keywords internal
 #'
 loadHistoricalData <- function(base_path = "../") {
 

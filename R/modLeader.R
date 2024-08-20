@@ -4,6 +4,7 @@
 #' @param id A unique identifier string for the module’s UI.
 #'
 #' @return Shiny reactive UI output
+#' @keywords internal
 #'
 mod_leaderboard_ui <- function(id) {
   ns <- shiny::NS(id)
@@ -28,6 +29,7 @@ mod_leaderboard_ui <- function(id) {
 #'  - leaderInst
 #'  - leaderTT
 #'  using gt tables and dynamically generate UI elements for display.
+#' @keywords internal
 #'
 mod_leaderboard_server <- function(id) {
   shiny::moduleServer(id, function(input, output, session) {

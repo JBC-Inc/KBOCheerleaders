@@ -17,3 +17,4 @@ Reactable table with Cheerleader Teams and individual cheerleader
 stats such as total followers, YouTube subscribers, Instagram followers,
 and TikTok followers arranged in descending order.
 }
+\keyword{internal}

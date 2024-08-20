@@ -15,3 +15,4 @@ ggplot2 with team logo images
 \description{
 Allows faster loading times.
 }
+\keyword{internal}

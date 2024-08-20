@@ -3,6 +3,7 @@
 #' @param id  @param id A unique identifier string for the module’s UI.
 #'
 #' @return list of shiny reactive input and output.
+#' @keywords internal
 #'
 mod_team_ui <- function(id) {
   ns <- shiny::NS(id)
@@ -28,6 +29,7 @@ mod_team_ui <- function(id) {
 #'  - team photo
 #'  - team logo
 #'  - team cap insignia
+#' @keywords internal
 #'
 mod_team_server <- function(id, td) {
   shiny::moduleServer(id, function(input, output, session) {

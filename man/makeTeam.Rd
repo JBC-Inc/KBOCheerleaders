@@ -21,3 +21,4 @@ nice bslib card layout
 \description{
 Make the team photo, logo and hat insignia card layouts.
 }
+\keyword{internal}

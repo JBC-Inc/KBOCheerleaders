@@ -20,3 +20,4 @@ list all cheerleaders bio(HTML, data.frame) and social media links
 Iterate over team cheerleader URLs to make the list of HTML, data.frame
 and link vectors.
 }
+\keyword{internal}

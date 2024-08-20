@@ -20,3 +20,4 @@ Function takes all cheerleader social media metrics and generates
 the Instagram leaderboard for top (x) cheerleaders with the most
 Instagram followers.
 }
+\keyword{internal}

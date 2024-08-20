@@ -26,6 +26,7 @@ mod_cheer_ui <- function(id) {
 #'  - Radio buttons for selecting a cheerleader
 #'  - UI Elements to display the cheerleaders photo
 #'  - DT:: for displaying the cheerleaders biography or data.
+#'  @keywords internal
 #'
 mod_cheer_server <- function(id, td, smm) {
   shiny::moduleServer(id, function(input, output, session) {

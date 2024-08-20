@@ -10,6 +10,7 @@
 #'  - Favicon
 #'  - Font Links
 #'  - Custom JS Handles
+#'  @keywords internal
 #'
 addExternalResources <- function() {
 

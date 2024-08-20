@@ -26,3 +26,4 @@ of followers by platform.
 \details{
 These are all the UI cards that contain the actual plot outputs
 }
+\keyword{internal}
