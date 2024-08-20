@@ -3,11 +3,11 @@
 #'
 #' @param id A unique identifier string for the module’s UI.
 #'
+#' @keywords internal
 #' @return list of Shiny reactive input and output:
 #'  - Team song toggle switch
 #'  - UI for team song
 #'  - UI for piki piki song
-#'  @keywords internal
 #'
 mod_song_ui <- function(id) {
   ns <- shiny::NS(id)

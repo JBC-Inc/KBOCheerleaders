@@ -16,3 +16,4 @@ app_server(input, output, session)
 \description{
 Server function for the application
 }
+\keyword{internal}

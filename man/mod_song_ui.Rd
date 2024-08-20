@@ -15,9 +15,9 @@ list of Shiny reactive input and output:
 \item Team song toggle switch
 \item UI for team song
 \item UI for piki piki song
-@keywords internal
 }
 }
 \description{
 Song UI
 }
+\keyword{internal}

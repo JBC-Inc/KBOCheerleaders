@@ -4,6 +4,8 @@
 #' @param output Internal parameter for `{shiny}`
 #' @param session Internal parameter for `{shiny}`
 #'
+#' @keywords internal
+#'
 app_server <- function(input, output, session) {
 
   mod_song_server("song", td)

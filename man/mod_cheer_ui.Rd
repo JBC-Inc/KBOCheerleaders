@@ -15,3 +15,4 @@ list of Shiny reactive outputs.
 \description{
 Cheerleader UI
 }
+\keyword{internal}

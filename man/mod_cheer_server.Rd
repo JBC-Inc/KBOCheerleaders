@@ -21,9 +21,9 @@ for selecting and displaying cheerleader information:
 \item Radio buttons for selecting a cheerleader
 \item UI Elements to display the cheerleaders photo
 \item DT:: for displaying the cheerleaders biography or data.
-@keywords internal
 }
 }
 \description{
 Title
 }
+\keyword{internal}

@@ -25,6 +25,7 @@ Imports:
     lubridate,
     magick,
     purrr,
+    reactable,
     rvest,
     shiny,
     shinycssloaders,
@@ -35,11 +36,12 @@ Imports:
     tidyr,
     tuber,
     YTAnalytics
-Depends: 
-    R (>= 2.10),
-    tidyverse
+Remotes:
+    JBC-Inc/KBOCheerleaders
 Suggests: 
     devtools,
     rsconnect,
     usethis
+Depends: 
+    R (>= 2.10)
 LazyData: false

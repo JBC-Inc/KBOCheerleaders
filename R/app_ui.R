@@ -1,4 +1,9 @@
 
+#' Shiny Application User Interface
+#'
+#' @return Shiny App ui
+#' @keywords internal
+#'
 app_ui <- function() {
   bslib::page_sidebar(
     addExternalResources(),
