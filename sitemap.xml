@@ -5,9 +5,11 @@
 <url><loc>https://jbc-inc.github.io/KBOCheerleaders/index.html</loc></url>
 <url><loc>https://jbc-inc.github.io/KBOCheerleaders/reference/addExternalResources.html</loc></url>
 <url><loc>https://jbc-inc.github.io/KBOCheerleaders/reference/app_server.html</loc></url>
+<url><loc>https://jbc-inc.github.io/KBOCheerleaders/reference/app_ui.html</loc></url>
 <url><loc>https://jbc-inc.github.io/KBOCheerleaders/reference/backup.html</loc></url>
 <url><loc>https://jbc-inc.github.io/KBOCheerleaders/reference/cheerData.html</loc></url>
 <url><loc>https://jbc-inc.github.io/KBOCheerleaders/reference/cheerTableIndex.html</loc></url>
+<url><loc>https://jbc-inc.github.io/KBOCheerleaders/reference/cheer_data.html</loc></url>
 <url><loc>https://jbc-inc.github.io/KBOCheerleaders/reference/extractChannelID.html</loc></url>
 <url><loc>https://jbc-inc.github.io/KBOCheerleaders/reference/fatDistroPlot.html</loc></url>
 <url><loc>https://jbc-inc.github.io/KBOCheerleaders/reference/fatPlot.html</loc></url>
@@ -45,8 +47,10 @@
 <url><loc>https://jbc-inc.github.io/KBOCheerleaders/reference/mod_stats_ui.html</loc></url>
 <url><loc>https://jbc-inc.github.io/KBOCheerleaders/reference/mod_team_server.html</loc></url>
 <url><loc>https://jbc-inc.github.io/KBOCheerleaders/reference/mod_team_ui.html</loc></url>
-<url><loc>https://jbc-inc.github.io/KBOCheerleaders/reference/run_app.html</loc></url>
+<url><loc>https://jbc-inc.github.io/KBOCheerleaders/reference/team_cheerleaders.html</loc></url>
+<url><loc>https://jbc-inc.github.io/KBOCheerleaders/reference/team_data.html</loc></url>
 <url><loc>https://jbc-inc.github.io/KBOCheerleaders/reference/ultraCombo.html</loc></url>
+<url><loc>https://jbc-inc.github.io/KBOCheerleaders/reference/ultra_combo.html</loc></url>
 <url><loc>https://jbc-inc.github.io/KBOCheerleaders/reference/updateUI.html</loc></url>
 </urlset>
 
