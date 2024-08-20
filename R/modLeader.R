@@ -44,11 +44,11 @@ mod_leaderboard_server <- function(id) {
     })
 
     output$leaderYT <- gt::render_gt({
-      makegtYT(ultra_combo, 20)
+      makegtYT(ultra_combo, 10)
     })
 
     output$leaderInst <- gt::render_gt({
-      makegtInst(ultra_combo, 20)
+      makegtInst(ultra_combo, 10)
     })
 
     output$leaderTT <- gt::render_gt({
