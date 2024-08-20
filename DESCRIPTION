@@ -26,6 +26,7 @@ Imports:
     magick,
     purrr,
     reactable,
+    readr,
     rvest,
     shiny,
     shinycssloaders,
