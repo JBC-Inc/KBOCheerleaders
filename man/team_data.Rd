@@ -12,6 +12,9 @@ A data frame with X rows and Y columns:
 \item{color}{A character vector of team themesong urls on YouTube.}
 }
 }
+\source{
+"Extracted from namuwiki pages."
+}
 \usage{
 team_data
 }

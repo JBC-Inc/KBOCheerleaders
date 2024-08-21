@@ -13,7 +13,7 @@ A data frame with 97 rows and 3 columns:
 }
 }
 \source{
-Data source (if applicable). For example, "Extracted from team wiki pages."
+"Extracted from namuwiki pages."
 }
 \usage{
 team_cheerleaders

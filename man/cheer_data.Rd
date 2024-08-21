@@ -12,7 +12,7 @@ A list of cheerleader details where each entry is a list with two components:
 }
 }
 \source{
-Data source (if applicable). For example, "Extracted from individual cheerleader profile pages."
+"Extracted from namuwiki cheerleader profile pages."
 }
 \usage{
 cheer_data

@@ -15,9 +15,9 @@ adds external resources to the Shiny app by returning a
 \item Favicon
 \item Font Links
 \item Custom JS Handles
-@keywords internal
 }
 }
 \description{
 Make scripts available to their components.
 }
+\keyword{internal}

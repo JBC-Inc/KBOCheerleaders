@@ -8,7 +8,7 @@
 A tibble with 138 rows and 15 columns.
 }
 \source{
-Data source (if applicable). For example, "Collected from social media profiles and team websites."
+"Collected from social media profiles (YouTube, Instagram, TikTok)."
 }
 \usage{
 ultra_combo
@@ -38,7 +38,6 @@ This dataset contains 138 rows and 15 columns with information on cheerleaders' 
 }
 \examples{
 data(ultra_combo)
-# Display the first few rows of the dataset
 head(ultra_combo)
 }
 \keyword{datasets}
