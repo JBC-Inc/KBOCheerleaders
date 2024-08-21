@@ -6,3 +6,12 @@ template:
     base_font:
       google: Roboto
     pkgdown-nav-height: 42px
+
+  reference:
+  - title: Built in Data Sets
+
+  contents:
+  - team_data
+  - team_cheerleaders
+  - cheer_data
+  - ultra_combo
