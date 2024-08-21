@@ -10,6 +10,7 @@
 #'   \item{url}{A character vector of team namuwiki urls.}
 #'   \item{color}{A character vector of team themesong urls on YouTube.}
 #' }
+#' @source "Extracted from namuwiki pages."
 #' @examples
 #' data(team_data)
 #' head(team_data)
@@ -27,7 +28,7 @@
 #'   \item{cheerleader}{A character vector of cheerleader names.}
 #'   \item{link}{A character vector of URLs to cheerleaders' profile pages.}
 #' }
-#' @source Data source (if applicable). For example, "Extracted from team wiki pages."
+#' @source "Extracted from namuwiki pages."
 #' @examples
 #' data(team_cheerleaders)
 #' head(team_cheerleaders)
@@ -52,7 +53,7 @@
 #'   \item{table}{A tibble with personal information attributes.}
 #'   \item{links}{A character vector of social media profile URLs.}
 #' }
-#' @source Data source (if applicable). For example, "Extracted from individual cheerleader profile pages."
+#' @source "Extracted from namuwiki cheerleader profile pages."
 #' @examples
 #' data(cheer_data)
 #' # Display details for the first cheerleader
@@ -82,9 +83,9 @@
 #'   \item{avg_views_per_video}{An integer vector for the average number of views per video, with `NA` for missing data.}
 #' }
 #' @format A tibble with 138 rows and 15 columns.
-#' @source Data source (if applicable). For example, "Collected from social media profiles and team websites."
+#' @source "Collected from social media profiles (YouTube, Instagram, TikTok)."
 #' @examples
 #' data(ultra_combo)
-#' # Display the first few rows of the dataset
 #' head(ultra_combo)
 "ultra_combo"
+
