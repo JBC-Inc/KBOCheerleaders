@@ -27,24 +27,30 @@ app_ui <- function() {
 
     bslib::navset_tab(
       id = "tabs",
-      bslib::nav_panel(value = "react", "Team Overview", mod_react_ui("react")$ui, ),
-      bslib::nav_panel(value = "stats", "Team Followers", mod_stats_ui("stats")),
+      bslib::nav_panel(
+        value = "react",
+        "Team Overview",
+        mod_react_ui("react")$ui
+        ),
+      bslib::nav_panel(
+        value = "stats",
+        "Team Followers",
+        mod_stats_ui("stats")$ui
+        ),
       bslib::nav_panel(
         value = "visual",
         "Cheerleader Insights",
         mod_team_ui("team")$ui,
         mod_cheer_ui("cheer")$ui
-      ),
+        ),
       bslib::nav_panel(
         value = "leader",
         "Top Cheerleaders",
         mod_leaderboard_ui("leaderboard")$ui
-      ),
+        ),
       bslib::nav_spacer(),
       makeNavMenu(),
     )
   )
 }
 
-#' @export
-app_ui

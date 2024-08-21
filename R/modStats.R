@@ -7,7 +7,9 @@
 #'
 mod_stats_ui <- function(id) {
   ns <- shiny::NS(id)
-  shiny::uiOutput(ns("stats"))
+  list(
+    ui = shiny::uiOutput(ns("stats"))
+  )
 }
 
 #' Team followers server
