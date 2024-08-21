@@ -7,9 +7,8 @@ template:
       google: Roboto
     pkgdown-nav-height: 42px
 
-  reference:
-  - title: Built in Data Sets
-
+reference:
+- title: Built in Data Sets
   contents:
   - team_data
   - team_cheerleaders
