@@ -2,7 +2,7 @@ pandoc: 3.1.11
 pkgdown: 2.1.0
 pkgdown_sha: ~
 articles: {}
-last_built: 2024-08-21T22:06Z
+last_built: 2024-08-21T22:44Z
 urls:
   reference: https://jbc-inc.github.io/KBOCheerleaders/reference
   article: https://jbc-inc.github.io/KBOCheerleaders/articles
