@@ -250,7 +250,13 @@ KBODataUpdate <- function() {
 
   # Ultra Combo ---------------------------------------------------------------
 
-  ultra_combo <- ultraCombo(team_cheerleaders, youtube, instagram, tiktok)
+  ultra_combo <- ultraCombo(team_cheerleaders,
+                            cheer_data,
+                            youtube,
+                            instagram,
+                            tiktok
+                            )
+
   usethis::use_data(ultra_combo, overwrite = TRUE)
 
   historic <- loadHistoricalData("../")
@@ -265,6 +271,15 @@ KBODataUpdate <- function() {
 
   print("Successfully made ultra_combo.rds, histori.rds, fat_plot.rds, fat_distro_plot.rds")
 
+  long <- makeUltraLong(ultra_combo)
+  usethis::use_data(long, overwrite = TRUE)
+
+  age_jitter_dist <- ageJitterDist(long, team_data)
+  usethis::use_data(age_jitter_dist, overwrite = TRUE)
+
+  age_dist <- ageDist(long)
+  usethis::use_data(age_dist, overwrite = TRUE)
+
 }
 
 
@@ -272,11 +287,15 @@ KBODataUpdate <- function() {
 # KBODataUpdate()
 
 # backup()
+# 8 weeks of observations
+#
 # 8.1.24  original made on 8.17.24
-# 8.17.24 2 week of social media updates
-# 8.24.24 1 week of social media updates
-
-
+# 8.17.24 2 weeks of social media metrics
+# 8.24.24 1 wk
+# 8.31.24 1 wk
+# 9.7.24  1 wk
+# 9.14.24 1 wk
+# 9.21.24 1 wk
 
 
 

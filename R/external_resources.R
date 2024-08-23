@@ -63,6 +63,19 @@ addExternalResources <- function() {
          Shiny.setInputValue('randcheer', Math.random());
        });
       });
+    ")),
+
+    # event handler
+
+    shiny::tags$script(shiny::HTML("
+      Shiny.addCustomMessageHandler('handler1', function(message){
+        var team = message[1];
+        var name = message[0];
+        //alert(`${name}, ${team}`);
+        Shiny.setInputValue('team-team', team);
+        Shiny.setInputValue('cheer-cheerleader', name);
+        Shiny.setInputValue('randcheer', Math.random());
+      });
     "))
 
     # shiny::tags$script(src = "https://kit.fontawesome.com/38ef58b8f5.js"),

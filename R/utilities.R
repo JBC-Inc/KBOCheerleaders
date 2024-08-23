@@ -14,11 +14,11 @@
 #' @return bslib::page_fillable
 #' @keywords internal
 #'
-makeStatsPage <- function(fat, f1, f2, f3) {
+makeStatsPage <- function(fat, f1, f2, f3, ajd, ad) {
 
   bslib::page_fillable(
 
-    # Followers aggregate team
+    # Followers aggregate team ----------
 
     bslib::layout_column_wrap(
       width = '900px',
@@ -50,7 +50,7 @@ makeStatsPage <- function(fat, f1, f2, f3) {
       )
     ),
 
-    # distributions
+    # distributions ---------------------
 
     bslib::layout_columns(
       width = '100%',
@@ -112,7 +112,63 @@ makeStatsPage <- function(fat, f1, f2, f3) {
       #   bslib::card_header("Average Followers per Platform (95% Percentile)", class = "bg-dark"),
       #   bslib::card_body(shiny::plotOutput("f4", height = '100%'))
       # )
+    ),
+
+    # Age Jitter Dist -------------------
+
+    bslib::layout_columns(
+      width = '100%',
+      col_widths = 12,
+      fixed_width = TRUE,
+
+      bslib::card(
+        id = "ajd",
+        height = 742,
+        full_screen = TRUE,
+        bslib::card_header(
+          "Distribution of Followers + Subscribers by Age Group",
+          class = "bg-dark"),
+        bslib::card_body(
+          shinycssloaders::withSpinner(
+            ui_element = plotly::plotlyOutput(ajd, height = '669px'),
+            image = "www/favicon-32x32.png",
+            image.width = 242,
+            image.height = 242,
+            caption = "...LOADING..."
+          )
+        )
+      )
+    ),
+
+    # Age Dist --------------------------
+
+    bslib::layout_columns(
+      width = '100%',
+      col_widths = 12,
+      fixed_width = TRUE,
+
+      bslib::card(
+        id = "ad",
+        height = 650,
+        full_screen = TRUE,
+        bslib::card_header(
+          "Distribution of followers Age Group/Platform",
+          class = "bg-dark"),
+        bslib::card_body(
+          shinycssloaders::withSpinner(
+            ui_element = plotly::plotlyOutput(ad, height = '570px'),
+            image = "www/favicon-32x32.png",
+            image.width = 242,
+            image.height = 242,
+            caption = "...LOADING..."
+          )
+        )
+      )
     )
+
+
+
+
   )
 }
 
@@ -877,7 +933,7 @@ updateUI <- function(session,
       shiny::updateRadioButtons(session, "cheer-cheerleader", selected = character(0))
     },
     "default" = {
-      # Handle any other states or do nothing
+
     }
   )
 }

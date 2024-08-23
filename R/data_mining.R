@@ -408,12 +408,16 @@ getCheerleaderPage <- function(wiki_url, cheerleader_url, values) {
       stringr::str_to_title(X2),
       X2)) |>
 
+    dplyr::mutate(X2 = stringr::str_replace_all(X2, "\\[.*?\\]", "")) |>
+    dplyr::mutate(X2 = stringr::str_replace_all(X2, "\\(\\s*", "("),
+                  X2 = stringr::str_replace_all(X2, "\\s*\\)", ")")) |>
+
     # blood type
     dplyr::mutate(X2 = stringr::str_replace_all(X2, "(?i)\\bab\\b", "AB")) |>
 
     # Myers-Briggs Type Indicator
     dplyr::mutate(X1 = dplyr::case_when(
-      X1 == "Mbti" ~ "MBTI",
+      X1 == "Mbti" ~ stringr::str_to_upper(X1),
       TRUE ~ X1)) |>
     dplyr::mutate(X2 = dplyr::case_when(
       X1 == "MBTI" ~ stringr::str_to_upper(X2),
@@ -424,6 +428,7 @@ getCheerleaderPage <- function(wiki_url, cheerleader_url, values) {
     dplyr::mutate(previous_birth = cumsum(X1 == "Birth")) |>
     dplyr::mutate(X1 = dplyr::case_when(
       X1 == "Birth" ~ "Birthday",
+      X1 == "Birth Date" ~ "Birthday",
       TRUE ~ X1
     )) |>
     dplyr::mutate(X1 = dplyr::case_when(
@@ -440,9 +445,6 @@ getCheerleaderPage <- function(wiki_url, cheerleader_url, values) {
     dplyr::filter(X1 != "previous_agency") |>
 
     # cleanup
-    dplyr::mutate(X2 = stringr::str_replace_all(X2, "\\[.*?\\]", "")) |>
-    dplyr::mutate(X2 = stringr::str_replace_all(X2, "\\(\\s*", "("),
-                  X2 = stringr::str_replace_all(X2, "\\s*\\)", ")")) |>
     dplyr::select(-previous_birth, -previous_agency)
 
   list(
@@ -507,7 +509,6 @@ getCheerleaderPhotos <- function(bio_tables, cheer_data) {
     }
   }
 }
-
 
 # Social Media Functions ------------------------------------------------------
 
@@ -726,9 +727,12 @@ getTikTok <- function(cheer_data) {
   tiktok
 }
 
+# Ultra Combo -----------------------------------------------------------------
+
 #' All cheerleader/team data with social media metrics
 #'
 #' @param team_cheerleaders Cheerleader team, name and wiki url
+#' @param cheer_data cheerleader data table/links
 #' @param youtube youtube
 #' @param instagram instagram
 #' @param tiktok tiktok
@@ -736,7 +740,7 @@ getTikTok <- function(cheer_data) {
 #' @return data.frame with 14 columns
 #' @keywords internal
 #'
-ultraCombo <- function(team_cheerleaders, youtube, instagram, tiktok) {
+ultraCombo <- function(team_cheerleaders, cheer_data, youtube, instagram, tiktok) {
 
   yt <- youtube |> dplyr::select(name, subs, views, count, cat)
   inst <- instagram |> dplyr::select(name, followers, cat)
@@ -785,7 +789,69 @@ ultraCombo <- function(team_cheerleaders, youtube, instagram, tiktok) {
     dplyr::mutate(avg_views_per_video = as.integer(views / count)) |>
     dplyr::mutate(link = glue::glue('<a href="{wiki_url}{link}" target="_blank">{name}</a>'))
 
-  ultra_combo
+  # add age to ultra-combo
+  age <- processCheerleaders(cheer_data)
+
+  ultra_combo |>
+    dplyr::left_join(age, by = c("name" = "Name")) |>
+    dplyr::mutate(age = as.numeric(Age)) |>
+    dplyr::select(-Age)
+}
+
+#' Extracts age from the "Birth" or "Age" row of the cheerleaders table.
+#'
+#' @param text the value (X2) record of matching "Birthday" (X1) record.
+#'
+#' @return Cheerleaders Age or NA if could not extract.
+#'
+extractAge <- function(text) {
+
+  if (grepl(pattern = "Age", text)) {
+    inside_parentheses <- stringr::str_extract(text, "\\(.*\\)")
+    age_match <- stringr::str_extract(inside_parentheses, "\\d+")
+  } else {
+    age_match <- stringr::str_extract(text, "(?<=\\()\\d+(?=\\D*\\))")
+  }
+  if (is.na(age_match)) {
+    return(NA)
+  }
+  age_match
+}
+
+#' Process Cheerleader
+#'
+#' This function processes cheer_data, extracting age information from each
+#' data frame and returning a consolidated tibble with the cheerleader
+#' names and their respective ages.
+#'
+#' @param cheer_data A named list of data frames, where each data frame
+#' should have a `table` element containing cheerleader information.
+#' The names of the list elements are used to label the output.
+#'
+#' @return A tibble with two columns:
+#' \itemize{
+#'   \item \code{Name}: The name of the cheerleader
+#'   \item \code{Age}: The extracted age of the cheerleader, or \code{NA}
+#' }
+#'
+processCheerleaders <- function(cheerleaders_list) {
+
+  cheerleaders_list |>
+    purrr::imap_dfr(function(data, name) {
+      tibble_data <- data$table
+
+      age <- tibble_data |>
+        dplyr::filter(X1 %in% c("Birthday", "Birth Date", "Year Of Birth")) |>
+        dplyr::pull(X2) |>
+        purrr::map_chr(extractAge) |>
+        na.omit() |>
+        magrittr::extract(1)
+
+      tibble::tibble(
+        Name = name,
+        Age = if (!is.null(age)) age else NA_character_
+      )
+    })
 }
 
 #' Aggregate Team Followers plot
@@ -957,6 +1023,173 @@ fatDistroPlot <- function(ultra_combo) {
       f4 = f4
     ))
 }
+
+
+#' Ultra Combo transposed long for aggregate followers
+#'
+#' @param ultra_combo all the cheerleader data
+#'
+#' @return reshape long ultra_combo
+#'
+makeUltraLong <- function(ultra_combo) {
+
+  ultra_combo |>
+    dplyr::select(team, color, name, age, subs, instagram_followers, tiktok_followers) |>
+    tidyr::pivot_longer(
+      cols = c(subs, instagram_followers, tiktok_followers),
+      names_to = "platform",
+      values_to = "followers") |>
+    tidyr::drop_na(followers) |>
+    dplyr::mutate(
+      age_group = cut(
+        age,
+        breaks = c(15, 20, 25, 30, 40, 45),
+        right = FALSE,
+        labels = c("15-18", "20-24", "25-30", "30-40", "40-50")
+      )
+    )
+
+}
+
+
+#' Create interactive age distribution
+#'
+#' @param ultra_combo All the cheerleader and team data
+#'
+#' @return plotly object
+#' @keywords internal
+#'
+ageJitterDist <- function(long, team_data) {
+
+  team_colors <- c(
+    setNames(team_data$color, team_data$name)
+  )
+
+  p <- long |>
+    dplyr::filter(followers < 800000) |>
+    tidyr::drop_na() |>
+
+    ggplot2::ggplot(
+      ggplot2::aes(
+        x = as.factor(age_group),
+        y = followers,
+        color = team,
+        text = paste("Name:", name,
+                     "<br>Team:", team,
+                     "<br>Followers:", format(followers, big.mark = ","))
+      )
+    ) +
+
+    ggplot2::geom_boxplot(fill = "transparent", color = "black") +
+
+    ggplot2::geom_jitter(
+      ggplot2::aes(size = followers),
+      width = 0.2,
+      show.legend = TRUE
+    ) +
+
+    ggplot2::scale_color_manual(
+      values = team_colors
+    ) +
+    ggplot2::scale_y_continuous(
+      breaks = seq(0, 800000, 100000),
+      labels = scales::comma_format()
+    ) +
+    ggplot2::labs(
+      #title = "Distribution of Followers + Subscribers by Age Group",
+      x = "", y = "",
+      subtitle = "(Omission of outliers)",
+      color = "Team"
+      ) +
+    ggplot2::theme_minimal()
+
+  p_plotly <- plotly::ggplotly(
+    p = p,
+    source = "A",
+    tooltip = "text"
+    ) |>
+    plotly::layout(
+      legend = list(
+        title = list(
+          text = "Team"
+          )
+        )
+      ) |>
+    plotly::event_register(event = "plotly_click")
+
+  p_plotly$x$data[[1]]$hoverinfo <- "none"
+  p_plotly$x$data[[1]]$marker$opacity <- 0
+
+  p_plotly
+}
+
+
+#' Distribution of platforms by age groups
+#'
+#' @param ultra_combo all the cheerleader data with ages
+#'
+#' @return side effect is to return ggplot2 object with platform count
+#' metrics by age groups.
+#'
+#' @keywords internal
+#'
+ageDist <- function(long) {
+
+  platform_colors <- c(
+    "subs" = "#ff0000",               # Red for subs
+    "tiktok_followers" = "#000000",   # Black for tiktok_followers
+    "instagram_followers" = "purple" # Base color for instagram followers
+  )
+
+  long |>
+    dplyr::count(age_group, platform) |>
+    ggplot2::ggplot(
+      ggplot2::aes(
+        x = age_group,
+        y = n,
+        fill = platform)
+      ) +
+
+    ggplot2::geom_bar(stat = "identity", position = "stack", alpha = 0.7) +
+
+    ggplot2::scale_fill_manual(
+      values = platform_colors,
+      labels = c("Instagram", "YouTube", "TikTok")
+      ) +
+
+    ggplot2::scale_y_continuous(
+      breaks = seq(0, 200, by = 10),
+      labels = scales::comma_format()
+      ) +
+
+    ggplot2::labs(
+      title = "Distribution of Platforms by Age Group",
+      x = "Age Group",
+      y = "",
+      fill = "Platform"
+      ) +
+
+    ggplot2::theme_minimal() +
+    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1))
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # Backup/Historical -----------------------------------------------------------

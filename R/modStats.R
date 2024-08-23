@@ -66,7 +66,12 @@ mod_stats_server <- function(id, agg_follow, plot_click, sesh) {
     })
 
     output$stats <- shiny::renderUI({
-      makeStatsPage(ns("fat"), ns("f1"), ns("f2"), ns("f3"))
+      makeStatsPage(ns("fat"),
+                    ns("f1"),
+                    ns("f2"),
+                    ns("f3"),
+                    ns("ajd"),
+                    ns("ad"))
     })
 
     output$fat <- shiny::renderPlot({
@@ -112,5 +117,24 @@ mod_stats_server <- function(id, agg_follow, plot_click, sesh) {
     output$f3 <- shiny::renderPlot({
       fat_distro_plot[[3]]
     })
+
+    output$ajd <- plotly::renderPlotly({
+      age_jitter_dist
+    })
+
+    output$ad <- plotly::renderPlotly({
+      age_dist
+    })
   })
 }
+
+
+
+
+
+
+
+
+
+
+

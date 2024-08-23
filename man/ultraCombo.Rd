@@ -4,10 +4,12 @@
 \alias{ultraCombo}
 \title{All cheerleader/team data with social media metrics}
 \usage{
-ultraCombo(team_cheerleaders, youtube, instagram, tiktok)
+ultraCombo(team_cheerleaders, cheer_data, youtube, instagram, tiktok)
 }
 \arguments{
 \item{team_cheerleaders}{Cheerleader team, name and wiki url}
+
+\item{cheer_data}{cheerleader data table/links}
 
 \item{youtube}{youtube}
 

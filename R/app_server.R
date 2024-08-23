@@ -52,6 +52,19 @@ app_server <- function(input, output, session) {
     updateUI(session, state = "default")
   })
 
+  shiny::observeEvent(plotly::event_data(event = "plotly_click", source = "A"), {
+
+    point <- plotly::event_data("plotly_click", source = "A")
+
+    cheerleader <- long |>
+      dplyr::filter(abs(followers - point$y) < 2000) |>
+      dplyr::pull(name)
+
+    team <- team_cheerleaders$team[team_cheerleaders$cheerleader == cheerleader]
+
+    session$sendCustomMessage("handler1", list(cheerleader, team))
+  })
+
   mod_react_server("react", td)
 
   mod_stats_server(
@@ -67,5 +80,3 @@ app_server <- function(input, output, session) {
   mod_leaderboard_server("leaderboard")
 }
 
-#' @export
-app_server

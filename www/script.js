@@ -1,4 +1,4 @@
-
+/*
 $(document).on("click", ".cheerleader-photo", function() {
 
   var team = $(this).data("team");
@@ -19,16 +19,5 @@ $(document).on("click", ".team-photo", function() {
 
   Shiny.setInputValue("team", team);
   Shiny.setInputValue("cheerleader", "");
-});
-
-
-/*
-Shiny.addCustomMessageHandler("set_team", function(message) {
-  console.log("Received message for 'set_team':", JSON.stringify(message, null, 2));
-});
-
-// Custom message handler for "set_cheerleader"
-Shiny.addCustomMessageHandler("set_cheerleader", function(message) {
-  console.log("Received message for 'set_cheerleader':", JSON.stringify(message, null, 2));
 });
 */

@@ -16,12 +16,14 @@ data("keyword_image_mapping")        # List(name, img name)
 
   # ultra combo -------------------------
   data("ultra_combo")                # leaderboards, reactable, fat plot/distro
+  data("long")                       # ultra_combo reshape for age distributions
   data("historic")                   # historical ultra_combos (trend lines)
 
   # social media statistics -------------
   data("fat_plot")                   # followers all teams plot
-  data("fat_distro_plot")            # distributions plots
-
+  data("fat_distro_plot")            # density distributions plots
+  data("age_jitter_dist")            # boxplot distribution by age group
+  data("age_dist")                   # bar chart distribution by platform / age
 
 # values --------------------------------
 data("wiki_url")                     # wiki url prefix
