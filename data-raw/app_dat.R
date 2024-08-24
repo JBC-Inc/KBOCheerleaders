@@ -131,7 +131,7 @@
 
 #####
 
-KBODataUpdate <- function() {
+KBODataUpdate <- function(use_data = FALSE) {
 
   # Source all functions to backup/generate new data:
 
@@ -171,12 +171,16 @@ KBODataUpdate <- function() {
   # Team Cheerleaders/Team Photos ---------------------------------------------
 
   team_cheerleaders <-getTeamCheerleaders(team_data$url)
-  usethis::use_data(team_cheerleaders, overwrite = TRUE)
+  if (use_data) {
+    usethis::use_data(team_cheerleaders, overwrite = TRUE)
+  }
   print("Successfully made team_cheerleaders.rda")
 
   getTeamPhotos(team_data)
   team_photos <- list.files("./www/team_img")
-  usethis::use_data(team_photos, overwrite = TRUE)
+  if (use_data) {
+    usethis::use_data(team_photos, overwrite = TRUE)
+  }
   print("Successfully made team_photos.rda")
 
   # Cheerleader Data ----------------------------------------------------------
@@ -190,7 +194,9 @@ KBODataUpdate <- function() {
     as.character(cheerleader_data$bio_table)
   })
   names(bio_tables) <- names(cheer_data)
-  readr::write_rds(bio_tables, "./data/bio_tables.rds")
+  if (use_data) {
+    readr::write_rds(bio_tables, "./data/bio_tables.rds")
+  }
   print("Successfully made bio_data.rds")
 
 
@@ -205,7 +211,9 @@ KBODataUpdate <- function() {
   })
   cheer_data$`Hannah Kim`$table <- cheer_data$`Hannah Kim`$table[-1, ]
   cheer_data$`Hyein Na`$table <- cheer_data$`Hyein Na`$table[-1, ]
-  usethis::use_data(cheer_data, overwrite = TRUE)
+  if (use_data) {
+    usethis::use_data(cheer_data, overwrite = TRUE)
+  }
 
   # cheerleader photos
   getCheerleaderPhotos(bio_tables, cheer_data)
@@ -213,13 +221,12 @@ KBODataUpdate <- function() {
 
   # Social Media Data ---------------------------------------------------------
 
-  # authenticate youtube
+  # # authenticate youtube
   # file.remove(".httr-oauth")
   # tuber::yt_oauth(
   #   app_id = Sys.getenv("YT_CLIENT_ID"),
   #   app_secret = Sys.getenv("YT_CLIENT_SECRET")
   #   )
-  #
   # Sys.sleep(3)
 
   # youtube
@@ -242,11 +249,13 @@ KBODataUpdate <- function() {
   tiktok$team <- lookup[tiktok$cheername]
   tiktok$cat <- "tiktok"
 
-  usethis::use_data(youtube, overwrite = TRUE)
-  usethis::use_data(instagram, overwrite = TRUE)
-  usethis::use_data(tiktok, overwrite = TRUE)
+  if (use_data) {
+    usethis::use_data(youtube, overwrite = TRUE)
+    usethis::use_data(instagram, overwrite = TRUE)
+    usethis::use_data(tiktok, overwrite = TRUE)
+  }
 
-  print("Successfully made YouTube.rds, Instagram.rds and TikTok.rds")
+  print("Successfully made YouTube.rda, Instagram.rda and TikTok.rda")
 
   # Ultra Combo ---------------------------------------------------------------
 
@@ -257,45 +266,71 @@ KBODataUpdate <- function() {
                             tiktok
                             )
 
-  usethis::use_data(ultra_combo, overwrite = TRUE)
+  if (use_data) {
+    usethis::use_data(ultra_combo, overwrite = TRUE)
+  }
+
+  # Historic made from each weeks ultra_combo ---------------------------------
 
   historic <- loadHistoricalData("../")
 
-  usethis::use_data(historic, overwrite = TRUE)
+  if (use_data) {
+    usethis::use_data(historic, overwrite = TRUE)
+  }
+
+  # Ultra plots ---------------------------------------------------------------
 
   fat_plot <- fatPlot(ultra_combo)
-  usethis::use_data(fat_plot, overwrite = TRUE)
+
+  if (use_data) {
+    usethis::use_data(fat_plot, overwrite = TRUE)
+  }
 
   fat_distro_plot <- fatDistroPlot(ultra_combo)
-  usethis::use_data(fat_distro_plot, overwrite = TRUE)
 
-  print("Successfully made ultra_combo.rds, histori.rds, fat_plot.rds, fat_distro_plot.rds")
+  if (use_data) {
+    usethis::use_data(fat_distro_plot, overwrite = TRUE)
+  }
+
+  print("Successfully made ultra_combo.rda, histori.rda, fat_plot.rda, fat_distro_plot.rda")
+
+  # Long + long plots ---------------------------------------------------------
 
   long <- makeUltraLong(ultra_combo)
-  usethis::use_data(long, overwrite = TRUE)
+
+  if (use_data) {
+    usethis::use_data(long, overwrite = TRUE)
+  }
 
   age_jitter_dist <- ageJitterDist(long, team_data)
-  usethis::use_data(age_jitter_dist, overwrite = TRUE)
+
+  if (use_data) {
+    usethis::use_data(age_jitter_dist, overwrite = TRUE)
+  }
 
   age_dist <- ageDist(long)
-  usethis::use_data(age_dist, overwrite = TRUE)
 
+  if (use_data) {
+    usethis::use_data(age_dist, overwrite = TRUE)
+  }
+
+  print("successfully made long.rda, age_jitter_dist.rda, age_dist.rda")
 }
 
 
 
-# KBODataUpdate()
+# KBODataUpdate(use_data = TRUE)
 
 # backup()
 # 8 weeks of observations
 #
-# 8.1.24  original made on 8.17.24
-# 8.17.24 2 weeks of social media metrics
-# 8.24.24 1 wk
-# 8.31.24 1 wk
-# 9.7.24  1 wk
-# 9.14.24 1 wk
-# 9.21.24 1 wk
+# 8.1.24
+# 8.17.24 2 weeks worth
+# 8.24.24 collected
+# 8.31.24
+# 9.7.24
+# 9.14.24
+# 9.21.24
 
 
 

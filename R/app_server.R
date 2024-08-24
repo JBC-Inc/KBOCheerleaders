@@ -61,7 +61,8 @@ app_server <- function(input, output, session) {
       dplyr::group_by(team, color, name, age, age_group) |>
       dplyr::summarize(followers = sum(followers), .groups = 'drop') |>
       dplyr::filter(followers < 1200000) |>
-      dplyr::filter(abs(followers - point$y) < 1000) |>
+      dplyr::filter(abs(followers - point$y) < 50) |>
+      dplyr::slice(1) |>
       dplyr::pull(name)
 
     team <- team_cheerleaders$team[team_cheerleaders$cheerleader == cheerleader]

@@ -126,7 +126,7 @@ makeStatsPage <- function(fat, f1, f2, f3, ajd, ad) {
         height = 742,
         full_screen = TRUE,
         bslib::card_header(
-          "Distribution of Followers + Subscribers by Age Group",
+          "Distribution of Followers + Subscribers by Age Group (1 outlier removed for clarity)",
           class = "bg-dark"),
         bslib::card_body(
           shinycssloaders::withSpinner(
@@ -494,7 +494,7 @@ makeCheerleader <- function(td, smm, cheerleader, cheerPhoto, cheerBio) {
 #' @return gt
 #' @keywords internal
 #'
-makegtYT <- function(ultra_combo, top_count) {
+makegtYT <- function(historic, top_count) {
 
   historic |>
     dplyr::filter(cat == "youtube") |>
@@ -536,10 +536,6 @@ makegtYT <- function(ultra_combo, top_count) {
     ) |>
     gt::tab_style(
       style = gt::cell_text(align = "center"),
-      locations = gt::cells_column_labels(everything())
-    ) |>
-    gt::tab_style(
-      style = gt::cell_text(align = "center"),
       locations = gt::cells_body(columns = everything())
     ) |>
     gt::fmt_number(
@@ -564,7 +560,7 @@ makegtYT <- function(ultra_combo, top_count) {
 #' @return gt
 #' @keywords internal
 #'
-makegtInst <- function(ultra_combo, top_count) {
+makegtInst <- function(historic, top_count) {
 
   historic |>
     dplyr::filter(cat == "instagram") |>
@@ -601,17 +597,13 @@ makegtInst <- function(ultra_combo, top_count) {
       style = gt::cell_text(align = "center"),
       locations = gt::cells_column_labels(dplyr::everything())
     ) |>
-    gt::tab_style(
-      style = gt::cell_text(align = "center"),
-      locations = gt::cells_body(columns = dplyr::everything())
-    ) |>
     gt::fmt_number(
       columns = c(instagram_followers),
       decimals = 0,
       use_seps = TRUE
     ) |>
     gt::cols_move(columns = plot, after = instagram_followers) |>
-    gtExtras::gt_plt_sparkline(plot, type = "shaded", fig_dim = c(7, 42))
+    gtExtras::gt_plt_sparkline(plot, type = "shaded", fig_dim = c(7, 30))
 
 }
 
@@ -628,7 +620,7 @@ makegtInst <- function(ultra_combo, top_count) {
 #' @return gt
 #' @keywords internal
 #'
-makegtTT <- function(ultra_combo, top_count) {
+makegtTT <- function(historic, top_count) {
 
   historic |>
     dplyr::mutate(likes_followers = as.integer(likes/tiktok_followers)) |>
@@ -670,17 +662,13 @@ makegtTT <- function(ultra_combo, top_count) {
       style = gt::cell_text(align = "center"),
       locations = gt::cells_column_labels(dplyr::everything())
     ) |>
-    gt::tab_style(
-      style = gt::cell_text(align = "center"),
-      locations = gt::cells_body(columns = dplyr::everything())
-    ) |>
     gt::fmt_number(
       columns = c(tiktok_followers, likes, likes_followers),
       decimals = 0,
       use_seps = TRUE
     ) |>
     gt::cols_move(columns = plot, after = tiktok_followers) |>
-    gtExtras::gt_plt_sparkline(plot, type = "shaded", fig_dim = c(7, 42))
+    gtExtras::gt_plt_sparkline(plot, type = "shaded", fig_dim = c(7, 30))
 }
 
 #' Generate Leaderboard Cards
