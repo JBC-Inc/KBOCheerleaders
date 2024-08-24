@@ -4,13 +4,13 @@
 \alias{makegtTT}
 \title{Generate \code{gt} tables for TikTok Leaderboard}
 \usage{
-makegtTT(ultra_combo, top_count)
+makegtTT(historic, top_count)
 }
 \arguments{
-\item{ultra_combo}{aggregate cheerleader social media metrics.}
-
 \item{top_count}{product of number of weeks of historic data and records.
 ex. 3 weeks data for top 5 cheerleaders = 15}
+
+\item{ultra_combo}{aggregate cheerleader social media metrics.}
 }
 \value{
 gt
