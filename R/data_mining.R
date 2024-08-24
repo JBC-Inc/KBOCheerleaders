@@ -1045,7 +1045,7 @@ makeUltraLong <- function(ultra_combo) {
         age,
         breaks = c(15, 20, 25, 30, 40, 45),
         right = FALSE,
-        labels = c("15-18", "20-24", "25-30", "30-40", "40-50")
+        labels = c("15-19", "20-24", "25-29", "30-39", "40-50")
       )
     )
 
@@ -1065,9 +1065,11 @@ ageJitterDist <- function(long, team_data) {
     setNames(team_data$color, team_data$name)
   )
 
-  p <- long |>
-    dplyr::filter(followers < 800000) |>
+  ggplot <- long |>
     tidyr::drop_na() |>
+    dplyr::group_by(team, color, name, age, age_group) |>
+    dplyr::summarize(followers = sum(followers), .groups = 'drop') |>
+    dplyr::filter(followers < 1200000) |>
 
     ggplot2::ggplot(
       ggplot2::aes(
@@ -1083,7 +1085,9 @@ ageJitterDist <- function(long, team_data) {
     ggplot2::geom_boxplot(fill = "transparent", color = "black") +
 
     ggplot2::geom_jitter(
-      ggplot2::aes(size = followers),
+      ggplot2::aes(
+        size = followers
+        ),
       width = 0.2,
       show.legend = TRUE
     ) +
@@ -1092,19 +1096,19 @@ ageJitterDist <- function(long, team_data) {
       values = team_colors
     ) +
     ggplot2::scale_y_continuous(
-      breaks = seq(0, 800000, 100000),
+      breaks = seq(0, 1000000, 250000),
       labels = scales::comma_format()
     ) +
     ggplot2::labs(
-      #title = "Distribution of Followers + Subscribers by Age Group",
-      x = "", y = "",
+      x = "",
+      y = "",
       subtitle = "(Omission of outliers)",
       color = "Team"
       ) +
     ggplot2::theme_minimal()
 
   p_plotly <- plotly::ggplotly(
-    p = p,
+    p = ggplot,
     source = "A",
     tooltip = "text"
     ) |>
@@ -1142,7 +1146,8 @@ ageDist <- function(long) {
   )
 
   long |>
-    dplyr::count(age_group, platform) |>
+    tidyr::drop_na() |>
+    dplyr::count(age_group, platform, na.rm = TRUE) |>
     ggplot2::ggplot(
       ggplot2::aes(
         x = age_group,
@@ -1150,7 +1155,12 @@ ageDist <- function(long) {
         fill = platform)
       ) +
 
-    ggplot2::geom_bar(stat = "identity", position = "stack", alpha = 0.7) +
+    ggplot2::geom_bar(
+      stat = "identity",
+      position = "stack",
+      alpha = 0.7,
+      width = 0.42
+      ) +
 
     ggplot2::scale_fill_manual(
       values = platform_colors,
@@ -1163,7 +1173,7 @@ ageDist <- function(long) {
       ) +
 
     ggplot2::labs(
-      title = "Distribution of Platforms by Age Group",
+      # title = "Distribution of Platforms by Age Group",
       x = "Age Group",
       y = "",
       fill = "Platform"

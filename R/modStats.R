@@ -122,7 +122,7 @@ mod_stats_server <- function(id, agg_follow, plot_click, sesh) {
       age_jitter_dist
     })
 
-    output$ad <- plotly::renderPlotly({
+    output$ad <- shiny::renderPlot({
       age_dist
     })
   })

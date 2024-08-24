@@ -152,11 +152,11 @@ makeStatsPage <- function(fat, f1, f2, f3, ajd, ad) {
         height = 650,
         full_screen = TRUE,
         bslib::card_header(
-          "Distribution of followers Age Group/Platform",
+          "Distribution of Social Media Platforms by Age Group",
           class = "bg-dark"),
         bslib::card_body(
           shinycssloaders::withSpinner(
-            ui_element = plotly::plotlyOutput(ad, height = '570px'),
+            ui_element = shiny::plotOutput(ad, height = '570px'),
             image = "www/favicon-32x32.png",
             image.width = 242,
             image.height = 242,
