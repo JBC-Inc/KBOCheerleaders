@@ -803,6 +803,7 @@ ultraCombo <- function(team_cheerleaders, cheer_data, youtube, instagram, tiktok
 #' @param text the value (X2) record of matching "Birthday" (X1) record.
 #'
 #' @return Cheerleaders Age or NA if could not extract.
+#' @keywords internal
 #'
 extractAge <- function(text) {
 
@@ -833,6 +834,7 @@ extractAge <- function(text) {
 #'   \item \code{Name}: The name of the cheerleader
 #'   \item \code{Age}: The extracted age of the cheerleader, or \code{NA}
 #' }
+#' @keywords internal
 #'
 processCheerleaders <- function(cheerleaders_list) {
 
@@ -1030,6 +1032,7 @@ fatDistroPlot <- function(ultra_combo) {
 #' @param ultra_combo all the cheerleader data
 #'
 #' @return reshape long ultra_combo
+#' @keywords internal
 #'
 makeUltraLong <- function(ultra_combo) {
 

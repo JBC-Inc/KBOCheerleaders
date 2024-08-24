@@ -23,3 +23,4 @@ This function processes cheer_data, extracting age information from each
 data frame and returning a consolidated tibble with the cheerleader
 names and their respective ages.
 }
+\keyword{internal}

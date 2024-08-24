@@ -15,3 +15,4 @@ Cheerleaders Age or NA if could not extract.
 \description{
 Extracts age from the "Birth" or "Age" row of the cheerleaders table.
 }
+\keyword{internal}
