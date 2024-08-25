@@ -45,6 +45,8 @@ addExternalResources <- function() {
       href = "https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
       ),
 
+    # Team / Cheerleaders
+
     shiny::tags$script(shiny::HTML("
       $(document).ready(function() {
         $(document).on('click', '.team-photo', function() {
@@ -65,7 +67,7 @@ addExternalResources <- function() {
       });
     ")),
 
-    # event handler
+    # ggiraph
 
     shiny::tags$script(shiny::HTML("
       Shiny.addCustomMessageHandler('handler1', function(message){
@@ -75,6 +77,14 @@ addExternalResources <- function() {
         Shiny.setInputValue('team-team', team);
         Shiny.setInputValue('cheer-cheerleader', name);
         Shiny.setInputValue('randcheer', Math.random());
+      });
+    ")),
+
+    # navbar page scroll
+
+    shiny::tags$script(shiny::HTML("
+      Shiny.addCustomMessageHandler('scrollToTop', function(message) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       });
     "))
 

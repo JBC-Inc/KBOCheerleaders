@@ -52,27 +52,17 @@ app_server <- function(input, output, session) {
     updateUI(session, state = "default")
   })
 
-  shiny::observe(label = "plotly Select Cheerleader", {
+  shiny::observeEvent(input$`stats-ajd_selected`, {
 
-    point <- plotly::event_data("plotly_click", source = "A")
+    click_data <- strsplit(input$`stats-ajd_selected`, "\\|")[[1]]
 
-    age_groupS <- levels(long$age_group)[round(point$x)]
-
-    cheerleader <- long |>
-      tidyr::drop_na() |>
-      dplyr::group_by(team, color, name, age, age_group) |>
-      dplyr::summarize(followers = sum(followers), .groups = 'drop') |>
-      dplyr::filter(followers < 1200000) |>
-      dplyr::filter(abs(followers - point$y) <= 1) |>
-      dplyr::filter(age_group == age_groupS) |>
-      dplyr::slice(1) |>
-      dplyr::pull(name)
-
-    team <- team_cheerleaders$team[team_cheerleaders$cheerleader == cheerleader]
+    cheerleader <- click_data[1]
+    team <- click_data[2]
 
     session$sendCustomMessage("handler1", list(cheerleader, team))
-  }) |>
-    shiny::bindEvent(plotly::event_data("plotly_click", source = "A"))
+
+    session$sendCustomMessage(type = 'stats-ajd_set', message = character(0))
+  })
 
   mod_react_server("react", td)
 

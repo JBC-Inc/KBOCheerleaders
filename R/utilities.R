@@ -128,7 +128,7 @@ makeStatsPage <- function(fat, f1, f2, f3, ajd, ad) {
         bslib::card_header(
           bslib::tooltip(
             shiny::span(
-              "Distribution of Followers + Subscribers by Age Group (1 outlier removed for clarity)",
+              "Distribution of Followers + Subscribers by Age Group ",
               bsicons::bs_icon("question-circle-fill")
             ),
             "Click Cheerleader to view teh page."),
@@ -136,7 +136,7 @@ makeStatsPage <- function(fat, f1, f2, f3, ajd, ad) {
         ),
         bslib::card_body(
           shinycssloaders::withSpinner(
-            ui_element = plotly::plotlyOutput(ajd, height = '669px'),
+            ui_element = ggiraph::girafeOutput(ajd),
             image = "www/favicon-32x32.png",
             image.width = 242,
             image.height = 242,
@@ -162,7 +162,7 @@ makeStatsPage <- function(fat, f1, f2, f3, ajd, ad) {
           class = "bg-dark"),
         bslib::card_body(
           shinycssloaders::withSpinner(
-            ui_element = shiny::plotOutput(ad, height = '570px'),
+            ui_element = shiny::plotOutput(ad, height = '570px', width = '95%'),
             image = "www/favicon-32x32.png",
             image.width = 242,
             image.height = 242,
@@ -542,6 +542,10 @@ makegtYT <- function(historic, top_count) {
     ) |>
     gt::tab_style(
       style = gt::cell_text(align = "center"),
+      locations = gt::cells_column_labels(everything())
+    ) |>
+    gt::tab_style(
+      style = gt::cell_text(align = "center"),
       locations = gt::cells_body(columns = everything())
     ) |>
     gt::fmt_number(
@@ -601,7 +605,11 @@ makegtInst <- function(historic, top_count) {
     ) |>
     gt::tab_style(
       style = gt::cell_text(align = "center"),
-      locations = gt::cells_column_labels(dplyr::everything())
+      locations = gt::cells_column_labels(everything())
+    ) |>
+    gt::tab_style(
+      style = gt::cell_text(align = "center"),
+      locations = gt::cells_body(columns = everything())
     ) |>
     gt::fmt_number(
       columns = c(instagram_followers),
@@ -666,7 +674,11 @@ makegtTT <- function(historic, top_count) {
     ) |>
     gt::tab_style(
       style = gt::cell_text(align = "center"),
-      locations = gt::cells_column_labels(dplyr::everything())
+      locations = gt::cells_column_labels(everything())
+    ) |>
+    gt::tab_style(
+      style = gt::cell_text(align = "center"),
+      locations = gt::cells_body(columns = everything())
     ) |>
     gt::fmt_number(
       columns = c(tiktok_followers, likes, likes_followers),
@@ -902,6 +914,8 @@ updateUI <- function(session,
                      cheerleader = NULL) {
 
   shiny::updateNavbarPage(session, inputId = "tabs", selected = "visual")
+
+  session$sendCustomMessage("scrollToTop", list())
 
   switch(
     state,

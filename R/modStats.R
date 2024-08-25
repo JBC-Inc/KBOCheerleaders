@@ -118,7 +118,7 @@ mod_stats_server <- function(id, agg_follow, plot_click, sesh) {
       fat_distro_plot[[3]]
     })
 
-    output$ajd <- plotly::renderPlotly({
+    output$ajd <- ggiraph::renderGirafe({
       age_jitter_dist
     })
 
@@ -127,6 +127,7 @@ mod_stats_server <- function(id, agg_follow, plot_click, sesh) {
     })
   })
 }
+
 
 
 

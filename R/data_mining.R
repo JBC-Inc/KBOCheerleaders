@@ -1068,66 +1068,59 @@ ageJitterDist <- function(long, team_data) {
     setNames(team_data$color, team_data$name)
   )
 
-  ggplot <- long |>
+  gg_point <- long |>
     tidyr::drop_na() |>
     dplyr::group_by(team, color, name, age, age_group) |>
     dplyr::summarize(followers = sum(followers), .groups = 'drop') |>
-    dplyr::filter(followers < 1200000) |>
+    dplyr::filter(followers < 750000) |>
 
     ggplot2::ggplot(
       ggplot2::aes(
         x = as.factor(age_group),
-        y = followers,
-        color = team,
-        text = paste("Name:", name,
-                     "<br>Team:", team,
-                     "<br>Followers:", format(followers, big.mark = ","))
-      )
-    ) +
-
-    ggplot2::geom_boxplot(fill = "transparent", color = "black") +
-
-    ggplot2::geom_jitter(
+        y = followers)
+      ) +
+    ggplot2::geom_boxplot(
+      fill = "transparent",
+      outliers = FALSE,
+      color = "black"
+      ) +
+    ggiraph::geom_jitter_interactive(
       ggplot2::aes(
-        size = followers
-        ),
-      width = 0.2,
+        size = followers,
+        color = team,
+        tooltip = paste(name, "\n", team, "\n", format(followers, big.mark = ",")),
+        data_id = paste(name, team, followers, sep = "|")
+      ),
+      width = .21,
       show.legend = TRUE
     ) +
-
-    ggplot2::scale_color_manual(
-      values = team_colors
-    ) +
+    ggplot2::scale_color_manual(values = team_colors) +
     ggplot2::scale_y_continuous(
-      breaks = seq(0, 1000000, 250000),
+      breaks = seq(0, 1000000, 100000),
       labels = scales::comma_format()
-    ) +
-    ggplot2::labs(
-      x = "",
-      y = "",
-      subtitle = "(Omission of outliers)",
-      color = "Team"
       ) +
+    ggplot2::labs(
+      y = "Followers",
+      x = "Age Group",
+      caption = "*Omission of outliers > 1,000,000 followers",
+      color = "Team"
+    ) +
+    ggplot2::guides(
+      size = "none"
+    ) +
     ggplot2::theme_minimal()
 
-  p_plotly <- plotly::ggplotly(
-    p = ggplot,
-    source = "A",
-    tooltip = "text"
-    ) |>
-    plotly::layout(
-      legend = list(
-        title = list(
-          text = "Team"
-          )
-        )
-      ) |>
-    plotly::event_register(event = "plotly_click")
-
-  p_plotly$x$data[[1]]$hoverinfo <- "none"
-  p_plotly$x$data[[1]]$marker$opacity <- 0
-
-  p_plotly
+  ggiraph::girafe(
+    ggobj = gg_point,
+    width_svg = 12,
+    # height_svg = 5.42,
+    options = list(
+      ggiraph::opts_sizing(rescale = TRUE),
+      ggiraph::opts_hover(css = "fill:default;r:7;"),
+      ggiraph::opts_selection(css = "fill:default"),
+      ggiraph::opts_tooltip(opacity = .69, use_fill = TRUE)
+      )
+    )
 }
 
 #' Distribution of platforms by age groups
@@ -1184,25 +1177,6 @@ ageDist <- function(long) {
     ggplot2::theme_minimal() +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1))
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 # Backup/Historical -----------------------------------------------------------
 
