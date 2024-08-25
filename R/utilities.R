@@ -214,8 +214,8 @@ makeReactable <- function(leader_data) {
       cheerleaders <- leader_data()$uc |>
         dplyr::filter(team == leader_data()$teams$team[index]) |>
         dplyr::arrange(desc(followers)) |>
-        dplyr::select(name, link, followers, subs,
-                      instagram_followers,
+        dplyr::select(name, link, followers,
+                      instagram_followers, subs,
                       tiktok_followers, team)
 
       reactable::reactable(
@@ -273,6 +273,24 @@ makeReactable <- function(leader_data) {
                          bar)
             }
           ),
+          instagram_followers = reactable::colDef(
+            name = "Instagram Followers",
+            width = 242,
+            cell = function(value) {
+              width <- paste0(value * 100 / max(cheerleaders$instagram_followers), "%")
+              value <- format(value, big.mark = ",")
+              value <- format(value, width = 9, justify = "right")
+              bar <- shiny::div(
+                class = "bar-chart",
+                style = list(marginRight = "0.375rem"),
+                shiny::div(
+                  class = "grade-bar",
+                  style = list(width = width)
+                )
+              )
+              shiny::div(class = "bar-cell", shiny::span(class = "number", value), bar)
+            }
+          ),
           subs = reactable::colDef(
             name = "YouTube Subscribers",
             width = 242,
@@ -296,24 +314,6 @@ makeReactable <- function(leader_data) {
                 )
                 shiny::div(class = "bar-cell", shiny::span(class = "number", value), bar)
               }
-            }
-          ),
-          instagram_followers = reactable::colDef(
-            name = "Instagram Followers",
-            width = 242,
-            cell = function(value) {
-              width <- paste0(value * 100 / max(cheerleaders$instagram_followers), "%")
-              value <- format(value, big.mark = ",")
-              value <- format(value, width = 9, justify = "right")
-              bar <- shiny::div(
-                class = "bar-chart",
-                style = list(marginRight = "0.375rem"),
-                shiny::div(
-                  class = "grade-bar",
-                  style = list(width = width)
-                )
-              )
-              shiny::div(class = "bar-cell", shiny::span(class = "number", value), bar)
             }
           ),
           tiktok_followers = reactable::colDef(
@@ -370,8 +370,6 @@ makeCheerleader <- function(td, smm, cheerleader, cheerPhoto, cheerBio) {
   yt <- dplyr::filter(smm()$youtube, name == cheerleader)
   inst <- dplyr::filter(smm()$instagram, name == cheerleader)
   tt <- dplyr::filter(smm()$tiktok, cheername == cheerleader)
-
-  yt <- yt |> dplyr::filter(views > 200000)
 
   photoBio <- bslib::card(
     full_screen = TRUE,
@@ -480,8 +478,8 @@ makeCheerleader <- function(td, smm, cheerleader, cheerPhoto, cheerBio) {
       width = NULL,
       fill = FALSE,
       style = bslib::css(flex_direction = "column"),
-      yt,
       insta,
+      yt,
       tiktok
     )
   )
