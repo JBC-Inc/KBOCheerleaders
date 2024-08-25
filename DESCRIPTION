@@ -24,6 +24,7 @@ Imports:
     knitr,
     lubridate,
     magick,
+    plotly,
     purrr,
     reactable,
     readr,
