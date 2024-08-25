@@ -52,23 +52,27 @@ app_server <- function(input, output, session) {
     updateUI(session, state = "default")
   })
 
-  shiny::observeEvent(plotly::event_data(event = "plotly_click", source = "A"), {
+  shiny::observe(label = "plotly Select Cheerleader", {
 
     point <- plotly::event_data("plotly_click", source = "A")
+
+    age_groupS <- levels(long$age_group)[round(point$x)]
 
     cheerleader <- long |>
       tidyr::drop_na() |>
       dplyr::group_by(team, color, name, age, age_group) |>
       dplyr::summarize(followers = sum(followers), .groups = 'drop') |>
       dplyr::filter(followers < 1200000) |>
-      dplyr::filter(abs(followers - point$y) < 50) |>
+      dplyr::filter(abs(followers - point$y) <= 1) |>
+      dplyr::filter(age_group == age_groupS) |>
       dplyr::slice(1) |>
       dplyr::pull(name)
 
     team <- team_cheerleaders$team[team_cheerleaders$cheerleader == cheerleader]
 
     session$sendCustomMessage("handler1", list(cheerleader, team))
-  })
+  }) |>
+    shiny::bindEvent(plotly::event_data("plotly_click", source = "A"))
 
   mod_react_server("react", td)
 
@@ -82,6 +86,9 @@ app_server <- function(input, output, session) {
 
   mod_cheer_server("cheer", td, smm)
 
-  mod_leaderboard_server("leaderboard")
-}
+  top_count <- shiny::reactive(label = "Leaderboard Records", {
+    length(unique(historic$datetime)) * 5
+  })
 
+  mod_leaderboard_server("leaderboard", top_count)
+}

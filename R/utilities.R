@@ -126,8 +126,14 @@ makeStatsPage <- function(fat, f1, f2, f3, ajd, ad) {
         height = 742,
         full_screen = TRUE,
         bslib::card_header(
-          "Distribution of Followers + Subscribers by Age Group (1 outlier removed for clarity)",
-          class = "bg-dark"),
+          bslib::tooltip(
+            shiny::span(
+              "Distribution of Followers + Subscribers by Age Group (1 outlier removed for clarity)",
+              bsicons::bs_icon("question-circle-fill")
+            ),
+            "Click Cheerleader to view teh page."),
+          class = "bg-dark"
+        ),
         bslib::card_body(
           shinycssloaders::withSpinner(
             ui_element = plotly::plotlyOutput(ajd, height = '669px'),
@@ -499,7 +505,7 @@ makegtYT <- function(historic, top_count) {
   historic |>
     dplyr::filter(cat == "youtube") |>
     dplyr::arrange(dplyr::desc(subs)) |>
-    dplyr::slice_head(n = top_count) |>
+    dplyr::slice_head(n = top_count()) |>
     dplyr::group_by(name) |>
     dplyr::summarize(
       plot = list(rev(subs)),
@@ -565,7 +571,7 @@ makegtInst <- function(historic, top_count) {
   historic |>
     dplyr::filter(cat == "instagram") |>
     dplyr::arrange(dplyr::desc(instagram_followers)) |>
-    dplyr::slice_head(n = top_count) |>
+    dplyr::slice_head(n = top_count()) |>
     dplyr::group_by(name) |>
     dplyr::summarize(
       plot = list(rev(instagram_followers)),
@@ -626,7 +632,7 @@ makegtTT <- function(historic, top_count) {
     dplyr::mutate(likes_followers = as.integer(likes/tiktok_followers)) |>
     dplyr::filter(cat == "tiktok") |>
     dplyr::arrange(dplyr::desc(tiktok_followers)) |>
-    dplyr::slice_head(n = top_count) |>
+    dplyr::slice_head(n = top_count()) |>
     dplyr::group_by(name) |>
     dplyr::summarize(
       plot = list(rev(tiktok_followers)),  # Keep historical data for sparklines

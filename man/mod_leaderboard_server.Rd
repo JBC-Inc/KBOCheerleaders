@@ -4,7 +4,7 @@
 \alias{mod_leaderboard_server}
 \title{Leaderboard Server}
 \usage{
-mod_leaderboard_server(id)
+mod_leaderboard_server(id, top_count)
 }
 \arguments{
 \item{id}{An ID string that corresponds with the ID used to call the

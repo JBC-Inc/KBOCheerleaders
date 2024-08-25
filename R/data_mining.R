@@ -1130,7 +1130,6 @@ ageJitterDist <- function(long, team_data) {
   p_plotly
 }
 
-
 #' Distribution of platforms by age groups
 #'
 #' @param ultra_combo all the cheerleader data with ages

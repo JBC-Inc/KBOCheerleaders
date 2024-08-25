@@ -31,7 +31,7 @@ mod_leaderboard_ui <- function(id) {
 #'  using gt tables and dynamically generate UI elements for display.
 #' @keywords internal
 #'
-mod_leaderboard_server <- function(id) {
+mod_leaderboard_server <- function(id, top_count) {
   shiny::moduleServer(id, function(input, output, session) {
     ns <- session$ns
 
@@ -44,15 +44,15 @@ mod_leaderboard_server <- function(id) {
     })
 
     output$leaderYT <- gt::render_gt({
-      makegtYT(historic, 15)
+      makegtYT(historic, top_count)
     })
 
     output$leaderInst <- gt::render_gt({
-      makegtInst(historic, 15)
+      makegtInst(historic, top_count)
     })
 
     output$leaderTT <- gt::render_gt({
-      makegtTT(historic, 15)
+      makegtTT(historic, top_count)
     })
   })
 }
