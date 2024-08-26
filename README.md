@@ -1,11 +1,7 @@
 
 <div style="display: flex; align-items: center;">
-
-<img src="man/figures/image.png" alt="Hex Sticker" style="margin: 22px 22px;" width="142"/>
-<h1 style="margin: 0; padding: 0;">
-KBO Cheerleaders
-</h1>
-
+  <img src="man/figures/image.png" alt="Hex Sticker" style="margin: 22px 22px;" width="142"/>
+  <h1 style="margin: 0; padding: 0;">KBO Cheerleaders</h1>
 </div>
 
 <p style="font-size: 16px; text-align:justify;">
