@@ -22,6 +22,11 @@ makeStatsPage <- function(fat, f1, f2, f3, ajd, ad) {
 
     bslib::layout_column_wrap(
 
+      #width = '500px',
+      #fixed_width = TRUE,
+
+      style = bslib::css(grid_template_columns = "3fr 1fr"),
+
       bslib::card(
         id = "stat-fat",
         class = "stat-fat",
@@ -31,7 +36,7 @@ makeStatsPage <- function(fat, f1, f2, f3, ajd, ad) {
               "Total Social Media Followers by Team (Instagram + YouTube + TikTok)",
               bsicons::bs_icon("question-circle-fill")
             ),
-            "Click Team Logo to view the page."),
+            "Click Logo to view page."),
           class = "bg-dark"
         ),
         bslib::card_body(
@@ -113,6 +118,11 @@ makeStatsPage <- function(fat, f1, f2, f3, ajd, ad) {
 
     bslib::layout_column_wrap(
 
+      # width = '500px',
+      # fixed_width = TRUE,
+
+      style = bslib::css(grid_template_columns = "3fr 1fr"),
+
       bslib::card(
         id = "ajd",
         full_screen = TRUE,
@@ -122,7 +132,7 @@ makeStatsPage <- function(fat, f1, f2, f3, ajd, ad) {
               "Distribution of Followers by Age Group ",
               bsicons::bs_icon("question-circle-fill")
             ),
-            "Click Cheerleader to view teh page."),
+            "Click Cheerleader to view page."),
           class = "bg-dark"
         ),
         bslib::card_body(
@@ -142,6 +152,11 @@ makeStatsPage <- function(fat, f1, f2, f3, ajd, ad) {
   asd <-
 
     bslib::layout_column_wrap(
+
+      #width = '500px',
+      #fixed_width = TRUE,
+
+      style = bslib::css(grid_template_columns = "3fr 1fr"),
 
       bslib::card(
         id = "ad",

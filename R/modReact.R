@@ -71,7 +71,7 @@ mod_react_server <- function(id, td) {
               "Cheerleader Social Media Statistics by Team",
               bsicons::bs_icon("question-circle-fill")
             ),
-            "Click Cheerleader Image to view the page."),
+            "Click Cheerleader to view page."),
           class = "bg-dark"
         ),
         bslib::card_body(
