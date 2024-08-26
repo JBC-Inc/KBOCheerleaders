@@ -16,22 +16,19 @@
 #'
 makeStatsPage <- function(fat, f1, f2, f3, ajd, ad) {
 
-  bslib::page_fillable(
+  # Followers aggregate team ----------
 
-    # Followers aggregate team ----------
+  fat <-
 
     bslib::layout_column_wrap(
-      width = '900px',
-      fixed_width = TRUE,
 
-      style = bslib::css(grid_template_columns = "4fr 1fr"),
       bslib::card(
         id = "stat-fat",
         class = "stat-fat",
         bslib::card_header(
           bslib::tooltip(
             shiny::span(
-              "Total Cheerleader Social Media Followers by Team (YouTube, Instagram, TikTok)",
+              "Total Social Media Followers by Team (Instagram + YouTube + TikTok)",
               bsicons::bs_icon("question-circle-fill")
             ),
             "Click Team Logo to view the page."),
@@ -39,18 +36,19 @@ makeStatsPage <- function(fat, f1, f2, f3, ajd, ad) {
         ),
         bslib::card_body(
           shinycssloaders::withSpinner(
-            ui_element = shiny::plotOutput(fat, click = "plot_click", height = '600px'),
+            ui_element = shiny::plotOutput(fat, click = "plot_click", height = '575px'),
             image = "www/favicon-32x32.png",
             image.width = 242,
             image.height = 242,
             caption = "...LOADING..."
           )
         ),
-        # bslib::card_footer("Click Team `Logo` to view.", class = "bg-info")
       )
-    ),
+    )
 
-    # distributions ---------------------
+  # distributions -----------------------------------------------------------
+
+  dist <-
 
     bslib::layout_columns(
       width = '100%',
@@ -59,11 +57,10 @@ makeStatsPage <- function(fat, f1, f2, f3, ajd, ad) {
 
       bslib::card(
         id = "f1",
-        # class = "f1",
         height = 269,
         full_screen = TRUE,
-        # bslib::card_header("Distribution Avg Followers per Platform", class = "bg-dark"),
-        bslib::card_header("Average Followers per Platform (95% Percentile)", class = "bg-dark"),
+        bslib::card_header("Average Followers per Platform (95% Percentile)",
+                           class = "bg-dark"),
         bslib::card_body(
           shiny::plotOutput(f1, height = '100%'))
       ),
@@ -71,14 +68,16 @@ makeStatsPage <- function(fat, f1, f2, f3, ajd, ad) {
         id = "f2",
         height = 269,
         full_screen = TRUE,
-        bslib::card_header("Capped Average Followers per Platform", class = "bg-dark"),
+        bslib::card_header("Capped Average Followers per Platform",
+                           class = "bg-dark"),
         bslib::card_body(shiny::plotOutput(f2, height = '100%'))
       ),
       bslib::card(
         id = "f3",
         height = 269,
         full_screen = TRUE,
-        bslib::card_header("Log-Transformed Average Followers per Platform", class = "bg-dark"),
+        bslib::card_header("Log-Transformed Average Followers per Platform",
+                           class = "bg-dark"),
         bslib::card_body(shiny::plotOutput(f3, height = '100%'))
       ),
 
@@ -90,7 +89,8 @@ makeStatsPage <- function(fat, f1, f2, f3, ajd, ad) {
           # Using HTML to create the legend layout
           tags$div(
             class = "legend-container",
-            tags$div(class = "legend-item", tags$div(class = "color-box red"), tags$span("YouTube")),
+            tags$div(class = "legend-item", tags$div(class = "color-box red"),
+                     tags$span("YouTube")),
             tags$div(
               class = "legend-item",
               tags$div(class = "color-box purple"),
@@ -105,30 +105,21 @@ makeStatsPage <- function(fat, f1, f2, f3, ajd, ad) {
         ),
         bslib::card_footer("Average Followers Aggregate Teams.", class = "bg-info")
       )
-      # bslib::card(
-      #   id = "f4",
-      #   height = 269,
-      #   full_screen = TRUE,
-      #   bslib::card_header("Average Followers per Platform (95% Percentile)", class = "bg-dark"),
-      #   bslib::card_body(shiny::plotOutput("f4", height = '100%'))
-      # )
-    ),
+    )
 
-    # Age Jitter Dist -------------------
+  # Age Jitter Dist ---------------------------------------------------------
 
-    bslib::layout_columns(
-      width = '100%',
-      col_widths = 12,
-      fixed_width = TRUE,
+  ajd <-
+
+    bslib::layout_column_wrap(
 
       bslib::card(
         id = "ajd",
-        height = 742,
         full_screen = TRUE,
         bslib::card_header(
           bslib::tooltip(
             shiny::span(
-              "Distribution of Followers + Subscribers by Age Group ",
+              "Distribution of Followers by Age Group ",
               bsicons::bs_icon("question-circle-fill")
             ),
             "Click Cheerleader to view teh page."),
@@ -144,25 +135,24 @@ makeStatsPage <- function(fat, f1, f2, f3, ajd, ad) {
           )
         )
       )
-    ),
+    )
 
-    # Age Dist --------------------------
+  # Age Stacked Dist --------------------------------------------------------
 
-    bslib::layout_columns(
-      width = '100%',
-      col_widths = 12,
-      fixed_width = TRUE,
+  asd <-
+
+    bslib::layout_column_wrap(
 
       bslib::card(
         id = "ad",
-        height = 650,
         full_screen = TRUE,
         bslib::card_header(
           "Distribution of Social Media Platforms by Age Group",
           class = "bg-dark"),
         bslib::card_body(
+          style = "margin-left:55px;",
           shinycssloaders::withSpinner(
-            ui_element = shiny::plotOutput(ad, height = '570px', width = '95%'),
+            ui_element = shiny::plotOutput(ad, width = '93%', height = '575px'),
             image = "www/favicon-32x32.png",
             image.width = 242,
             image.height = 242,
@@ -172,10 +162,15 @@ makeStatsPage <- function(fat, f1, f2, f3, ajd, ad) {
       )
     )
 
-
-
-
+  shiny::tagList(
+    fat,
+    dist,
+    ajd,
+    asd
   )
+
+
+
 }
 
 #' Generate the reactable table
@@ -367,9 +362,9 @@ makeReactable <- function(leader_data) {
 #'
 makeCheerleader <- function(td, smm, cheerleader, cheerPhoto, cheerBio) {
 
-  yt <- dplyr::filter(smm()$youtube, name == cheerleader)
-  inst <- dplyr::filter(smm()$instagram, name == cheerleader)
-  tt <- dplyr::filter(smm()$tiktok, cheername == cheerleader)
+  yt <- dplyr::filter(smm()$youtube, name == cheerleader) |> dplyr::slice(1)
+  inst <- dplyr::filter(smm()$instagram, name == cheerleader) |> dplyr::slice(1)
+  tt <- dplyr::filter(smm()$tiktok, cheername == cheerleader) |> dplyr::slice(1)
 
   photoBio <- bslib::card(
     full_screen = TRUE,
@@ -700,92 +695,101 @@ makegtTT <- function(historic, top_count) {
 #'
 makeLeaderboards <- function(leaderYT, leaderInst, leaderTT) {
 
-  yt <- bslib::card(
-    id = "ytleader",
-    full_screen = TRUE,
-    bslib::card_header(
-      style = paste("background-color: #ff0000; color: #ffffff;"),
-      bsicons::bs_icon("youtube"),
-      "Top YouTube Subscribers/Views"
-    ),
-    bslib::card_body(
-      fillable = TRUE,
-      shinycssloaders::withSpinner(
-        ui_element = gt::gt_output(leaderYT),
-        image = "www/favicon-32x32.png",
-        image.width = 242,
-        image.height = 242,
-        caption = "...LOADING..."
-      )
-    ),
-    bslib::card_footer(
-      "Click Team Logo/Cheerleader Photo to view.",
-      style = paste("background-color: #ff0000; color: #ffffff;")
-    )
-  )
+  yt <-
 
-  inst <- bslib::card(
-    id = "instleader",
-    full_screen = TRUE,
-    bslib::card_header(
-      style = paste(
-        "fill: rgba(255, 255, 255, 0.6) !important;
-        background: linear-gradient(45deg, #FFD600, #FF7A00, #FF0069, #D300C5, #7638FA);"
+    bslib::card(
+      id = "ytleader",
+      full_screen = TRUE,
+      bslib::card_header(
+        style = paste("background-color: #ff0000; color: #ffffff;"),
+        bsicons::bs_icon("youtube"),
+        "Top YouTube Subscribers/Views"
       ),
-      bsicons::bs_icon("instagram"),
-      "Top Insagram Followers"
-    ),
-    bslib::card_body(
-      fillable = TRUE,
-      shinycssloaders::withSpinner(
-        ui_element = gt::gt_output(leaderInst),
-        image = "www/favicon-32x32.png",
-        image.width = 242,
-        image.height = 242,
-        caption = "...LOADING..."
-      )
-    ),
-    bslib::card_footer(
-      "Click Team Logo/Cheerleader Photo to view.",
-      style = paste(
-        "fill: rgba(255, 255, 255, 0.6) !important;
-        background: linear-gradient(45deg, #FFD600, #FF7A00, #FF0069, #D300C5, #7638FA);"
+      bslib::card_body(
+        fillable = TRUE,
+        shinycssloaders::withSpinner(
+          ui_element = gt::gt_output(leaderYT),
+          image = "www/favicon-32x32.png",
+          image.width = 242,
+          image.height = 242,
+          caption = "...LOADING..."
+        )
+      ),
+      bslib::card_footer(
+        "Click Team Logo/Cheerleader Photo to view.",
+        style = paste("background-color: #ff0000; color: #ffffff;")
       )
     )
-  )
 
-  tt <- bslib::card(
-    id = "ttleader",
-    full_screen = TRUE,
-    bslib::card_header(
-      style = paste("background-color: #000000; color: #ffffff;"),
-      bsicons::bs_icon("tiktok"),
-      "Top TikTok Followers/Likes"
-    ),
-    bslib::card_body(
-      fillable = TRUE,
-      shinycssloaders::withSpinner(
-        ui_element = gt::gt_output(leaderTT),
-        image = "www/favicon-32x32.png",
-        image.width = 242,
-        image.height = 242,
-        caption = "...LOADING..."
+
+  inst <-
+
+    bslib::card(
+      id = "instleader",
+      full_screen = TRUE,
+      bslib::card_header(
+        style = paste(
+          "fill: rgba(255, 255, 255, 0.6) !important;
+        background: linear-gradient(45deg, #FFD600, #FF7A00, #FF0069, #D300C5, #7638FA);"
+        ),
+        bsicons::bs_icon("instagram"),
+        "Top Insagram Followers"
+      ),
+      bslib::card_body(
+        fillable = TRUE,
+        shinycssloaders::withSpinner(
+          ui_element = gt::gt_output(leaderInst),
+          image = "www/favicon-32x32.png",
+          image.width = 242,
+          image.height = 242,
+          caption = "...LOADING..."
+        )
+      ),
+      bslib::card_footer(
+        "Click Team Logo/Cheerleader Photo to view.",
+        style = paste(
+          "fill: rgba(255, 255, 255, 0.6) !important;
+        background: linear-gradient(45deg, #FFD600, #FF7A00, #FF0069, #D300C5, #7638FA);"
+        )
       )
-    ),
-    bslib::card_footer(
-      "Click Team Logo/Cheerleader Photo to view.",
-      style = paste("background-color: #000000; color: #ffffff;")
     )
-  )
+
+
+  tt <-
+
+    bslib::card(
+      id = "ttleader",
+      full_screen = TRUE,
+      bslib::card_header(
+        style = paste("background-color: #000000; color: #ffffff;"),
+        bsicons::bs_icon("tiktok"),
+        "Top TikTok Followers/Likes"
+      ),
+      bslib::card_body(
+        fillable = TRUE,
+        shinycssloaders::withSpinner(
+          ui_element = gt::gt_output(leaderTT),
+          image = "www/favicon-32x32.png",
+          image.width = 242,
+          image.height = 242,
+          caption = "...LOADING..."
+        )
+      ),
+      bslib::card_footer(
+        "Click Team Logo/Cheerleader Photo to view.",
+        style = paste("background-color: #000000; color: #ffffff;")
+      )
+    )
 
   bslib::layout_column_wrap(
-    width = '60%',
+    width = '900px',
     fixed_width = TRUE,
-    heights_equal = "row",
-    yt,
+    height = "auto",
     inst,
+    yt,
     tt
-  )
+    )
+
 }
 
 #' Make the team photo, logo and hat insignia card layouts.

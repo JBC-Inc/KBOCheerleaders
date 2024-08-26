@@ -209,8 +209,10 @@ KBODataUpdate <- function(use_data = FALSE) {
     }
     .x
   })
+
   cheer_data$`Hannah Kim`$table <- cheer_data$`Hannah Kim`$table[-1, ]
   cheer_data$`Hyein Na`$table <- cheer_data$`Hyein Na`$table[-1, ]
+
   if (use_data) {
     usethis::use_data(cheer_data, overwrite = TRUE)
   }

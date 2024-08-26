@@ -1102,7 +1102,7 @@ ageJitterDist <- function(long, team_data) {
     ggplot2::labs(
       y = "Followers",
       x = "Age Group",
-      caption = "*Omission of outliers > 1,000,000 followers",
+      caption = "*Omission of outliers > 1,000,000 followers (Haeri Kim, Lee Ju-Eun)",
       color = "Team"
     ) +
     ggplot2::guides(
@@ -1113,7 +1113,7 @@ ageJitterDist <- function(long, team_data) {
   ggiraph::girafe(
     ggobj = gg_point,
     width_svg = 12,
-    # height_svg = 5.42,
+    height_svg = 5.42,
     options = list(
       ggiraph::opts_sizing(rescale = TRUE),
       ggiraph::opts_hover(css = "fill:default;r:7;"),
@@ -1168,14 +1168,15 @@ ageDist <- function(long) {
       ) +
 
     ggplot2::labs(
-      # title = "Distribution of Platforms by Age Group",
       x = "Age Group",
       y = "",
       fill = "Platform"
       ) +
 
     ggplot2::theme_minimal() +
-    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1))
+    ggplot2::theme(
+      text = ggplot2::element_text(size = 20),
+      plot.margin = ggplot2::margin(5, 5, 5, 5))
 }
 
 # Backup/Historical -----------------------------------------------------------
