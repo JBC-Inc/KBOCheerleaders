@@ -630,6 +630,7 @@ getInstagram <- function(cheer_data) {
   blank <- data.frame(name = NA, team = NA, followers = NA)
 
   for (cheerleader in seq_along(names(cheer_data))) {
+
     links <- cheer_data[[cheerleader]][[2]]
     insta_link <- links[grepl("instagram", links)]
 
@@ -1108,7 +1109,12 @@ ageJitterDist <- function(long, team_data) {
     ggplot2::guides(
       size = "none"
     ) +
-    ggplot2::theme_minimal()
+    ggplot2::theme_minimal() +
+    ggplot2::guides(
+      color = ggplot2::guide_legend(
+        override.aes = list(size = 4.2)
+        )
+      )
 
   ggiraph::girafe(
     ggobj = gg_point,
