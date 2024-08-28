@@ -481,11 +481,14 @@ cheerData <- function(wiki_url, team_cheerleaders, values) {
 #' @return side effect is to save the image to /cheerleader_img
 #' @keywords internal
 #'
-getCheerleaderPhotos <- function(bio_tables, cheer_data) {
+getCheerleaderPhotos <- function(bio_tables) {
 
-  if (!dir.exists("./www/cheerleader_img")) {
+  dir_path <- "./www/cheerleader_img"
+
+  if (!dir.exists(dir_path)) {
     dir.create(dir_path, recursive = TRUE)
   }
+
   for (cheerleader in seq_along(bio_tables)) {
 
     bio_image <- stringr::str_extract(
@@ -500,12 +503,9 @@ getCheerleaderPhotos <- function(bio_tables, cheer_data) {
 
       download.file(bio_image, temp_file, mode = "wb")
 
-      img <- magick::image_read(temp_file)
+      saveas <- paste0(dir_path, "/",  names(bio_tables)[cheerleader], ".webp")
 
-      saveas <- paste0("./www/cheerleader_img/",
-                       names(cheer_data)[cheerleader], ".png")
-
-      magick::image_write(img, saveas, format = "png")
+      file.rename(temp_file, saveas)
     }
   }
 }
@@ -779,7 +779,7 @@ ultraCombo <- function(team_cheerleaders, cheer_data, youtube, instagram, tiktok
     dplyr::mutate(
       photo =
         glue::glue(
-          '<img height=50 src="www/cheerleader_img/{name}.png"
+          '<img height=50 src="www/cheerleader_img/{name}.webp"
              class="cheerleader-photo"
              data-team="{team}"
              data-name="{name}">

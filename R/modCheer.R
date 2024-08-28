@@ -67,7 +67,7 @@ mod_cheer_server <- function(id, td, smm) {
 
       shiny::req(input$cheerleader)
 
-      image <- paste0("./cheerleader_img/", input$cheerleader, ".png")
+      image <- paste0("./cheerleader_img/", input$cheerleader, ".webp")
       shiny::img(src = image, height = "320px")
     })
 

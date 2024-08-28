@@ -238,7 +238,7 @@ makeReactable <- function(leader_data) {
             headerStyle = list(fontWeight = 700),
             cell = function(value, index) {
               img_src <- knitr::image_uri(
-                sprintf("www/cheerleader_img/%s.png", value))
+                sprintf("www/cheerleader_img/%s.webp", value))
               shiny::div(
                 class = "cheerleader-photo-container",
                 style = "display: flex;",

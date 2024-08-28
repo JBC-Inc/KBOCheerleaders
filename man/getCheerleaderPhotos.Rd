@@ -4,12 +4,12 @@
 \alias{getCheerleaderPhotos}
 \title{Get Cheerleader Photo}
 \usage{
-getCheerleaderPhotos(bio_tables, cheer_data)
+getCheerleaderPhotos(bio_tables)
 }
 \arguments{
-\item{cheer_data}{all cheerleader table data}
-
 \item{bio_table}{html node from cheer_data$cheerleader$bio_table}
+
+\item{cheer_data}{all cheerleader table data}
 }
 \value{
 side effect is to save the image to /cheerleader_img
