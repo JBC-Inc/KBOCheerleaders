@@ -1,5 +1,5 @@
 
-# KBO Cheerleaders <img src="man/figures/image.png" align="right" height="142"/>
+# KBO Cheerleaders <a href="https://yourpackage.url"><img src="man/figures/image.png" align="right" height="142" /></a>
 
 <p style="font-size: 16px; text-align:justify;">
 Dive into the dynamic world of Korean Baseball cheerleaders with this
