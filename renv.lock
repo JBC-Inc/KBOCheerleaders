@@ -114,15 +114,16 @@
     },
     "YTAnalytics": {
       "Package": "YTAnalytics",
-      "Version": "0.1.0",
+      "Version": "0.2.0",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
         "dplyr",
         "httr",
-        "jsonlite"
+        "jsonlite",
+        "progress"
       ],
-      "Hash": "8d1c62251993b0390624ec1fe44db8c4"
+      "Hash": "5c1a244f60d875a5848b9622f3b2650a"
     },
     "anytime": {
       "Package": "anytime",
@@ -288,13 +289,13 @@
     },
     "cpp11": {
       "Package": "cpp11",
-      "Version": "0.4.7",
+      "Version": "0.5.0",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
         "R"
       ],
-      "Hash": "5a295d7d963cc5035284dcdbaf334f4e"
+      "Hash": "91570bba75d0c9d3f1040c835cee8fba"
     },
     "crayon": {
       "Package": "crayon",
@@ -323,13 +324,13 @@
     },
     "curl": {
       "Package": "curl",
-      "Version": "5.2.1",
+      "Version": "5.2.2",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
         "R"
       ],
-      "Hash": "411ca2c03b1ce5f548345d2fc2685f7a"
+      "Hash": "8f27335f2bcff4d6035edcc82d7d46de"
     },
     "digest": {
       "Package": "digest",
@@ -438,7 +439,7 @@
     },
     "ggfun": {
       "Package": "ggfun",
-      "Version": "0.1.5",
+      "Version": "0.1.6",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -448,9 +449,10 @@
         "ggplot2",
         "grid",
         "rlang",
-        "utils"
+        "utils",
+        "yulab.utils"
       ],
-      "Hash": "4fca342cc17bb91af2a279146bc57fef"
+      "Hash": "c56e3463c7358ced17ce79a4cab0fb65"
     },
     "ggimage": {
       "Package": "ggimage",
@@ -714,7 +716,7 @@
     },
     "httr2": {
       "Package": "httr2",
-      "Version": "1.0.2",
+      "Version": "1.0.3",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -731,7 +733,7 @@
         "vctrs",
         "withr"
       ],
-      "Hash": "320c8fe23fcb25a6690ef7bdb6a3a705"
+      "Hash": "10d93e97faad6b629301bb3a2fd23378"
     },
     "isoband": {
       "Package": "isoband",
@@ -1666,20 +1668,18 @@
     },
     "yulab.utils": {
       "Package": "yulab.utils",
-      "Version": "0.1.6",
+      "Version": "0.1.7",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
         "cli",
         "digest",
         "fs",
-        "httr2",
         "rlang",
-        "stats",
         "tools",
         "utils"
       ],
-      "Hash": "d8e7a1fa085976d443c64169cc0d8a7f"
+      "Hash": "367554cd9602e69616660580c820b3bf"
     }
   }
 }
