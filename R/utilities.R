@@ -515,7 +515,7 @@ makegtYT <- function(historic, top_count) {
     dplyr::arrange(dplyr::desc(subs)) |>
     dplyr::slice_head(n = top_count()) |>
     dplyr::group_by(name) |>
-    dplyr::summarize(
+    dplyr::reframe(
       plot = list(rev(subs)),
       logo = unique(logo),
       photo = unique(photo),
@@ -523,9 +523,10 @@ makegtYT <- function(historic, top_count) {
       subs = max(subs),
       views = max(views),
       count = max(count),
-      avg_views_per_video = max(avg_views_per_video),
-      .groups = "drop") |>
+      avg_views_per_video = max(avg_views_per_video)
+      ) |>
 
+    dplyr::distinct(name, .keep_all = TRUE) |>
     dplyr::arrange(dplyr::desc(subs)) |>
 
     gt::gt() |>
@@ -585,14 +586,15 @@ makegtInst <- function(historic, top_count) {
     dplyr::arrange(dplyr::desc(instagram_followers)) |>
     dplyr::slice_head(n = top_count()) |>
     dplyr::group_by(name) |>
-    dplyr::summarize(
+    dplyr::reframe(
       plot = list(rev(instagram_followers)),
       logo = unique(logo),
       photo = unique(photo),
       link = unique(link),
-      instagram_followers = max(instagram_followers),
-      .groups = "drop") |>
+      instagram_followers = max(instagram_followers)
+      ) |>
 
+    dplyr::distinct(name, .keep_all = TRUE) |>
     dplyr::arrange(dplyr::desc(instagram_followers)) |>
 
     gt::gt() |>
@@ -650,16 +652,17 @@ makegtTT <- function(historic, top_count) {
     dplyr::arrange(dplyr::desc(tiktok_followers)) |>
     dplyr::slice_head(n = top_count()) |>
     dplyr::group_by(name) |>
-    dplyr::summarize(
-      plot = list(rev(tiktok_followers)),  # Keep historical data for sparklines
+    dplyr::reframe(
+      plot = list(rev(tiktok_followers)),
       logo = unique(logo),
       photo = unique(photo),
       link = unique(link),
       tiktok_followers = max(tiktok_followers),
       likes = max(likes),
-      likes_followers = as.integer(max(likes) / max(tiktok_followers)),
-      .groups = "drop") |>
+      likes_followers = as.integer(max(likes) / max(tiktok_followers))
+      ) |>
 
+    dplyr::distinct(name, .keep_all = TRUE) |>
     dplyr::arrange(dplyr::desc(tiktok_followers)) |>
 
     gt::gt() |>
