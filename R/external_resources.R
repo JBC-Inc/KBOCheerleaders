@@ -22,8 +22,6 @@ addExternalResources <- function() {
 
     shinyjs::useShinyjs(),
 
-    # shiny::tags$script(src = "script.js"),
-
     shiny::includeCSS(path = "./www/custom.css"),
 
     shiny::tags$link(
@@ -45,7 +43,7 @@ addExternalResources <- function() {
       href = "https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
       ),
 
-    # Team / Cheerleaders
+    # Reactable, Leaderboards, repeat same team/cheerleader
 
     shiny::tags$script(shiny::HTML("
       $(document).ready(function() {
@@ -84,13 +82,9 @@ addExternalResources <- function() {
 
     shiny::tags$script(shiny::HTML("
       Shiny.addCustomMessageHandler('scrollToTop', function(message) {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        window.scrollTo({ top: 0, behavior: 'instant' });
       });
     "))
-
-    # shiny::tags$script(src = "https://kit.fontawesome.com/38ef58b8f5.js"),
-
-    # shinyFeedback::useShinyFeedback(feedback = FALSE)
   )
 }
 

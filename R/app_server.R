@@ -8,17 +8,17 @@
 #'
 app_server <- function(input, output, session) {
 
-  mod_song_server("song", td)
-
   td <- shiny::reactive(label = "Selected Team Data", {
 
+    team <- input$`team-team`
+
     list(
-      name  = team_data$name[team_data$name == input$`team-team`],
-      color = team_data$color[team_data$name == input$`team-team`],
-      song  = team_data$song[team_data$name == input$`team-team`],
-      photo = team_photos[which(team_data$name == input$`team-team`)],
-      logo  = team_logos[team_data$name == input$`team-team`],
-      cap   = team_caps[team_data$name == input$`team-team`]
+      name  = team_data$name[team_data$name == team],
+      color = team_data$color[team_data$name == team],
+      song  = team_data$song[team_data$name == team],
+      photo = team_photos[which(team_data$name == team)],
+      logo  = team_logos[team_data$name == team],
+      cap   = team_caps[team_data$name == team]
     )
   })
 
@@ -52,33 +52,25 @@ app_server <- function(input, output, session) {
     updateUI(session, state = "default")
   })
 
-  shiny::observeEvent(input$`stats-ajd_selected`, {
+  shiny::observeEvent(input$`stats-ajd_selected`, label = "Age Jitter Distribution", {
 
     click_data <- strsplit(input$`stats-ajd_selected`, "\\|")[[1]]
-
     cheerleader <- click_data[1]
     team <- click_data[2]
 
     session$sendCustomMessage("handler1", list(cheerleader, team))
-
     session$sendCustomMessage(type = 'stats-ajd_set', message = character(0))
   })
 
+  mod_song_server("song", td)
+
   mod_react_server("react", td)
 
-  mod_stats_server(
-    id = "stats",
-    plot_click = shiny::reactive(input$plot_click),
-    sesh = session
-  )
+  mod_stats_server("stats", session)
 
   mod_team_server("team", td)
 
   mod_cheer_server("cheer", td, smm)
 
-  top_count <- shiny::reactive(label = "Leaderboard Records", {
-    length(unique(historic$datetime)) * 5
-  })
-
-  mod_leaderboard_server("leaderboard", top_count)
+  mod_leaderboard_server("leaderboard", historic)
 }

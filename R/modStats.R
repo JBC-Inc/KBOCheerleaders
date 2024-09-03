@@ -14,22 +14,15 @@ mod_stats_ui <- function(id) {
 
 #' Team followers server
 #'
-#' @param id An ID string that corresponds with the ID used to call the module's UI function.
-#' @param agg_follow reactive which sums/sorts total followers by
-#'  - team
-#'  - color
-#'  - image
+#' @param id An ID string that corresponds with the ID used to call the
+#' module's UI function.
 #'
-#' @return ggplot2 with interactive team logo
+#' @return ggplot2 with interactive team logo.
 #' @keywords internal
 #'
-mod_stats_server <- function(id, agg_follow, plot_click, sesh) {
+mod_stats_server <- function(id, parent) {
   shiny::moduleServer(id, function(input, output, session) {
     ns <- session$ns
-
-    pc <- shiny::reactive({
-      plot_click()
-    })
 
     agg_follow <- shiny::reactive(label = "Followers Across Teams", {
 
@@ -43,11 +36,11 @@ mod_stats_server <- function(id, agg_follow, plot_click, sesh) {
         dplyr::arrange(dplyr::desc(followers))
     })
 
-    shiny::observeEvent(pc(), label = "Plot click team logo", {
+    shiny::observeEvent(input$plot_click, label = "Plot click team logo", {
 
       point <- shiny::nearPoints(
         df = agg_follow(),
-        coordinfo = pc(),
+        coordinfo = input$plot_click,
         xvar = 'team',
         threshold = 42,
         maxpoints = 1,
@@ -56,10 +49,8 @@ mod_stats_server <- function(id, agg_follow, plot_click, sesh) {
 
       if (nrow(point) != 0) {
 
-        shiny::updateNavbarPage(session, inputId = "tabs", selected = "visual")
-
-        updateUI(session = sesh,
-                 state = "followers",
+        updateUI(session = parent,
+                 state = "team",
                  team = point$team,
                  cheerleader = character(0))
       }
@@ -67,6 +58,7 @@ mod_stats_server <- function(id, agg_follow, plot_click, sesh) {
 
     output$stats <- shiny::renderUI({
       makeStatsPage(ns("fat"),
+                    ns("plot_click"),
                     ns("f1"),
                     ns("f2"),
                     ns("f3"),
@@ -106,17 +98,17 @@ mod_stats_server <- function(id, agg_follow, plot_click, sesh) {
         )
     })
 
-    output$f1 <- shiny::renderPlot({
-      fat_distro_plot[[4]]
-    })
-
-    output$f2 <- shiny::renderPlot({
-      fat_distro_plot[[2]]
-    })
-
-    output$f3 <- shiny::renderPlot({
-      fat_distro_plot[[3]]
-    })
+    # output$f1 <- shiny::renderPlot({
+    #   fat_distro_plot[[4]]
+    # })
+    #
+    # output$f2 <- shiny::renderPlot({
+    #   fat_distro_plot[[2]]
+    # })
+    #
+    # output$f3 <- shiny::renderPlot({
+    #   fat_distro_plot[[3]]
+    # })
 
     output$ajd <- ggiraph::renderGirafe({
       age_jitter_dist
@@ -127,15 +119,5 @@ mod_stats_server <- function(id, agg_follow, plot_click, sesh) {
     })
   })
 }
-
-
-
-
-
-
-
-
-
-
 
 

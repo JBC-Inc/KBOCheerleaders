@@ -31,9 +31,13 @@ mod_leaderboard_ui <- function(id) {
 #'  using gt tables and dynamically generate UI elements for display.
 #' @keywords internal
 #'
-mod_leaderboard_server <- function(id, top_count) {
+mod_leaderboard_server <- function(id, historic) {
   shiny::moduleServer(id, function(input, output, session) {
     ns <- session$ns
+
+    top_count <- shiny::reactive(label = "Leaderboard Records", {
+      length(unique(historic$datetime)) * 5
+    })
 
     output$leaders <- shiny::renderUI({
       makeLeaderboards(

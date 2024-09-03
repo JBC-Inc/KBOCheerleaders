@@ -14,17 +14,13 @@
 #' @return bslib::page_fillable
 #' @keywords internal
 #'
-makeStatsPage <- function(fat, f1, f2, f3, ajd, ad) {
+makeStatsPage <- function(fat, plot_click, f1, f2, f3, ajd, ad) {
 
   # Followers aggregate team ----------
 
   fat <-
 
     bslib::layout_column_wrap(
-
-      #width = '500px',
-      #fixed_width = TRUE,
-
       style = bslib::css(grid_template_columns = "3fr 1fr"),
 
       bslib::card(
@@ -41,7 +37,7 @@ makeStatsPage <- function(fat, f1, f2, f3, ajd, ad) {
         ),
         bslib::card_body(
           shinycssloaders::withSpinner(
-            ui_element = shiny::plotOutput(fat, click = "plot_click", height = '575px'),
+            ui_element = shiny::plotOutput(fat, click = plot_click, height = '575px'),
             image = "www/favicon-32x32.png",
             image.width = 242,
             image.height = 242,
@@ -118,9 +114,6 @@ makeStatsPage <- function(fat, f1, f2, f3, ajd, ad) {
 
     bslib::layout_column_wrap(
 
-      # width = '500px',
-      # fixed_width = TRUE,
-
       style = bslib::css(grid_template_columns = "3fr 1fr"),
 
       bslib::card(
@@ -153,9 +146,6 @@ makeStatsPage <- function(fat, f1, f2, f3, ajd, ad) {
 
     bslib::layout_column_wrap(
 
-      #width = '500px',
-      #fixed_width = TRUE,
-
       style = bslib::css(grid_template_columns = "3fr 1fr"),
 
       bslib::card(
@@ -183,9 +173,6 @@ makeStatsPage <- function(fat, f1, f2, f3, ajd, ad) {
     ajd,
     asd
   )
-
-
-
 }
 
 #' Generate the reactable table
@@ -412,17 +399,17 @@ makeCheerleader <- function(td, smm, cheerleader, cheerPhoto, cheerBio) {
       bslib::value_box(
         title = "Subscribers",
         format(yt$subs, big.mark = ","),
-        showcase = bsicons::bs_icon("youtube") # , size = "3rem")
+        showcase = bsicons::bs_icon("youtube")
       ),
       bslib::value_box(
         title = "Views",
         format(yt$views, big.mark = ","),
-        showcase = bsicons::bs_icon("film") # , size = "3rem")
+        showcase = bsicons::bs_icon("film")
       ),
       bslib::value_box(
         title = "Videos",
         format(yt$count, big.mark = ","),
-        showcase = bsicons::bs_icon("camera-video") # , size = "3rem")
+        showcase = bsicons::bs_icon("camera-video")
       )
     )
   } else {
@@ -443,7 +430,7 @@ makeCheerleader <- function(td, smm, cheerleader, cheerPhoto, cheerBio) {
       bslib::value_box(
         title = "Followers",
         format(inst$followers, big.mark = ","),
-        showcase = bsicons::bs_icon("instagram") # , size = "3rem")
+        showcase = bsicons::bs_icon("instagram")
       )
     )
   } else {
@@ -463,7 +450,6 @@ makeCheerleader <- function(td, smm, cheerleader, cheerPhoto, cheerBio) {
       bslib::value_box(
         title = "Followers",
         format(as.numeric(tt$followers), big.mark = ","),
-        # showcase = bsicons::bs_icon("tiktok", size = "3rem")
         showcase = htmltools::img(src = "social_icons/tiktok.webp",
                                   alt = "tiktok icon",
                                   height = "64",
@@ -472,7 +458,7 @@ makeCheerleader <- function(td, smm, cheerleader, cheerPhoto, cheerBio) {
       bslib::value_box(
         title = "Likes",
         format(as.numeric(tt$likes), big.mark = ","),
-        showcase = bsicons::bs_icon("heart") # , size = "3rem")
+        showcase = bsicons::bs_icon("heart")
       )
     )
   } else {
@@ -807,7 +793,6 @@ makeLeaderboards <- function(leaderYT, leaderInst, leaderTT) {
     yt,
     tt
     )
-
 }
 
 #' Make the team photo, logo and hat insignia card layouts.
@@ -939,10 +924,14 @@ updateUI <- function(session,
 
   switch(
     state,
+    "default" = {
+
+    },
     "team" = {
       shinyjs::show("team-ui", asis = TRUE)
       shinyjs::hide("individual-ui", asis = TRUE)
       shiny::updateSelectizeInput(session, "team-team", selected = team)
+      shiny::updateRadioButtons(session, "cheer-cheerleader", selected = character(0))
     },
     "cheer" = {
       shinyjs::hide("team-ui", asis = TRUE)
@@ -953,22 +942,9 @@ updateUI <- function(session,
       shinyjs::show("team-ui", asis = TRUE)
       shinyjs::hide("individual-ui", asis = TRUE)
       shiny::updateRadioButtons(session, "cheer-cheerleader", selected = character(0))
-    },
-    "followers" = {
-      shinyjs::show("team-ui", asis = TRUE)
-      shinyjs::hide("individual-ui", asis = TRUE)
-      shiny::updateSelectizeInput(session, "team-team", selected = team)
-      shiny::updateRadioButtons(session, "cheer-cheerleader", selected = character(0))
-    },
-    "default" = {
-
     }
   )
 }
-
-
-
-
 
 
 
