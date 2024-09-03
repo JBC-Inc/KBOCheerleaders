@@ -129,7 +129,7 @@ KBODataUpdate <- function(use_data = FALSE) {
                             youtube,
                             instagram,
                             tiktok
-                            )
+  )
 
   if (use_data) {
     usethis::use_data(ultra_combo, overwrite = TRUE)
@@ -143,7 +143,7 @@ KBODataUpdate <- function(use_data = FALSE) {
     usethis::use_data(historic, overwrite = TRUE)
   }
 
-  # Ultra plots ---------------------------------------------------------------
+  # Ultra Plots ---------------------------------------------------------------
 
   fat_plot <- fatPlot(ultra_combo)
 
@@ -190,7 +190,6 @@ KBODataUpdate <- function(use_data = FALSE) {
 }
 
 
-
 # KBODataUpdate(use_data = TRUE)
 
 # backup()
@@ -203,27 +202,6 @@ KBODataUpdate <- function(use_data = FALSE) {
 # 9.7.24
 # 9.14.24
 # 9.21.24
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

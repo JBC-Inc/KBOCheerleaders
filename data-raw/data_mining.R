@@ -930,7 +930,7 @@ fatDistroPlot <- function(ultra_combo) {
     dplyr::arrange(dplyr::desc(followers)) |>
 
     ggplot2::ggplot(ggplot2::aes(x = avg_followers, fill = cat)) +
-    ggplot2::geom_density(alpha = 0.6) +
+    ggplot2::geom_density(alpha = 0.6, na.rm = TRUE) +
 
     ggplot2::scale_x_continuous(
       breaks = seq(0, 10000000, 500000),
@@ -953,7 +953,7 @@ fatDistroPlot <- function(ultra_combo) {
     dplyr::summarize(avg_followers = mean(followers), .groups = 'drop') |>
     dplyr::mutate(avg_followers = pmin(avg_followers, 100000)) |>
     ggplot2::ggplot(ggplot2::aes(x = avg_followers, fill = cat)) +
-    ggplot2::geom_density(alpha = 0.6) +
+    ggplot2::geom_density(alpha = 0.6, na.rm = TRUE) +
     ggplot2::scale_x_continuous(
       breaks = seq(0, 200000, 25000),
       labels = scales::comma_format()) +
@@ -974,7 +974,7 @@ fatDistroPlot <- function(ultra_combo) {
     dplyr::summarize(avg_followers = mean(followers), .groups = 'drop') |>
     dplyr::mutate(log_avg_followers = log1p(avg_followers)) |>
     ggplot2::ggplot(ggplot2::aes(x = log_avg_followers, fill = cat)) +
-    ggplot2::geom_density(alpha = 0.6) +
+    ggplot2::geom_density(alpha = 0.6, na.rm = TRUE) +
     ggplot2::scale_fill_manual(values = c("youtube" = "red",
                                           "tiktok" = "black",
                                           "instagram" = "purple")) +
@@ -1004,7 +1004,7 @@ fatDistroPlot <- function(ultra_combo) {
   # Plot the density of trimmed average followers by platform category
   f4 <- trimmed_data |>
     ggplot2::ggplot(ggplot2::aes(x = avg_followers, fill = cat)) +
-    ggplot2::geom_density(alpha = 0.6) +
+    ggplot2::geom_density(alpha = 0.6, na.rm = TRUE) +
     ggplot2::scale_x_continuous(
       breaks = seq(0, 200000, 25000),
       labels = scales::comma_format()) +
