@@ -38,7 +38,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">mod_stats_server</span><span class="op">(</span><span class="va">id</span>, <span class="va">agg_follow</span>, <span class="va">plot_click</span>, <span class="va">sesh</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">mod_stats_server</span><span class="op">(</span><span class="va">id</span>, <span class="va">parent</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -46,19 +46,13 @@
 
 
 <dl><dt id="arg-id">id<a class="anchor" aria-label="anchor" href="#arg-id"></a></dt>
-<dd><p>An ID string that corresponds with the ID used to call the module's UI function.</p></dd>
-
-
-<dt id="arg-agg-follow">agg_follow<a class="anchor" aria-label="anchor" href="#arg-agg-follow"></a></dt>
-<dd><p>reactive which sums/sorts total followers by</p><ul><li><p>team</p></li>
-<li><p>color</p></li>
-<li><p>image</p></li>
-</ul></dd>
+<dd><p>An ID string that corresponds with the ID used to call the
+module's UI function.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>ggplot2 with interactive team logo</p>
+    <p>ggplot2 with interactive team logo.</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
