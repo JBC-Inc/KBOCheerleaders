@@ -488,18 +488,16 @@ makeCheerleader <- function(td, smm, cheerleader, cheerPhoto, cheerBio) {
 #' YouTube followers.
 #'
 #' @param ultra_combo aggregate cheerleader social media metrics.
-#' @param top_count product of number of weeks of historic data and records.
-#' ex. 3 weeks data for top 5 cheerleaders = 15
 #'
 #' @return gt
 #' @keywords internal
 #'
-makegtYT <- function(historic, top_count) {
+makegtYT <- function(historic) {
 
   historic |>
     dplyr::filter(cat == "youtube") |>
     dplyr::arrange(dplyr::desc(subs)) |>
-    dplyr::slice_head(n = top_count()) |>
+    dplyr::slice_head(n = length(unique(historic$datetime)) * 5) |>
     dplyr::group_by(name) |>
     dplyr::reframe(
       plot = list(rev(subs)),
@@ -549,7 +547,13 @@ makegtYT <- function(historic, top_count) {
       use_seps = TRUE
     ) |>
     gt::cols_move(columns = plot, after = subs) |>
-    gtExtras::gt_plt_sparkline(plot, type = "shaded", fig_dim = c(7, 30))
+    gtExtras::gt_plt_sparkline(
+      plot,
+      fig_dim = c(10, 42),
+      type = "shaded",
+      label = FALSE,
+      palette = c("black", rep("transparent", 3), "pink")
+    )
 }
 
 #' Generate `gt` tables for Instagram Leaderboard
@@ -559,25 +563,29 @@ makegtYT <- function(historic, top_count) {
 #' Instagram followers.
 #'
 #' @param ultra_combo aggregate cheerleader social media metrics.
-#' @param top_count product of number of weeks of historic data and records.
-#' ex. 3 weeks data for top 5 cheerleaders = 15
 #'
 #' @return gt
 #' @keywords internal
 #'
-makegtInst <- function(historic, top_count) {
+makegtInst <- function(historic) {
 
-  historic |>
+  top_5 <- historic |>
     dplyr::filter(cat == "instagram") |>
     dplyr::arrange(dplyr::desc(instagram_followers)) |>
-    dplyr::slice_head(n = top_count()) |>
+    dplyr::distinct(name, .keep_all = TRUE) |>
+    dplyr::slice_head(n = length(unique(historic$datetime))) |>
+    dplyr::pull(name)
+
+  historic |>
+    dplyr::filter(name %in% top_5,
+                  cat == "instagram") |>
     dplyr::group_by(name) |>
     dplyr::reframe(
-      plot = list(rev(instagram_followers)),
+      plot = list(instagram_followers),
       logo = unique(logo),
       photo = unique(photo),
       link = unique(link),
-      instagram_followers = max(instagram_followers)
+      instagram_followers = max(instagram_followers, na.rm = TRUE)
       ) |>
 
     dplyr::distinct(name, .keep_all = TRUE) |>
@@ -613,7 +621,13 @@ makegtInst <- function(historic, top_count) {
       use_seps = TRUE
     ) |>
     gt::cols_move(columns = plot, after = instagram_followers) |>
-    gtExtras::gt_plt_sparkline(plot, type = "shaded", fig_dim = c(7, 30))
+    gtExtras::gt_plt_sparkline(
+      plot,
+      fig_dim = c(10, 42),
+      type = "shaded",
+      label = FALSE,
+      palette = c("black", rep("transparent", 3), "pink")
+    )
 
 }
 
@@ -624,19 +638,17 @@ makegtInst <- function(historic, top_count) {
 #' TikTok followers.
 #'
 #' @param ultra_combo aggregate cheerleader social media metrics.
-#' @param top_count product of number of weeks of historic data and records.
-#' ex. 3 weeks data for top 5 cheerleaders = 15
 #'
 #' @return gt
 #' @keywords internal
 #'
-makegtTT <- function(historic, top_count) {
+makegtTT <- function(historic) {
 
   historic |>
     dplyr::mutate(likes_followers = as.integer(likes/tiktok_followers)) |>
     dplyr::filter(cat == "tiktok") |>
     dplyr::arrange(dplyr::desc(tiktok_followers)) |>
-    dplyr::slice_head(n = top_count()) |>
+    dplyr::slice_head(n = length(unique(historic$datetime)) * 5) |>
     dplyr::group_by(name) |>
     dplyr::reframe(
       plot = list(rev(tiktok_followers)),
@@ -683,7 +695,13 @@ makegtTT <- function(historic, top_count) {
       use_seps = TRUE
     ) |>
     gt::cols_move(columns = plot, after = tiktok_followers) |>
-    gtExtras::gt_plt_sparkline(plot, type = "shaded", fig_dim = c(7, 30))
+    gtExtras::gt_plt_sparkline(
+      plot,
+      fig_dim = c(10, 42),
+      type = "shaded",
+      label = FALSE,
+      palette = c("black", rep("transparent", 3), "pink")
+    )
 }
 
 #' Generate Leaderboard Cards

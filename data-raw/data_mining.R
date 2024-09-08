@@ -658,6 +658,9 @@ getInstagram <- function(cheer_data) {
         acct = inst_name,
         followers = inst_followers
       ))
+
+    # avoid rate limit
+    Sys.sleep(runif(1, 2, 5))
   }
   instagram |>
     dplyr::mutate(
@@ -1299,5 +1302,13 @@ loadHistoricalData <- function(base_path = "../") {
       }
     }
   }
+
+  historic <- historic |>
+    dplyr::mutate(photo = stringr::str_replace_all(photo, "\\.png", ".webp"))
+
   return(historic)
 }
+
+
+
+

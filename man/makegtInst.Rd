@@ -4,12 +4,9 @@
 \alias{makegtInst}
 \title{Generate \code{gt} tables for Instagram Leaderboard}
 \usage{
-makegtInst(historic, top_count)
+makegtInst(historic)
 }
 \arguments{
-\item{top_count}{product of number of weeks of historic data and records.
-ex. 3 weeks data for top 5 cheerleaders = 15}
-
 \item{ultra_combo}{aggregate cheerleader social media metrics.}
 }
 \value{

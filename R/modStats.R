@@ -98,17 +98,17 @@ mod_stats_server <- function(id, parent) {
         )
     })
 
-    # output$f1 <- shiny::renderPlot({
-    #   fat_distro_plot[[4]]
-    # })
-    #
-    # output$f2 <- shiny::renderPlot({
-    #   fat_distro_plot[[2]]
-    # })
-    #
-    # output$f3 <- shiny::renderPlot({
-    #   fat_distro_plot[[3]]
-    # })
+    output$f1 <- shiny::renderPlot({
+      fat_distro_plot[[4]]
+    })
+
+    output$f2 <- shiny::renderPlot({
+      fat_distro_plot[[2]]
+    })
+
+    output$f3 <- shiny::renderPlot({
+      fat_distro_plot[[3]]
+    })
 
     output$ajd <- ggiraph::renderGirafe({
       age_jitter_dist

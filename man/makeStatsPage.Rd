@@ -4,7 +4,7 @@
 \alias{makeStatsPage}
 \title{Generate stats tab}
 \usage{
-makeStatsPage(fat, f1, f2, f3, ajd, ad)
+makeStatsPage(fat, plot_click, f1, f2, f3, ajd, ad)
 }
 \arguments{
 \item{fat}{followers aggregate teams}

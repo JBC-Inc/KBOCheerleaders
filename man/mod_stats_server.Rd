@@ -4,20 +4,14 @@
 \alias{mod_stats_server}
 \title{Team followers server}
 \usage{
-mod_stats_server(id, agg_follow, plot_click, sesh)
+mod_stats_server(id, parent)
 }
 \arguments{
-\item{id}{An ID string that corresponds with the ID used to call the module's UI function.}
-
-\item{agg_follow}{reactive which sums/sorts total followers by
-\itemize{
-\item team
-\item color
-\item image
-}}
+\item{id}{An ID string that corresponds with the ID used to call the
+module's UI function.}
 }
 \value{
-ggplot2 with interactive team logo
+ggplot2 with interactive team logo.
 }
 \description{
 Team followers server

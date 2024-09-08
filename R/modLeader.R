@@ -35,10 +35,6 @@ mod_leaderboard_server <- function(id, historic) {
   shiny::moduleServer(id, function(input, output, session) {
     ns <- session$ns
 
-    top_count <- shiny::reactive(label = "Leaderboard Records", {
-      length(unique(historic$datetime)) * 5
-    })
-
     output$leaders <- shiny::renderUI({
       makeLeaderboards(
         ns("leaderYT"),
@@ -48,15 +44,15 @@ mod_leaderboard_server <- function(id, historic) {
     })
 
     output$leaderYT <- gt::render_gt({
-      makegtYT(historic, top_count)
+      makegtYT(historic)
     })
 
     output$leaderInst <- gt::render_gt({
-      makegtInst(historic, top_count)
+      makegtInst(historic)
     })
 
     output$leaderTT <- gt::render_gt({
-      makegtTT(historic, top_count)
+      makegtTT(historic)
     })
   })
 }

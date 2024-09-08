@@ -4,12 +4,9 @@
 \alias{makegtYT}
 \title{Generate \code{gt} tables for YouTube Leaderboard}
 \usage{
-makegtYT(historic, top_count)
+makegtYT(historic)
 }
 \arguments{
-\item{top_count}{product of number of weeks of historic data and records.
-ex. 3 weeks data for top 5 cheerleaders = 15}
-
 \item{ultra_combo}{aggregate cheerleader social media metrics.}
 }
 \value{

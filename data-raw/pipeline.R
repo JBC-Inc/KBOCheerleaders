@@ -135,14 +135,6 @@ KBODataUpdate <- function(use_data = FALSE) {
     usethis::use_data(ultra_combo, overwrite = TRUE)
   }
 
-  # Historic made from each weeks ultra_combo ---------------------------------
-
-  historic <- loadHistoricalData("../")
-
-  if (use_data) {
-    usethis::use_data(historic, overwrite = TRUE)
-  }
-
   # Ultra Plots ---------------------------------------------------------------
 
   fat_plot <- fatPlot(ultra_combo)
@@ -186,7 +178,16 @@ KBODataUpdate <- function(use_data = FALSE) {
   # ./data/*
   # ./www/*
 
-  # backup()
+  backup()
+
+  # Historic made from each weeks ultra_combo ---------------------------------
+
+  historic <- loadHistoricalData("../")
+
+  if (use_data) {
+    usethis::use_data(historic, overwrite = TRUE)
+  }
+
 }
 
 
