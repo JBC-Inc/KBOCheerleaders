@@ -130,7 +130,7 @@ makeStatsPage <- function(fat, plot_click, f1, f2, f3, ajd, ad) {
         ),
         bslib::card_body(
           shinycssloaders::withSpinner(
-            ui_element = ggiraph::girafeOutput(ajd),
+            ui_element = ggiraph::girafeOutput(ajd, width = "100%", height = "100%"),
             image = "www/favicon-32x32.png",
             image.width = 242,
             image.height = 242,
@@ -150,7 +150,6 @@ makeStatsPage <- function(fat, plot_click, f1, f2, f3, ajd, ad) {
 
       bslib::card(
         id = "ad",
-        full_screen = TRUE,
         bslib::card_header(
           "Distribution of Social Media Platforms by Age Group",
           class = "bg-dark"),
@@ -553,7 +552,8 @@ makegtYT <- function(historic) {
       type = "shaded",
       label = FALSE,
       palette = c("black", rep("transparent", 3), "pink")
-    )
+    ) |>
+    gt::tab_options(table.width = gt::pct(77))
 }
 
 #' Generate `gt` tables for Instagram Leaderboard
@@ -627,8 +627,8 @@ makegtInst <- function(historic) {
       type = "shaded",
       label = FALSE,
       palette = c("black", rep("transparent", 3), "pink")
-    )
-
+    ) |>
+    gt::tab_options(table.width = gt::pct(77))
 }
 
 #' Generate `gt` tables for TikTok Leaderboard
@@ -701,7 +701,8 @@ makegtTT <- function(historic) {
       type = "shaded",
       label = FALSE,
       palette = c("black", rep("transparent", 3), "pink")
-    )
+    ) |>
+    gt::tab_options(table.width = gt::pct(77))
 }
 
 #' Generate Leaderboard Cards
