@@ -194,14 +194,14 @@ KBODataUpdate <- function(use_data = FALSE) {
 # KBODataUpdate(use_data = TRUE)
 
 # backup()
-# 8 weeks of observations
-#
-# 8.1.24    INIT
-# 8.17.24   2 weeks collected
-# 8.24.24   collected
-# 8.31.24
-# 9.7.24
-# 9.14.24
+# (x) weeks of observations
+#--------------------------
+# 8.10.24   ✓
+# 8.17.24   ✓
+# 8.24.24   ✓
+# 8.31.24   ✓
+# 9.7.24    ✓
+# 9.14.24   ✓
 # 9.21.24
 
 
