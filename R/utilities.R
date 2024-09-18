@@ -367,29 +367,31 @@ makeCheerleader <- function(td, smm, cheerleader, cheerPhoto, cheerBio) {
   inst <- dplyr::filter(smm()$instagram, name == cheerleader) |> dplyr::slice(1)
   tt <- dplyr::filter(smm()$tiktok, cheername == cheerleader) |> dplyr::slice(1)
 
-  photoBio <- bslib::card(
-    full_screen = TRUE,
-    bslib::card_header(
-      style = paste("background-color:", td()$color, "; color: #ffffff;"),
-      cheerleader
-    ),
-    bslib::card_body(
-      class = "cardb",
-      fillable = TRUE,
-      shiny::uiOutput(cheerPhoto),
-    ),
-    bslib::card_body(
-      fillable = TRUE,
-      DT::dataTableOutput(cheerBio)
+  if (nrow(inst) > 0) {
+
+    instcard <- bslib::card(
+      id = "valb",
+      max_height = 130,
+      bslib::card_header(
+        style = paste("background-color:", td()$color, "; color: #ffffff;"),
+        paste0("Instagram Statistics for ", inst$acct)
+      ),
+      bslib::value_box(
+        title = "Followers",
+        style = "border: none;  text-align: center;",
+        format(inst$followers, big.mark = ","),
+        showcase = bsicons::bs_icon("instagram")
+      )
     )
-  )
+  } else {
+    instcard <- NULL
+  }
 
   if (nrow(yt) > 0) {
 
-    yt <- bslib::card(
+    ytcard <- bslib::card(
       id = "valb",
-      class = "cardb",
-
+      max_height = 363,
       bslib::card_header(
         style = paste("background-color:", td()$color, "; color: #ffffff;"),
         paste0("YouTube Statistics for ", yt$title)
@@ -397,57 +399,39 @@ makeCheerleader <- function(td, smm, cheerleader, cheerPhoto, cheerBio) {
 
       bslib::value_box(
         title = "Subscribers",
+        style = "border: none;  text-align: center;",
         format(yt$subs, big.mark = ","),
         showcase = bsicons::bs_icon("youtube")
       ),
       bslib::value_box(
         title = "Views",
+        style = "border: none;  text-align: center;",
         format(yt$views, big.mark = ","),
         showcase = bsicons::bs_icon("film")
       ),
       bslib::value_box(
         title = "Videos",
+        style = "border: none;  text-align: center;",
         format(yt$count, big.mark = ","),
         showcase = bsicons::bs_icon("camera-video")
       )
     )
   } else {
-    yt <- NULL
-  }
-
-  if (nrow(inst) > 0) {
-
-    insta <- bslib::card(
-      id = "valb",
-      class = "cardb",
-
-      bslib::card_header(
-        style = paste("background-color:", td()$color, "; color: #ffffff;"),
-        paste0("Instagram Statistics for ",
-               stringr::str_replace_all(inst$name, "/", ""))
-      ),
-      bslib::value_box(
-        title = "Followers",
-        format(inst$followers, big.mark = ","),
-        showcase = bsicons::bs_icon("instagram")
-      )
-    )
-  } else {
-    insta <- NULL
+    ytcard <- NULL
   }
 
   if (nrow(tt) > 0) {
 
-    tiktok <- bslib::card(
+    tiktokcard <- bslib::card(
       id = "valb",
-      class = "cardb",
-
+      max_height = 242,
       bslib::card_header(
         style = paste("background-color:", td()$color, "; color: #ffffff;"),
         paste0("TikTik Statistics for ", tt$name)
       ),
       bslib::value_box(
         title = "Followers",
+        style = "border: none;  text-align: center;",
         format(as.numeric(tt$followers), big.mark = ","),
         showcase = htmltools::img(src = "social_icons/tiktok.webp",
                                   alt = "tiktok icon",
@@ -456,26 +440,39 @@ makeCheerleader <- function(td, smm, cheerleader, cheerPhoto, cheerBio) {
       ),
       bslib::value_box(
         title = "Likes",
+        style = "border: none;  text-align: center;",
         format(as.numeric(tt$likes), big.mark = ","),
         showcase = bsicons::bs_icon("heart")
       )
     )
   } else {
-    tiktok <- NULL
+    tiktokcard <- NULL
   }
 
   bslib::layout_column_wrap(
     width = NULL,
     fill = FALSE,
     style = bslib::css(grid_template_columns = "2fr 1fr"),
-    photoBio,
+
+    bslib::card(
+      full_screen = TRUE,
+      bslib::card_header(
+        style = paste("background-color:", td()$color, "; color: #ffffff;"),
+        cheerleader
+      ),
+      bslib::card_body(
+        fillable = TRUE,
+        shiny::uiOutput(cheerPhoto),
+        DT::dataTableOutput(cheerBio)
+      )
+    ),
     bslib::layout_column_wrap(
       width = NULL,
       fill = FALSE,
       style = bslib::css(flex_direction = "column"),
-      insta,
-      yt,
-      tiktok
+      instcard,
+      ytcard,
+      tiktokcard
     )
   )
 }
@@ -808,6 +805,7 @@ makeLeaderboards <- function(leaderYT, leaderInst, leaderTT) {
     width = '900px',
     fixed_width = TRUE,
     height = "auto",
+    heights_equal = "row",
     inst,
     yt,
     tt
@@ -838,11 +836,7 @@ makeTeam <- function(td, teamPhoto, teamLogo, capInsignia) {
         style = paste("background-color:", td()$color, "; color: #ffffff;"),
         td()$name
       ),
-      bslib::card_body(
-        class = "cardb",
-        fillable = TRUE,
-        shiny::uiOutput(teamPhoto)
-      )
+      shiny::uiOutput(teamPhoto)
     ),
     bslib::layout_column_wrap(
       width = NULL,
@@ -857,10 +851,7 @@ makeTeam <- function(td, teamPhoto, teamLogo, capInsignia) {
           style = paste("background-color:", td()$color, "; color: #ffffff;"),
           paste0(td()$name, " Team Logo")
         ),
-        bslib::card_body(
-          class = "cardb",
-          shiny::uiOutput(teamLogo)
-        )
+        shiny::uiOutput(teamLogo)
       ),
 
       bslib::card(
@@ -871,10 +862,7 @@ makeTeam <- function(td, teamPhoto, teamLogo, capInsignia) {
           style = paste("background-color:", td()$color, "; color: #ffffff;"),
           paste0(td()$name, " Cap Insignia")
         ),
-        bslib::card_body(
-          class = "cardb",
-          shiny::uiOutput(capInsignia)
-        )
+        shiny::uiOutput(capInsignia)
       )
     )
   )

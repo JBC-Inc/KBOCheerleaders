@@ -68,7 +68,7 @@ mod_cheer_server <- function(id, td, smm) {
       shiny::req(input$cheerleader)
 
       image <- paste0("./cheerleader_img/", input$cheerleader, ".webp")
-      shiny::img(src = image, height = "320px")
+      shiny::img(src = image, style = "height: 342px; object-fit: contain;")
     })
 
     output$cheerBio <- DT::renderDataTable({

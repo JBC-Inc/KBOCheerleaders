@@ -48,16 +48,16 @@ mod_team_server <- function(id, td) {
       if (input$team == "KT Wiz") {
         shiny::img(src = paste0("team_img/", td()$photo),style = "height: 600px;")
       } else {
-        shiny::img(src = paste0("team_img/", td()$photo), height = "100%")
+        shiny::img(src = paste0("team_img/", td()$photo), style = "height: 100%; object-fit: contain;")
       }
     })
 
     output$teamLogo <- shiny::renderUI({
-      shiny::img(src = paste0("team_logo/", td()$logo), height = "242px")
+      shiny::img(src = paste0("team_logo/", td()$logo), style = "height: 242px; object-fit: contain;")
     })
 
     output$capInsignia <- shiny::renderUI({
-      shiny::img(src = paste0("team_cap/", td()$cap), height = "242px")
+      shiny::img(src = paste0("team_cap/", td()$cap), style = "height: 242px; object-fit: contain;")
     })
   })
 }

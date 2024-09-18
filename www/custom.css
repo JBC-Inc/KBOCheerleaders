@@ -123,18 +123,18 @@ table td:first-child {
   background: linear-gradient(45deg, #FFD600, #FF7A00, #FF0069, #D300C5, #7638FA);
 }
 
-
-
-
 /* -------------------------------------- cheerleader/team cards  */
 
-/* center image */
-.cardb {
-  text-align: center;
+/* remove space on column wrap */
+
+.bslib-grid .bslib-mb-spacing {
+  display: flex !important;
 }
 
-.html-fill-container {
-  display: block !important;
+/* remove datatables vertical scroll */
+
+.html-fill-container > .html-fill-item.datatables {
+  flex-basis: auto !important;
 }
 
 /* cheerleader icon colors */
@@ -153,53 +153,9 @@ table td:first-child {
   font-size: 1.2rem;
 }
 
-/* remove space on column wrap */
-.bslib-grid .bslib-mb-spacing {
-  display: flex !important;
-}
-
 .card-body.bslib-gap-spacing.html-fill-item.html-fill-container {
   padding: 7px !important;
 }
-
-
-
-/*
-.bslib-value-box.default .value-box-showcase svg.bi.bi-tiktok {
-    fill: #000000 !important;
-}
-.tiktok-text {
-    font-family: Arial, sans-serif;
-    font-size: 24px;
-    fill: #FF0000;
-    text-shadow: 4px 4px 8px rgba(255, 0, 0, 0.5);
-}
-*/
-
-/* icon padding
-.value-box-showcase.html-fill-item.html-fill-container {
-  padding: 5px;
-}
-.value-box-area.html-fill-item.html-fill-container {
-  padding: 5px;
-}
-*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
