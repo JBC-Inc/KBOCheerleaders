@@ -796,6 +796,15 @@ ultraCombo <- function(team_cheerleaders, cheer_data, youtube, instagram, tiktok
   # add age to ultra-combo
   age <- processCheerleaders(cheer_data)
 
+  age <- age |>
+    dplyr::mutate(Age = as.integer(Age)) |>
+    dplyr::mutate(Age = dplyr::case_when(
+      Name == "Hyein Na" ~ 31,
+      Name == "Minju Song" ~ 20,
+      Name == "Joo-Seon Kim" ~ 20,
+      TRUE ~ Age)
+      )
+
   ultra_combo |>
     dplyr::left_join(age, by = c("name" = "Name")) |>
     dplyr::mutate(age = as.numeric(Age)) |>
