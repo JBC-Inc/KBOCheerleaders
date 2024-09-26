@@ -45,11 +45,8 @@ mod_team_server <- function(id, td) {
     })
 
     output$teamPhoto <- shiny::renderUI({
-      if (input$team == "KT Wiz") {
-        shiny::img(src = paste0("team_img/", td()$photo),style = "height: 600px;")
-      } else {
-        shiny::img(src = paste0("team_img/", td()$photo), style = "height: 100%; object-fit: contain;")
-      }
+
+      shiny::img(src = paste0("team_img/", td()$photo), style = "height: 100%; object-fit: contain;")
     })
 
     output$teamLogo <- shiny::renderUI({
