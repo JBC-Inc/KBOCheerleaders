@@ -879,7 +879,9 @@ makeTitle <- function() {
     shiny::tags$div(
       class = "d-flex align-items-center",
       shiny::tags$img(
-        src = "https://upload.wikimedia.org/wikipedia/en/thumb/5/59/KBO_League.svg/1920px-KBO_League.svg.png",
+        # src = "https://upload.wikimedia.org/wikipedia/en/thumb/5/59/KBO_League.svg/1920px-KBO_League.svg.png",
+        # src = "https://1000logos.net/wp-content/uploads/2023/05/KBO-League-Logo-2013.png",
+        src = "https://miro.medium.com/v2/resize:fit:894/0*5JDCx9vCR9b5qwJm.png",
         height = "55px",
         style = "margin-right: 10px;"
         ),
