@@ -8,6 +8,15 @@
 #'
 app_server <- function(input, output, session) {
 
+  # Session timeout ///////////////////////////////////////////////////////////
+  shiny::observeEvent(input$session_timeout, {
+    if (!is.null(input$session_timeout) && input$session_timeout) {
+      session$sendCustomMessage("showTimeoutModal", list())
+      session$close()
+    }
+  })
+
+
   td <- shiny::reactive(label = "Selected Team Data", {
 
     team <- input$`team-team`
